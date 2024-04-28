@@ -1,7 +1,8 @@
 import "@/App";
+import Components from "@/components";
 
 function App() {
-  return <a className="text-red-200">Learn React</a>;
+  return <Components></Components>;
 }
 
 export default App;
