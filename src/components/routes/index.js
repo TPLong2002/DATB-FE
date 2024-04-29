@@ -6,37 +6,46 @@ import {
 } from "react-router-dom";
 import { authRoutes } from "@/components/routes/authRoutes";
 import { publicRoutes } from "@/components/routes/publicRoutes";
+import { privateRoutes } from "./privateRoutes";
 function App() {
-  console.log(authRoutes);
   return (
     <Router>
       <Routes>
         {authRoutes.map((route, index) => {
-          const Layout = route.layout;
-          const Page = route.component;
           return (
             <Route
               key={index}
               path={route.path}
               element={
-                <Layout>
-                  <Page />
-                </Layout>
+                <route.layout>
+                  <route.component />
+                </route.layout>
               }
             />
           );
         })}
         {publicRoutes.map((route, index) => {
-          const Layout = route.layout;
-          const Page = route.component;
           return (
             <Route
               key={index}
               path={route.path}
               element={
-                <Layout>
-                  <Page />
-                </Layout>
+                <route.layout>
+                  <route.component />
+                </route.layout>
+              }
+            />
+          );
+        })}
+        {privateRoutes.map((route, index) => {
+          return (
+            <Route
+              key={index}
+              path={route.path}
+              element={
+                <route.layout>
+                  <route.component />
+                </route.layout>
               }
             />
           );
