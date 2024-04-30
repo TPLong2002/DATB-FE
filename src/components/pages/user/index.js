@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import Table from "@/components/pages/user/Table";
 import { getUsers } from "@/services/user";
 function App() {
-  const [data, setData] = useState([
-    // { id: 1, username: "John", group_id: 1, email: "" },
-  ]);
+  const [data, setData] = useState({
+    rows: [{ key: 1, id: 0 }],
+    count: 1,
+  });
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 10,

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Pagination, Space, Table, Tag } from "antd";
 import DeleteUser from "@/components/pages/user/DeleteUser";
+import CreateUser from "@/components/pages/user/CreateUser";
+import { Link } from "react-router-dom";
 
 const { Column, ColumnGroup } = Table;
 
@@ -15,6 +17,7 @@ const tags = [
 const App = (props) => {
   const { data, pagination, setData, setPagination, fetchUser } = props;
   const [openDelete, setOpenDelete] = useState(false);
+  const [openCreate, setOpenCreate] = useState(false);
   const [userDelete, setUserDelete] = useState(0);
   const { rows, count } = data;
   const handleDelete = (id) => {
@@ -30,6 +33,7 @@ const App = (props) => {
           id={userDelete}
           fetchData={fetchUser}
         />
+        <CreateUser fetchData={fetchUser} />
       </div>
 
       <Table
@@ -46,7 +50,6 @@ const App = (props) => {
       >
         <Column title="ID" dataIndex="id" key="id" />
         <Column title="Username" dataIndex="username" key="username" />
-        <Column title="Group" dataIndex="group_id" key="group_id" />
         <Column title="Email" dataIndex="email" key="email" />
         <Column
           title="Group"
@@ -70,9 +73,16 @@ const App = (props) => {
           title="Action"
           key="action"
           render={(_, record) => (
-            <Space size="middle">
-              <a>Profile {record.username}</a>
-              <a onClick={() => handleDelete(record.id)}>Delete</a>
+            <Space size="middle" className="text-l">
+              <Link to="/profile" state={{ id: record.id }}>
+                Profile {record.username}
+              </Link>
+              <a
+                onClick={() => handleDelete(record.id)}
+                className="hover:text-red-500"
+              >
+                Delete
+              </a>
             </Space>
           )}
         />
