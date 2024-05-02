@@ -7,4 +7,12 @@ const getGroups = async () => {
     console.log(error);
   }
 };
-export { getGroups };
+const getGroupByUserId = async (id) => {
+  try {
+    const res = await Axios.get("/group/userid", { params: { id } });
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+export { getGroups, getGroupByUserId };
