@@ -9,6 +9,8 @@ import { Button, Input, DatePicker, Radio } from "antd";
 import { getGroupByUserId } from "@/services/group";
 import dayjs from "dayjs";
 import UploadAvatar from "@/components/pages/profile/UploadAvatar";
+import { toast } from "react-toastify";
+import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 
 function Profile() {
   let { state } = useLocation();
@@ -77,6 +79,9 @@ function Profile() {
         if (data?.secure_url) {
           newProfile[index] = { ...newProfile[index], avt: data.secure_url };
           const res = await updateProfile(newProfile[index]);
+          if (+res.code === 0) {
+            toast.success(res.message);
+          }
           if (res.code === 0) {
             console.log(res.message);
           }
@@ -146,6 +151,16 @@ function Profile() {
               onChange={(e) => handleChange(e, index)}
               placeholder="Thêm email"
             ></Input>
+            <Input.Password
+              value={profile?.password}
+              type="password"
+              name="password"
+              onChange={(e) => handleChange(e, index)}
+              placeholder="Mật khẩu"
+              iconRender={(visible) =>
+                visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+              }
+            ></Input.Password>
             <Input
               value={profile?.phoneNumber}
               name="phoneNumber"

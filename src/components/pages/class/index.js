@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Table from "@/components/pages/user/Table";
-import { getUsers } from "@/services/user";
+import Table from "@/components/pages/class/Table";
+import { getClasses } from "@/services/class";
 function App() {
   const [data, setData] = useState({
     rows: [{ key: 1, id: 0 }],
@@ -12,9 +12,9 @@ function App() {
   });
   const fetchUser = async () => {
     try {
-      const res = await getUsers(pagination.page, pagination.limit);
-      console.log(res);
+      const res = await getClasses(pagination.page, pagination.limit);
       setData(res.data);
+      console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -22,7 +22,6 @@ function App() {
   useEffect(() => {
     fetchUser();
   }, [pagination]);
-
   return (
     <div>
       <Table
