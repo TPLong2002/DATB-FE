@@ -16,7 +16,7 @@ function Profile() {
   const [profiles, setProfiles] = useState([{}]);
   const [group, setGroup] = useState({});
   const [options, setOptions] = useState(1);
-  const [img, setImg] = useState([]);
+
   const [originalImg, setOriginalImg] = useState([]);
   const cloud_name = "depfh6rnw";
   const preset_key = "rsnt801s";
@@ -27,7 +27,7 @@ function Profile() {
     if (options === 1) {
       const res = await getProfile(id);
       setProfiles(res.data);
-      setImg(res.data.map((row) => ({ avt: row.avt, id: row.id })));
+
       setOriginalImg(
         res.data.map((row) => ({ avt: row.avt, id: res.data.id }))
       );
@@ -35,7 +35,7 @@ function Profile() {
     if (options === 2) {
       const res = await getRelativesProfile(id);
       setProfiles(res.data);
-      setImg(res.data.map((row) => ({ avt: row.avt, id: res.data.id })));
+
       setOriginalImg(
         res.data.map((row) => ({ avt: row.avt, id: res.data.id }))
       );
@@ -59,6 +59,7 @@ function Profile() {
   const onSubmit = async (index) => {
     const newProfile = [...profiles];
     if (profiles[index].avt && profiles[index].avt != originalImg[index]) {
+      console.log(1);
       const formData = new FormData();
       console.log(profiles[index].avt);
       formData.append("file", profiles[index].avt);
@@ -72,7 +73,7 @@ function Profile() {
           }
         );
         const data = await res.json();
-
+        console.log(data);
         if (data?.secure_url) {
           newProfile[index] = { ...newProfile[index], avt: data.secure_url };
           const res = await updateProfile(newProfile[index]);

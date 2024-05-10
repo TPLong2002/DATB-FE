@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Pagination, Space, Table, Tag } from "antd";
+import { Space, Table, Tag } from "antd";
 import DeleteUser from "@/components/pages/user/DeleteUser";
 import CreateUser from "@/components/pages/user/CreateUser";
 import { Link } from "react-router-dom";
 
-const { Column, ColumnGroup } = Table;
+const { Column } = Table;
 
 const tags = [
   { id: 1, name: "admin", color: "red" },
@@ -15,9 +15,8 @@ const tags = [
 ];
 
 const App = (props) => {
-  const { data, pagination, setData, setPagination, fetchUser } = props;
+  const { data, pagination, setPagination, fetchUser } = props;
   const [openDelete, setOpenDelete] = useState(false);
-  const [openCreate, setOpenCreate] = useState(false);
   const [userDelete, setUserDelete] = useState(0);
   const { rows, count } = data;
   const handleDelete = (id) => {

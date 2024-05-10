@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { deleteUser } from "@/services/user";
 
-import { Button, Modal } from "antd";
+import { Modal } from "antd";
 
 const App = (props) => {
   const { open, setOpen, id, fetchData } = props;

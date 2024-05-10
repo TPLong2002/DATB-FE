@@ -1,18 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { createUser } from "@/services/user";
 import { getGroups } from "@/services/group";
-
+import { UploadOutlined } from "@ant-design/icons";
+import Papa from "papaparse";
 import { Modal, Input, Select, Button } from "antd";
 
 const App = (props) => {
-  const { id, fetchData } = props;
-  const [user, setUser] = useState({});
+  const { fetchData } = props;
+  const [users, setUsers] = useState([
+    { username: "", password: "", email: "" },
+  ]);
   const [groups, setGroups] = useState([]);
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState(
-    "Bạn có chắc muốn xóa người dùng naỳ không ?"
+    "Bạn có chắc muốn xóa người dùng này không ?"
   );
+  // const [importedFile, setImportedFile] = useState(null);
+  const fileInputRef = useRef(null); // Use useRef to create a ref
+
   const fetchGroup = async () => {
     try {
       const res = await getGroups();
@@ -21,13 +27,15 @@ const App = (props) => {
       console.log(error);
     }
   };
+
   useEffect(() => {
     fetchGroup();
   }, []);
+
   const handleOk = async () => {
-    console.log(user);
-    const create = await createUser(user);
-    if (create.code == 0) {
+    console.log(users);
+    const create = await createUser(users);
+    if (+create.code === 0) {
       setModalText(create.message);
       setConfirmLoading(true);
       setTimeout(async () => {
@@ -38,16 +46,41 @@ const App = (props) => {
       }, 1000);
     }
   };
-  const handleChange = (e) => {
+
+  const handleChange = (e, index) => {
     const { name, value } = e.target;
-    setUser({ ...user, [name]: value });
+    const newUsers = [...users];
+    newUsers[index] = { ...users[index], [name]: value };
+    setUsers(newUsers);
   };
-  const handleSelectChange = (value) => {
-    setUser({ ...user, group_id: value });
+
+  const handleSelectChange = (value, index) => {
+    const newUsers = [...users];
+    newUsers[index] = { ...users[index], group_id: value };
+    setUsers(newUsers);
   };
+
   const handleCancel = () => {
     console.log("Clicked cancel button");
     setOpen(false);
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    // Event listener on reader when the file
+    // loads, we parse it and set the data.
+    reader.onload = async ({ target }) => {
+      console.log("File loaded successfully");
+      const csv = Papa.parse(target.result, {
+        header: true,
+      });
+      const parsedData = csv?.data;
+
+      setUsers(parsedData);
+    };
+    reader.readAsText(file);
   };
   const admin = groups.filter((group) => group.name === "admin");
   const school_staff = groups.filter(
@@ -56,6 +89,7 @@ const App = (props) => {
   const parent_student = groups.filter(
     (group) => group.name === "student" || group.name === "parent"
   );
+
   return (
     <>
       <Button type="primary" onClick={() => setOpen(true)}>
@@ -67,72 +101,100 @@ const App = (props) => {
         onOk={handleOk}
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
+        footer={[
+          <input
+            key="file"
+            type="file"
+            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+            style={{ display: "none" }}
+            onChange={handleFileChange}
+            ref={fileInputRef} // Assign the ref to the file input
+          />,
+          <Button
+            key="import"
+            onClick={() => fileInputRef.current.click()} // Trigger click event of the file input when "Import" button is clicked
+            icon={<UploadOutlined />}
+          >
+            Import
+          </Button>,
+          <Button key="back" onClick={handleCancel}>
+            Cancel
+          </Button>,
+          <Button key="submit" type="primary" onClick={handleOk}>
+            Submit
+          </Button>,
+        ]}
       >
         {confirmLoading ? (
           <p>{modalText}</p>
         ) : (
-          <div>
-            <Input
-              placeholder="Username"
-              name="username"
-              onChange={handleChange}
-            ></Input>
-            <Input
-              placeholder="Password"
-              name="password"
-              onChange={handleChange}
-            ></Input>
-            <Input
-              placeholder="Email"
-              name="email"
-              onChange={handleChange}
-            ></Input>
-            <Select
-              defaultValue={1}
-              name="group_id"
-              style={{ width: 200 }}
-              onChange={handleSelectChange}
-              options={[
-                {
-                  label: <span>Manager</span>,
-                  title: "Manager",
-                  options: admin.map((ad) => {
-                    return {
-                      key: ad.id,
-                      label: <span>{ad.description}</span>,
-                      value: ad.id,
-                    };
-                  }),
-                },
-                {
-                  label: <span>School Staff</span>,
-                  title: "School Staff",
-                  options:
-                    school_staff &&
-                    school_staff.map((school) => {
+          users.map((user, index) => (
+            <div key={index}>
+              <Input
+                placeholder="Username"
+                name="username"
+                value={user.username}
+                onChange={(e) => handleChange(e, index)}
+              ></Input>
+              <Input
+                placeholder="Password"
+                name="password"
+                value={user.password}
+                onChange={(e) => handleChange(e, index)}
+              ></Input>
+              <Input
+                placeholder="Email"
+                name="email"
+                value={user.email}
+                onChange={(e) => handleChange(e, index)}
+              ></Input>
+              <Select
+                value={+user.group_id || null}
+                name="group_id"
+                style={{ width: 200 }}
+                onChange={(value) => handleSelectChange(value, index)}
+                options={[
+                  {
+                    label: <span>Manager</span>,
+                    title: "Manager",
+                    options: admin.map((ad) => {
                       return {
-                        key: school.id,
-                        label: <span>{school.description}</span>,
-                        value: school.id,
+                        key: ad.id,
+                        label: <span>{ad.description}</span>,
+                        value: ad.id,
                       };
                     }),
-                },
-                {
-                  label: <span>Student & Parent</span>,
-                  title: "Student & Parent",
-                  options:
-                    parent_student &&
-                    parent_student.map((school) => {
-                      return {
-                        key: school.id,
-                        label: <span>{school.description}</span>,
-                        value: school.id,
-                      };
-                    }),
-                },
-              ]}
-            />
-          </div>
+                  },
+                  {
+                    label: <span>School Staff</span>,
+                    title: "School Staff",
+                    options:
+                      school_staff &&
+                      school_staff.map((school) => {
+                        return {
+                          key: school.id,
+                          label: <span>{school.description}</span>,
+                          value: school.id,
+                        };
+                      }),
+                  },
+                  {
+                    label: <span>Student & Parent</span>,
+                    title: "Student & Parent",
+                    options:
+                      parent_student &&
+                      parent_student.map((school) => {
+                        return {
+                          key: school.id,
+                          label: <span>{school.description}</span>,
+                          value: school.id,
+                        };
+                      }),
+                  },
+                ]}
+              />
+            </div>
+          ))
         )}
       </Modal>
     </>

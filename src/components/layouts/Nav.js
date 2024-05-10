@@ -4,10 +4,10 @@ import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 
 const navigation = [
-  { name: "Người dùng", href: "/user", current: true },
-  { name: "Team", href: "#", current: false },
-  { name: "Projects", href: "#", current: false },
-  { name: "Calendar", href: "#", current: false },
+  { name: "Người dùng", link: "/user", current: true },
+  { name: "Team", link: "#", current: false },
+  { name: "Projects", link: "#", current: false },
+  { name: "Calendar", link: "#", current: false },
 ];
 
 function classNames(...classes) {
@@ -46,7 +46,7 @@ export default function Example() {
                     {navigation.map((item) => (
                       <Link
                         key={item.name}
-                        to={item.href}
+                        to={item.link}
                         className={classNames(
                           item.current
                             ? "bg-blue-900 text-white"
