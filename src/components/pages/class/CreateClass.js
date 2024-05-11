@@ -65,10 +65,10 @@ const App = (props) => {
   return (
     <>
       <Button type="primary" onClick={() => setOpen(true)}>
-        Tạo mới người dùng
+        Tạo lớp học
       </Button>
       <Modal
-        title="Tạo mới người dùng"
+        title="Tạo lớp học"
         open={open}
         onOk={handleOk}
         confirmLoading={confirmLoading}

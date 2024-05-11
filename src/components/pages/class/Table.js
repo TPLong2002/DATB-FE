@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Space, Table, Tag } from "antd";
-import DeleteUser from "@/components/pages/class/DeleteUser";
-import CreateUser from "@/components/pages/class/CreateUser";
+import DeleteClass from "@/components/pages/class/DeleteClass";
+import CreateClass from "@/components/pages/class/CreateClass";
 import { Link } from "react-router-dom";
 
 const { Column } = Table;
@@ -18,13 +18,13 @@ const App = (props) => {
   return (
     <>
       <div className="text-right">
-        <DeleteUser
+        <DeleteClass
           open={openDelete}
           setOpen={setOpenDelete}
           id={userDelete}
           fetchData={fetchClass}
         />
-        <CreateUser fetchData={fetchClass} />
+        <CreateClass fetchData={fetchClass} />
       </div>
 
       <Table

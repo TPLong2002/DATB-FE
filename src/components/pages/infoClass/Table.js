@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Space, Table, Tag, Typography } from "antd";
-import DeleteUser from "@/components/pages/user/DeleteUser";
-import CreateUser from "@/components/pages/user/CreateUser";
+import DeleteUser from "@/components/pages/infoClass/KickStrudent";
+import AddStudent from "./AddStudent";
 import { Link } from "react-router-dom";
 
 const { Column } = Table;
@@ -17,7 +17,9 @@ const tags = [
 const App = (props) => {
   const { data, fetchStudent } = props;
   const [openDelete, setOpenDelete] = useState(false);
-  const [userDelete, setUserDelete] = useState(0);
+  const [userkick, setUserKick] = useState(0);
+  const [class_id, setClass_id] = useState(0);
+  const [schoolyear, setSchoolyear] = useState(0);
   const [rows, setRows] = useState([]);
   useEffect(() => {
     const datasrc = data?.Class_Students.map((student) => {
@@ -27,11 +29,13 @@ const App = (props) => {
         email: student.email,
       };
     });
+    setClass_id(data?.id);
+    setSchoolyear(data?.schoolyear.substring(2, 4));
     setRows(datasrc);
   }, [data]);
   const handleDelete = (id) => {
     setOpenDelete(true);
-    setUserDelete(id);
+    setUserKick(id);
   };
 
   return (
@@ -40,10 +44,17 @@ const App = (props) => {
         <DeleteUser
           open={openDelete}
           setOpen={setOpenDelete}
-          id={userDelete}
+          user_id={userkick}
+          class_id={class_id}
           fetchData={fetchStudent}
         />
+        <AddStudent
+          fetchData={fetchStudent}
+          class_id={class_id}
+          schoolyear={schoolyear}
+        />
       </div>
+
       <Title>Danh sách học sinh {data?.name}</Title>
       <Table
         dataSource={rows ? rows.map((row) => ({ ...row, key: row.id })) : []}
