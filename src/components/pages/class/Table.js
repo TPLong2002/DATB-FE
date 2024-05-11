@@ -1,21 +1,13 @@
 import React, { useState } from "react";
 import { Space, Table, Tag } from "antd";
-import DeleteUser from "@/components/pages/user/DeleteUser";
-import CreateUser from "@/components/pages/user/CreateUser";
+import DeleteUser from "@/components/pages/class/DeleteUser";
+import CreateUser from "@/components/pages/class/CreateUser";
 import { Link } from "react-router-dom";
 
 const { Column } = Table;
 
-const tags = [
-  { id: 1, name: "admin", color: "red" },
-  { id: 2, name: "student", color: "green" },
-  { id: 3, name: "parent", color: "geekblue" },
-  { id: 4, name: "teacher", color: "gold" },
-  { id: 5, name: "accountant", color: "purple" },
-];
-
 const App = (props) => {
-  const { data, pagination, setPagination, fetchUser } = props;
+  const { data, pagination, setPagination, fetchClass } = props;
   const [openDelete, setOpenDelete] = useState(false);
   const [userDelete, setUserDelete] = useState(0);
   const { rows, count } = data;
@@ -30,9 +22,9 @@ const App = (props) => {
           open={openDelete}
           setOpen={setOpenDelete}
           id={userDelete}
-          fetchData={fetchUser}
+          fetchData={fetchClass}
         />
-        <CreateUser fetchData={fetchUser} />
+        <CreateUser fetchData={fetchClass} />
       </div>
 
       <Table
@@ -68,6 +60,23 @@ const App = (props) => {
         <Column title="Name" dataIndex="name" key="name" />
         <Column title="GVCN" dataIndex="gvcn" key="gvcn" />
         <Column title="Schoolyear" dataIndex="schoolyear" key="schoolyear" />
+        <Column
+          title="Action"
+          key="action"
+          render={(_, record) => (
+            <Space size="middle" className="text-l">
+              <Link to="/classinfo" state={{ id: record.id }}>
+                Xem thông tin {record.username}
+              </Link>
+              <a
+                onClick={() => handleDelete(record.id)}
+                className="hover:text-red-500"
+              >
+                Delete
+              </a>
+            </Space>
+          )}
+        />
       </Table>
     </>
   );

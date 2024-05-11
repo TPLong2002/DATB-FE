@@ -10,17 +10,16 @@ function App() {
     page: 1,
     limit: 10,
   });
-  const fetchUser = async () => {
+  const fetchClass = async () => {
     try {
       const res = await getClasses(pagination.page, pagination.limit);
       setData(res.data);
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
   };
   useEffect(() => {
-    fetchUser();
+    fetchClass();
   }, [pagination]);
   return (
     <div>
@@ -29,7 +28,7 @@ function App() {
         pagination={pagination}
         setPagination={setPagination}
         setData={setData}
-        fetchUser={fetchUser}
+        fetchClass={fetchClass}
       ></Table>
     </div>
   );
