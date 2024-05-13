@@ -66,7 +66,7 @@ const App = (props) => {
           render={(_, record) => (
             <Space size="middle" className="text-l">
               <Link to="/classinfo" state={{ id: record.id }}>
-                Xem thông tin {record.username}
+                Xem danh sách học sinh {record.username}
               </Link>
               <a
                 onClick={() => handleDelete(record.id)}

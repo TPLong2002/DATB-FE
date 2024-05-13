@@ -1,23 +1,21 @@
 import React, { useState } from "react";
-import { deleteClass } from "@/services/class";
+import { deleteSubject } from "@/services/subject";
 
 import { Modal } from "antd";
 import { toast } from "react-toastify";
-
+const defaultText = "Bạn có chắc muốn xóa môn học này không ?";
 const App = (props) => {
-  const { open, setOpen, id, fetchData } = props;
+  const { open, setOpen, subjectDetele, fetchData } = props;
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modalText, setModalText] = useState(
-    "Bạn có chắc muốn xóa lớp học này không ?"
-  );
+  const [modalText, setModalText] = useState(defaultText);
   const handleOk = () => {
-    deleteClass(id).then((res) => {
+    deleteSubject(subjectDetele).then((res) => {
       setModalText(res.message);
       setConfirmLoading(true);
-      setModalText(res.message);
       setTimeout(() => {
         setOpen(false);
         fetchData();
+        setModalText(defaultText);
         toast.success("Xóa lớp học thành công");
         setConfirmLoading(false);
       }, 2000);

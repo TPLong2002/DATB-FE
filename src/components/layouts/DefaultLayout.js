@@ -1,4 +1,4 @@
-import Nav from "./Nav";
+import Nav from "@/components/components/Nav";
 function Layout({ children }) {
   return (
     <div className="header">
