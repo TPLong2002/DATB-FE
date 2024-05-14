@@ -91,6 +91,15 @@ const App = (props) => {
     setAllStudents(updatedAllStudents);
     setDefaultStudent("Chọn học sinh");
   };
+  const handleDelete = (index) => {
+    let newStudents = [...students];
+    const removedStudent = newStudents.splice(index, 1)[0];
+    setAllStudents([
+      ...allStudents,
+      { value: removedStudent.id, label: removedStudent.label },
+    ]);
+    setStudents(newStudents);
+  };
   const onSearch = (value) => {
     console.log("search:", value);
   };
@@ -139,7 +148,11 @@ const App = (props) => {
             {students.map((_class, index) => (
               <div key={index} className="flex space-x-2">
                 <Input value={_class.label} readOnly></Input>
-                <Button icon={<DeleteOutlined />} danger></Button>
+                <Button
+                  icon={<DeleteOutlined />}
+                  onClick={handleDelete}
+                  danger
+                ></Button>
               </div>
             ))}
             <Select

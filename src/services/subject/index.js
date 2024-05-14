@@ -1,15 +1,7 @@
 import Axios from "@/services/axios";
 export const getAllSubject = async () => {
   try {
-    const res = Axios.get("/subject/subjects");
-    return res;
-  } catch (error) {
-    console.log(error);
-  }
-};
-export const getSubjectById = async (id) => {
-  try {
-    const res = Axios.get(`/subject/${id}`);
+    const res = Axios.get("/subject");
     return res;
   } catch (error) {
     console.log(error);
@@ -35,6 +27,24 @@ export const deleteSubject = async (data) => {
   try {
     console.log(data);
     const res = Axios.put(`/subject/hidden`, data);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const getTeachersNotInSubject = async (id) => {
+  try {
+    const res = Axios.get(`/teacher/teachersnotinsubject`, {
+      params: { subject_id: id },
+    });
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const addTeacherToSubject = async (data) => {
+  try {
+    const res = Axios.post("/teacher/addteachertosubject", data);
     return res;
   } catch (error) {
     console.log(error);

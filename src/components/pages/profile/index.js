@@ -31,7 +31,7 @@ function Profile() {
       setProfiles(res.data);
 
       setOriginalImg(
-        res.data.map((row) => ({ avt: row.avt, id: res.data.id }))
+        res?.data?.map((row) => ({ avt: row.avt, id: res.data.id }))
       );
     }
     if (options === 2) {
@@ -79,11 +79,9 @@ function Profile() {
         if (data?.secure_url) {
           newProfile[index] = { ...newProfile[index], avt: data.secure_url };
           const res = await updateProfile(newProfile[index]);
-          if (+res.code === 0) {
-            toast.success(res.message);
-          }
+
           if (res.code === 0) {
-            console.log(res.message);
+            toast.success(res.message);
           }
         }
       } catch (error) {
@@ -92,7 +90,7 @@ function Profile() {
     } else {
       const res = await updateProfile(newProfile[index]);
       if (res.code === 0) {
-        console.log(res.message);
+        toast.success(res.message);
       }
     }
   };
@@ -115,95 +113,96 @@ function Profile() {
           )}
         </Radio.Group>
       </div>
-      {profiles.map((profile, index) => (
-        <div className="border rounded-sm border-gray-400" key={index}>
-          {/* <Avatar
+      {profiles &&
+        profiles.map((profile, index) => (
+          <div className="border rounded-sm border-gray-400" key={index}>
+            {/* <Avatar
             shape="square"
             size={{ xs: 24, sm: 32, md: 40, lg: 64, xl: 80, xxl: 100 }}
             src={profile?.avt}
             className="border rounded-sm border-gray-400"
           /> */}
-          {profile && (
-            <UploadAvatar
-              profiles={profiles}
-              setProfiles={setProfiles}
-              index={index}
-            />
-          )}
+            {profile && (
+              <UploadAvatar
+                profiles={profiles}
+                setProfiles={setProfiles}
+                index={index}
+              />
+            )}
 
-          <div>
-            <Input
-              value={profile?.firstName}
-              name="firstName"
-              onChange={(e) => handleChange(e, index)}
-              placeholder="Thêm họ"
-            ></Input>
-            <Input
-              value={profile?.lastName}
-              name="lastName"
-              onChange={(e) => handleChange(e, index)}
-              placeholder="Thêm tên"
-            ></Input>
-            <Input
-              value={profile?.email}
-              name="email"
-              readOnly
-              onChange={(e) => handleChange(e, index)}
-              placeholder="Thêm email"
-            ></Input>
-            <Input.Password
-              value={profile?.password}
-              type="password"
-              name="password"
-              onChange={(e) => handleChange(e, index)}
-              placeholder="Mật khẩu"
-              iconRender={(visible) =>
-                visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-              }
-            ></Input.Password>
-            <Input
-              value={profile?.phoneNumber}
-              name="phoneNumber"
-              onChange={(e) => handleChange(e, index)}
-              placeholder="Thêm số điện thoại"
-            ></Input>
-            <Input
-              value={profile?.address}
-              name="address"
-              onChange={(e) => handleChange(e, index)}
-              placeholder="Thêm địa chỉ"
-            ></Input>
-            <Input
-              value={profile?.CCCD}
-              name="CCCD"
-              onChange={handleChange}
-              placeholder="Thêm CCCD"
-            ></Input>
-            {!profile?.dateOfBirth && (
-              <DatePicker
-                format={format}
-                onChange={(date, dateString) =>
-                  onChange(date, dateString, index)
+            <div>
+              <Input
+                value={profile?.firstName}
+                name="firstName"
+                onChange={(e) => handleChange(e, index)}
+                placeholder="Thêm họ"
+              ></Input>
+              <Input
+                value={profile?.lastName}
+                name="lastName"
+                onChange={(e) => handleChange(e, index)}
+                placeholder="Thêm tên"
+              ></Input>
+              <Input
+                value={profile?.email}
+                name="email"
+                readOnly
+                onChange={(e) => handleChange(e, index)}
+                placeholder="Thêm email"
+              ></Input>
+              <Input.Password
+                value={profile?.password}
+                type="password"
+                name="password"
+                onChange={(e) => handleChange(e, index)}
+                placeholder="Mật khẩu"
+                iconRender={(visible) =>
+                  visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
                 }
-              />
-            )}
-            {profile?.dateOfBirth && (
-              <DatePicker
-                defaultValue={dayjs(profile.dateOfBirth)}
-                format={format}
-                onChange={(date, dateString) =>
-                  onChange(date, dateString, index)
-                }
-              />
-            )}
+              ></Input.Password>
+              <Input
+                value={profile?.phoneNumber}
+                name="phoneNumber"
+                onChange={(e) => handleChange(e, index)}
+                placeholder="Thêm số điện thoại"
+              ></Input>
+              <Input
+                value={profile?.address}
+                name="address"
+                onChange={(e) => handleChange(e, index)}
+                placeholder="Thêm địa chỉ"
+              ></Input>
+              <Input
+                value={profile?.CCCD}
+                name="CCCD"
+                onChange={handleChange}
+                placeholder="Thêm CCCD"
+              ></Input>
+              {!profile?.dateOfBirth && (
+                <DatePicker
+                  format={format}
+                  onChange={(date, dateString) =>
+                    onChange(date, dateString, index)
+                  }
+                />
+              )}
+              {profile?.dateOfBirth && (
+                <DatePicker
+                  defaultValue={dayjs(profile.dateOfBirth)}
+                  format={format}
+                  onChange={(date, dateString) =>
+                    onChange(date, dateString, index)
+                  }
+                />
+              )}
+            </div>
+            <div className="text-center">
+              <Button type="primary" onClick={() => onSubmit(index)}>
+                Save
+              </Button>
+            </div>
           </div>
-          <div className="text-center">
-            <Button type="primary" onClick={() => onSubmit(index)}>
-              Save
-            </Button>
-          </div>
-        </div>
-      ))}
+        ))}
     </div>
   );
 }

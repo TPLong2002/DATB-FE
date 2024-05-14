@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { deleteSubject } from "@/services/subject";
 
 import { Modal } from "antd";
@@ -7,7 +7,18 @@ const defaultText = "Bạn có chắc muốn xóa môn học này không ?";
 const App = (props) => {
   const { open, setOpen, subjectDetele, fetchData } = props;
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modalText, setModalText] = useState(defaultText);
+  const [modalText, setModalText] = useState(
+    +subjectDetele.ishidden == 1
+      ? defaultText
+      : "Bạn có chắc muốn hiện môn học này không ?"
+  );
+  useEffect(() => {
+    setModalText(
+      +subjectDetele.ishidden == 1
+        ? defaultText
+        : "Bạn có chắc muốn hiện môn học này không ?"
+    );
+  }, [subjectDetele]);
   const handleOk = () => {
     deleteSubject(subjectDetele).then((res) => {
       setModalText(res.message);
