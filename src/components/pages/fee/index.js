@@ -3,6 +3,7 @@ import { getAllFee } from "@/services/fee";
 import TableFee from "./TableFee";
 import dayjs from "dayjs";
 import { Typography } from "antd";
+import CreateFee from "@/components/pages/fee/CreateFee";
 const { Title } = Typography;
 const format = "DD/MM/YYYY";
 function Fee() {
@@ -37,7 +38,11 @@ function Fee() {
   }, [pagination]);
   return (
     <div className="space-y-3">
-      <Title>Các khoảng phí</Title>
+      <div className="flex justify-between items-center text-center">
+        <Title>Các khoảng phí</Title>
+        <CreateFee fetchFee={fetchFee}></CreateFee>
+      </div>
+
       <TableFee
         data={data}
         fetchFee={fetchFee}

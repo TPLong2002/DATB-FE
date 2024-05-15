@@ -1,15 +1,18 @@
-import { useEffect, useState } from "react";
-
-import { Typography, Table, Space, Input, Button } from "antd";
+import { useState } from "react";
+import { Table, Space, Checkbox } from "antd";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import DeleteFee from "@/components/pages/fee/DeleteFee";
 
-const { Title } = Typography;
 function InfoSubject(props) {
   const { data, fetchFee, pagination, setPagination } = props;
   const { rows, count } = data;
+  const [feeDetele, setFeeDetele] = useState({ id: 0, ishidden: 0 });
+  const [openDelete, setOpenDelete] = useState(false);
   const navigate = useNavigate();
-
+  const handleDelete = (id, ishidden) => {
+    setFeeDetele({ id, ishidden: ishidden ^ 1 });
+    setOpenDelete(true);
+  };
   const columns = [
     {
       title: "Tên phí",
@@ -27,6 +30,16 @@ function InfoSubject(props) {
     {
       title: "Ngày hết hạn",
       dataIndex: "endDate",
+    },
+    {
+      title: "Ẩn",
+      dataIndex: "ishidden",
+      render: (ishidden, record) => (
+        <Checkbox
+          checked={+ishidden === 1}
+          onChange={() => handleDelete(record.id, record.ishidden)}
+        />
+      ),
     },
     {
       title: "Action",
@@ -47,8 +60,17 @@ function InfoSubject(props) {
       setPagination({ ...pagination, page, limit: pageSize });
     },
   };
-  const submit = async () => {};
-  return <Table columns={columns} dataSource={rows} pagination={paginate} />;
+  return (
+    <div>
+      <DeleteFee
+        open={openDelete}
+        setOpen={setOpenDelete}
+        feeDetele={feeDetele}
+        fetchData={fetchFee}
+      />
+      <Table columns={columns} dataSource={rows} pagination={paginate} />
+    </div>
+  );
 }
 
 export default InfoSubject;
