@@ -11,9 +11,11 @@ import dayjs from "dayjs";
 import UploadAvatar from "@/components/pages/profile/UploadAvatar";
 import { toast } from "react-toastify";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
+import { useParams } from "react-router-dom";
 
 function Profile() {
-  let { state } = useLocation();
+  const params = useParams();
+  console.log(params);
   const format = "YYYY/MM/DD";
   const [profiles, setProfiles] = useState([{}]);
   const [group, setGroup] = useState({});
@@ -44,8 +46,8 @@ function Profile() {
     }
   };
   useEffect(() => {
-    fetchProfile(state.id);
-  }, [state.id, options]);
+    fetchProfile(params.user_id);
+  }, [params.user_id, options]);
   const onChange = (date, dateString, index) => {
     const newProfile = [...profiles];
     newProfile[index] = { ...newProfile[index], dateOfBirth: dateString };

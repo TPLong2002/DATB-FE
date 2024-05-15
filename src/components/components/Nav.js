@@ -1,20 +1,27 @@
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import logo from "@/img/logo.png";
 
 const navigation = [
-  { name: "Người dùng", link: "/user", current: true },
-  { name: "Lớp học", link: "/class", current: false },
-  { name: "Môn Học", link: "/subject", current: false },
-  { name: "Calendar", link: "#", current: false },
+  { name: "Người dùng", link: "/user" },
+  { name: "Lớp học", link: "/class" },
+  { name: "Môn Học", link: "/subject" },
+  { name: "Khoảng phí", link: "/fee" },
 ];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
-
+function mapPath(path) {
+  if (path.startsWith("/subject/info")) {
+    return "/subject";
+  }
+  return path;
+}
 export default function Example() {
+  let location = useLocation();
   return (
     <Disclosure as="nav" className="bg-blue-500">
       {({ open }) => (
@@ -37,7 +44,7 @@ export default function Example() {
                 <div className="flex flex-shrink-0 items-center">
                   <img
                     className="h-8 w-auto bg-white p-1 rounded-full"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                    src={logo}
                     alt="Your Company"
                   />
                 </div>
@@ -48,7 +55,7 @@ export default function Example() {
                         key={item.name}
                         to={item.link}
                         className={classNames(
-                          item.current
+                          item.link === mapPath(location.pathname)
                             ? "bg-blue-900 text-white"
                             : "text-white hover:bg-blue-700 hover:text-white",
                           "rounded-md px-3 py-2 text-sm font-medium"

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Space, Table, Tag } from "antd";
 import DeleteUser from "@/components/pages/user/DeleteUser";
 import CreateUser from "@/components/pages/user/CreateUser";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const { Column } = Table;
 
@@ -19,6 +19,7 @@ const App = (props) => {
   const [openDelete, setOpenDelete] = useState(false);
   const [userDelete, setUserDelete] = useState(0);
   const { rows, count } = data;
+  const navigate = useNavigate();
   const handleDelete = (id) => {
     setOpenDelete(true);
     setUserDelete(id);
@@ -73,9 +74,9 @@ const App = (props) => {
           key="action"
           render={(_, record) => (
             <Space size="middle" className="text-l">
-              <Link to="/profile" state={{ id: record.id }}>
+              <a onClick={() => navigate(`/user/profile/${record.id}`)}>
                 Profile {record.username}
-              </Link>
+              </a>
               <a
                 onClick={() => handleDelete(record.id)}
                 className="hover:text-red-500"

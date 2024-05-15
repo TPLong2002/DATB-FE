@@ -15,9 +15,10 @@ export const createSubject = async (data) => {
     console.log(error);
   }
 };
-export const updateSubject = async (id, data) => {
+export const updateSubject = async (data) => {
   try {
-    const res = Axios.put(`/subject/${id}`, data);
+    console.log(data);
+    const res = Axios.put(`/subject`, data);
     return res;
   } catch (error) {
     console.log(error);

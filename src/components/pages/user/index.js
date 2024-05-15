@@ -13,7 +13,6 @@ function App() {
   const fetchUser = async () => {
     try {
       const res = await getUsers(pagination.page, pagination.limit);
-      console.log(res);
       setData(res.data);
     } catch (error) {
       console.log(error);

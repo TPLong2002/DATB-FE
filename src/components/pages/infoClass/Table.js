@@ -30,7 +30,7 @@ const App = (props) => {
       };
     });
     setClass_id(data?.id);
-    setSchoolyear(data?.schoolyear.substring(2, 4));
+    setSchoolyear(data?.schoolyear?.substring(2, 4));
     setRows(datasrc);
   }, [data]);
   const handleDelete = (id) => {
