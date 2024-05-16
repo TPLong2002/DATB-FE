@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Space, Table, Tag } from "antd";
+import { Button, Space, Table, Tag } from "antd";
 import DeleteClass from "@/components/pages/class/DeleteClass";
 import CreateClass from "@/components/pages/class/CreateClass";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const { Column } = Table;
 
@@ -11,19 +11,23 @@ const App = (props) => {
   const [openDelete, setOpenDelete] = useState(false);
   const [userDelete, setUserDelete] = useState(0);
   const { rows, count } = data;
+
+  const navigate = useNavigate();
+
   const handleDelete = (id) => {
     setOpenDelete(true);
     setUserDelete(id);
   };
+  console.log(data);
   return (
     <>
+      <DeleteClass
+        open={openDelete}
+        setOpen={setOpenDelete}
+        id={userDelete}
+        fetchData={fetchClass}
+      />
       <div className="text-right">
-        <DeleteClass
-          open={openDelete}
-          setOpen={setOpenDelete}
-          id={userDelete}
-          fetchData={fetchClass}
-        />
         <CreateClass fetchData={fetchClass} />
       </div>
 
@@ -66,8 +70,15 @@ const App = (props) => {
           render={(_, record) => (
             <Space size="middle" className="text-l">
               <Link to="/classinfo" state={{ id: record.id }}>
-                Xem danh sách học sinh {record.username}
+                Danh sách {record.username}
               </Link>
+              <a
+                onClick={() => {
+                  navigate(`/class/subject/${record.id}`);
+                }}
+              >
+                Môn học
+              </a>
               <a
                 onClick={() => handleDelete(record.id)}
                 className="hover:text-red-500"

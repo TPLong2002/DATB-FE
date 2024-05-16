@@ -7,6 +7,7 @@ import Subject from "@/components/pages/subject";
 import SubjectInfo from "@/components/pages/subject/InfoSubject";
 import Fee from "@/components/pages/fee";
 import FeeDetail from "@/components/pages/fee/DetailFee";
+import ClassSubject from "@/components/pages/classSubject";
 export const privateRoutes = [
   { path: "/user", component: User, layout: DefaultLayout },
   { path: "/user/profile/:user_id", component: Profile, layout: DefaultLayout },
@@ -20,4 +21,9 @@ export const privateRoutes = [
   },
   { path: "/fee", component: Fee, layout: DefaultLayout },
   { path: "/fee/detail/:id", component: FeeDetail, layout: DefaultLayout },
+  {
+    path: "/class/subject/:class_id",
+    component: ClassSubject,
+    layout: DefaultLayout,
+  },
 ];
