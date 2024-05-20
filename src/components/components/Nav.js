@@ -9,14 +9,21 @@ const navigation = [
   { name: "Lớp học", link: "/class" },
   { name: "Môn Học", link: "/subject" },
   { name: "Khoảng phí", link: "/fee" },
+  { name: "Điểm", link: "/mark" },
 ];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 function mapPath(path) {
-  if (path.startsWith("/subject/info")) {
+  if (path.startsWith("/subject/")) {
     return "/subject";
+  }
+  if (path.startsWith("/user/")) {
+    return "/user";
+  }
+  if (path.startsWith("/class/")) {
+    return "/class";
   }
   return path;
 }

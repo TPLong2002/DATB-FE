@@ -54,7 +54,7 @@ const App = (props) => {
           total: count,
           defaultPageSize: pagination.limit,
           showSizeChanger: true,
-          pageSizeOptions: ["5", "10", "50"],
+          pageSizeOptions: ["1", "10", "50"],
           onChange: (page, pageSize) => {
             setPagination({ ...pagination, page, limit: pageSize });
           },
