@@ -10,6 +10,7 @@ const navigation = [
   { name: "Môn Học", link: "/subject" },
   { name: "Khoảng phí", link: "/fee" },
   { name: "Điểm", link: "/mark" },
+  { name: "Bài tập", link: "/assignment" },
 ];
 
 function classNames(...classes) {
@@ -24,6 +25,9 @@ function mapPath(path) {
   }
   if (path.startsWith("/class/")) {
     return "/class";
+  }
+  if (path.startsWith("/assignment/")) {
+    return "/assignment";
   }
   return path;
 }

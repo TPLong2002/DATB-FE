@@ -9,6 +9,8 @@ import Fee from "@/components/pages/fee";
 import FeeDetail from "@/components/pages/fee/DetailFee";
 import ClassSubject from "@/components/pages/classSubject";
 import Mark from "@/components/pages/mark";
+import Assignment from "@/components/pages/assignment";
+import AssignmentDetail from "@/components/pages/assignment/DetailAssignment";
 export const privateRoutes = [
   { path: "/user", component: User, layout: DefaultLayout },
   { path: "/user/profile/:user_id", component: Profile, layout: DefaultLayout },
@@ -28,4 +30,10 @@ export const privateRoutes = [
     layout: DefaultLayout,
   },
   { path: "/mark", component: Mark, layout: DefaultLayout },
+  { path: "/assignment", component: Assignment, layout: DefaultLayout },
+  {
+    path: "/assignment/detail/:id",
+    component: AssignmentDetail,
+    layout: DefaultLayout,
+  },
 ];

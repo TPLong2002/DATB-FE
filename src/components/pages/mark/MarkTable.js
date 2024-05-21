@@ -5,7 +5,7 @@ import { Table, Space } from "antd";
 import EditMark from "./EditMark";
 
 function MarkTable(props) {
-  const { class_id, subject_id } = props;
+  const { class_id, subject_id, fetchSubjectsByClassId } = props;
   const [markTypes, setMarkTypes] = useState([]);
   const [data, setData] = useState([]);
   const [student, setStudent] = useState();
@@ -14,7 +14,7 @@ function MarkTable(props) {
   const transformData = (data) => {
     const students = {};
 
-    data.forEach((item) => {
+    data?.forEach((item) => {
       const userId = item.user_id;
       if (!students[userId]) {
         students[userId] = {
@@ -78,6 +78,8 @@ function MarkTable(props) {
             student={student}
             class_id={class_id}
             subject_id={subject_id}
+            markTypes={markTypes}
+            fetchMarkType={fetchMarkType}
           ></EditMark>
         )}
       </div>

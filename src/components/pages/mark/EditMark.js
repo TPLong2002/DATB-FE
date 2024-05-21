@@ -1,18 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { Input, Modal } from "antd";
-import { getMarkByStudentId } from "@/services/mark";
+import { getMarkByStudentId, updateOrCreateMark } from "@/services/mark";
+import { toast } from "react-toastify";
 
 function EditMark(props) {
-  const { openEditMark, setOpenEditMark, student, class_id, subject_id } =
-    props;
+  const {
+    openEditMark,
+    setOpenEditMark,
+    student,
+    class_id,
+    subject_id,
+    markTypes,
+    fetchMarkType,
+  } = props;
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modalText, setModalText] = useState("Content of the modal");
+  const [modalText, setModalText] = useState("loading...");
   const [marks, setMarks] = useState([]);
   const [data, setData] = useState({});
+  const [transcript_id, setTranscript_id] = useState();
   useEffect(() => {
     const fetch = async () => {
       const res = await getMarkByStudentId(class_id, subject_id, student);
-      console.log(res.data);
+      setTranscript_id(res.data[0].transcript_id);
       const m = {};
       res.data.forEach((item) => {
         m[item.Marktype.name] = item.mark;
@@ -22,23 +31,43 @@ function EditMark(props) {
     };
     fetch();
   }, [student]);
-  const handleOk = () => {
-    setModalText("loading...");
-    setConfirmLoading(true);
-    setTimeout(() => {
-      setOpenEditMark(false);
-      setConfirmLoading(false);
-    }, 2000);
+  const handleOk = async () => {
+    const result = markTypes.reduce((acc, item) => {
+      if (data[item.name] !== undefined && data[item.name] !== "") {
+        acc.push({
+          subject_id: subject_id,
+          user_id: student,
+          marktype_id: item.id,
+          mark: +data[item.name],
+          transcript_id: transcript_id,
+        });
+      }
+      return acc;
+    }, []);
+    if (result?.length > 0) {
+      setConfirmLoading(true);
+      const res = await updateOrCreateMark(result);
+      setModalText("loading...");
+      if (+res.code == 0) {
+        setTimeout(() => {
+          fetchMarkType().then(() => {
+            setOpenEditMark(false);
+            setConfirmLoading(false);
+            toast.success(res.message);
+          });
+        }, 1000);
+      }
+    }
   };
   const handleChange = (e) => {
-    setData({ ...data, [e.target.name]: +e.target.value });
+    setData({ ...data, [e.target.name]: e.target.value });
   };
 
   const handleCancel = () => {
     console.log("Clicked cancel button");
     setOpenEditMark(false);
   };
-  console.log(data);
+
   return (
     <>
       <Modal
@@ -67,36 +96,14 @@ function EditMark(props) {
                 marks[0]?.User?.Profile?.lastName
               }
             />
-            <Input
-              placeholder="Điểm miệng"
-              name="Điểm miệng"
-              onChange={handleChange}
-              value={data["Điểm miệng"]}
-            />
-            <Input
-              placeholder="Điểm 15 phút"
-              name="15 phút"
-              onChange={handleChange}
-              value={data["15 phút"]}
-            />
-            <Input
-              placeholder="Điểm 1 tiết"
-              name="1 tiết"
-              onChange={handleChange}
-              value={data["1 tiết"]}
-            />
-            <Input
-              placeholder="Điểm thi giữa kỳ"
-              name="Giữa kỳ"
-              onChange={handleChange}
-              value={data["Giữa kỳ"]}
-            />
-            <Input
-              placeholder="Điểm thi cuối kỳ"
-              name="Cuối kỳ"
-              onChange={handleChange}
-              value={data["Cuối kỳ"]}
-            />
+            {markTypes?.map((markType, index) => (
+              <Input
+                placeholder={"Điểm" + markType.name}
+                name={markType.name}
+                onChange={handleChange}
+                value={data[markType.name]}
+              />
+            ))}
           </div>
         )}
       </Modal>

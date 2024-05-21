@@ -23,3 +23,11 @@ export const getMarkByStudentId = async (class_id, subject_id, user_id) => {
     console.log(error);
   }
 };
+export const updateOrCreateMark = async (data) => {
+  try {
+    const res = await Axios.post(`/mark/updateOrCreate`, data);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
