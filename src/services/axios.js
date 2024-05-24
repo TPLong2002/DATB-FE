@@ -2,6 +2,7 @@ import axios from "axios";
 const baseURL = "http://localhost:3002/api/v1";
 const instance = axios.create({
   baseURL: baseURL,
+  withCredentials: true,
 });
 const token = localStorage.getItem("token");
 instance.defaults.headers.common["Authorization"] =

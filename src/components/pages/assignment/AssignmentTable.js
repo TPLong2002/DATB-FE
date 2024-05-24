@@ -61,7 +61,13 @@ function InfoSubject(props) {
   };
   return (
     <div>
-      <Table columns={columns} dataSource={rows} pagination={paginate} />
+      <Table
+        className="shadow-lg"
+        bordered={true}
+        columns={columns}
+        dataSource={rows}
+        pagination={paginate}
+      />
     </div>
   );
 }

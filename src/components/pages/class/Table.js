@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Button, Space, Table, Tag } from "antd";
 import DeleteClass from "@/components/pages/class/DeleteClass";
-import CreateClass from "@/components/pages/class/CreateClass";
 import { Link, useNavigate } from "react-router-dom";
 
 const { Column } = Table;
@@ -18,7 +17,6 @@ const App = (props) => {
     setOpenDelete(true);
     setUserDelete(id);
   };
-  console.log(data);
   return (
     <>
       <DeleteClass
@@ -27,11 +25,10 @@ const App = (props) => {
         id={userDelete}
         fetchData={fetchClass}
       />
-      <div className="text-right">
-        <CreateClass fetchData={fetchClass} />
-      </div>
 
       <Table
+        bordered={true}
+        className="shadow-xl"
         dataSource={
           rows
             ? rows.map((row) => {

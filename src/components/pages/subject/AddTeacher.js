@@ -134,6 +134,7 @@ const App = (props) => {
               onSearch={onSearch}
               filterOption={filterOption}
               options={allTeachers}
+              style={{ width: "50%" }}
             />
           </div>
         )}

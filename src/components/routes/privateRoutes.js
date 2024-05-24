@@ -11,6 +11,7 @@ import ClassSubject from "@/components/pages/classSubject";
 import Mark from "@/components/pages/mark";
 import Assignment from "@/components/pages/assignment";
 import AssignmentDetail from "@/components/pages/assignment/DetailAssignment";
+import Role from "@/components/pages/role";
 export const privateRoutes = [
   { path: "/user", component: User, layout: DefaultLayout },
   { path: "/user/profile/:user_id", component: Profile, layout: DefaultLayout },
@@ -36,4 +37,5 @@ export const privateRoutes = [
     component: AssignmentDetail,
     layout: DefaultLayout,
   },
+  { path: "/role", component: Role, layout: DefaultLayout },
 ];

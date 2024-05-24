@@ -129,7 +129,7 @@ const App = (props) => {
           <p>{modalText}</p>
         ) : (
           users.map((user, index) => (
-            <div key={index}>
+            <div key={index} className="space-y-2">
               <Input
                 placeholder="Username"
                 name="username"
@@ -149,6 +149,7 @@ const App = (props) => {
                 onChange={(e) => handleChange(e, index)}
               ></Input>
               <Select
+                placeholder="Chọn nhóm quyền"
                 value={+user.group_id || null}
                 name="group_id"
                 style={{ width: 200 }}

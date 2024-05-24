@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Space, Table, Tag } from "antd";
+import React, { useEffect, useState } from "react";
+import { Space, Table, Tag, Select, Input } from "antd";
 import DeleteUser from "@/components/pages/user/DeleteUser";
 import CreateUser from "@/components/pages/user/CreateUser";
 import { useNavigate } from "react-router-dom";
@@ -15,28 +15,98 @@ const tags = [
 ];
 
 const App = (props) => {
-  const { data, pagination, setPagination, fetchUser } = props;
+  const {
+    data,
+    pagination,
+    setPagination,
+    fetchUser,
+    groups,
+    groupSelected,
+    setGroupSelected,
+    type,
+    setTypeSelected,
+    typeSelected,
+    search,
+    setSearch,
+  } = props;
   const [openDelete, setOpenDelete] = useState(false);
-  const [userDelete, setUserDelete] = useState(0);
+  const [userDelete, setUserDelete] = useState({ id: 0, ishidden: 0 });
+  const [textSearch, setTextSearch] = useState(search ? search : "");
+
   const { rows, count } = data;
   const navigate = useNavigate();
-  const handleDelete = (id) => {
+  const handleDelete = (id, isdeleted) => {
     setOpenDelete(true);
-    setUserDelete(id);
+    setUserDelete({ id: id, ishidden: +isdeleted ^ 1 });
+  };
+
+  const filterOption = (input, option) =>
+    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
+  const onSearch = (value) => {
+    console.log("search:", value);
+  };
+  const onSelectChange = (value) => {
+    setGroupSelected(value);
+  };
+  const onTypeChange = (value) => {
+    setTypeSelected(value);
+  };
+  const handleChange = (e) => {
+    setTextSearch(e.target.value);
+  };
+  const handleSearch = (value) => {
+    setSearch(value);
   };
   return (
     <>
-      <div className="text-right">
+      <div className="flex justify-between py-4">
         <DeleteUser
           open={openDelete}
           setOpen={setOpenDelete}
-          id={userDelete}
+          userDelete={userDelete}
           fetchData={fetchUser}
         />
-        <CreateUser fetchData={fetchUser} />
+
+        <div className="flex space-x-2">
+          <Select
+            showSearch
+            value={groupSelected}
+            placeholder="Chọn người dùng"
+            optionFilterProp="children"
+            onChange={onSelectChange}
+            onSearch={onSearch}
+            filterOption={filterOption}
+            options={groups.map((group) => ({
+              value: group.id,
+              label: group.name,
+            }))}
+            style={{ width: 160 }}
+          />
+          <Select
+            showSearch
+            value={typeSelected}
+            placeholder="Chọn loại tài khoảng"
+            optionFilterProp="children"
+            onChange={onTypeChange}
+            onSearch={onSearch}
+            filterOption={filterOption}
+            options={type}
+            style={{ width: 160 }}
+          />
+        </div>
+        <div className="flex space-x-2">
+          <Input.Search
+            placeholder="search"
+            value={textSearch}
+            onSearch={handleSearch}
+            onChange={handleChange}
+          ></Input.Search>
+          <CreateUser fetchData={fetchUser} />
+        </div>
       </div>
 
       <Table
+        bordered={true}
         dataSource={rows ? rows.map((row) => ({ ...row, key: row.id })) : []}
         pagination={{
           total: count,
@@ -47,6 +117,7 @@ const App = (props) => {
             setPagination({ ...pagination, page, limit: pageSize });
           },
         }}
+        className="shadow-xl"
       >
         <Column title="ID" dataIndex="id" key="id" />
         <Column title="Username" dataIndex="username" key="username" />
@@ -77,12 +148,21 @@ const App = (props) => {
               <a onClick={() => navigate(`/user/profile/${record.id}`)}>
                 Profile {record.username}
               </a>
-              <a
-                onClick={() => handleDelete(record.id)}
-                className="hover:text-red-500"
-              >
-                Delete
-              </a>
+              {record.isdeleted == 0 ? (
+                <a
+                  onClick={() => handleDelete(record.id, record.isdeleted)}
+                  className="hover:text-red-500"
+                >
+                  Delete
+                </a>
+              ) : (
+                <a
+                  onClick={() => handleDelete(record.id, record.isdeleted)}
+                  className="hover:text-green-500"
+                >
+                  Recover
+                </a>
+              )}
             </Space>
           )}
         />

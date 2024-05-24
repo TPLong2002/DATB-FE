@@ -68,6 +68,7 @@ const App = () => {
       />
 
       <Table
+        className="shadow-lg"
         columns={columns}
         dataSource={
           data

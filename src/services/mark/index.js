@@ -1,10 +1,18 @@
 import Axios from "@/services/axios";
-export const getMatksOfStudentsInClass = async (class_id, subject_id) => {
+export const getMatksOfStudentsInClass = async (
+  class_id,
+  subject_id,
+  schoolyear_id,
+  semester_id
+) => {
   try {
+    console.log(class_id, subject_id, schoolyear_id, semester_id);
     const res = await Axios.get(`/mark/subjectclass`, {
       params: {
         class_id,
         subject_id,
+        schoolyear_id,
+        semester_id,
       },
     });
     return res;

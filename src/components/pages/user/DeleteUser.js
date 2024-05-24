@@ -1,16 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { deleteUser } from "@/services/user";
 
 import { Modal } from "antd";
 
 const App = (props) => {
-  const { open, setOpen, id, fetchData } = props;
+  const { open, setOpen, userDelete, fetchData } = props;
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState(
-    "Bạn có chắc muốn xóa người dùng naỳ không ?"
+    +userDelete.ishidden == 1
+      ? "Bạn có chắc muốn xóa người dùng này không ?"
+      : "Bạn có chắc muốn khôi phục người dùng này không ?"
   );
+  console.log(userDelete);
+  useEffect(() => {
+    setModalText(
+      +userDelete.ishidden == 1
+        ? "Bạn có chắc muốn xóa người dùng này không ?"
+        : "Bạn có chắc muốn khôi phục người dùng này không ?"
+    );
+  }, [userDelete]);
   const handleOk = () => {
-    deleteUser(id).then((res) => {
+    if (userDelete.ishidden === 1) {
+      setModalText("Bạn có chắc muốn khôi phục người dùng này không ?");
+    }
+    deleteUser(userDelete.id, userDelete.ishidden).then((res) => {
       setModalText(res.message);
       setConfirmLoading(true);
       setModalText(res.message);

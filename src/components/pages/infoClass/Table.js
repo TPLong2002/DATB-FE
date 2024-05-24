@@ -57,6 +57,7 @@ const App = (props) => {
 
       <Title>Danh sách học sinh {data?.name}</Title>
       <Table
+        className="shadow-lg"
         dataSource={rows ? rows.map((row) => ({ ...row, key: row.id })) : []}
         pagination={false}
       >

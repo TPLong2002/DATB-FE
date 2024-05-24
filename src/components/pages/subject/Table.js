@@ -18,7 +18,7 @@ const App = (props) => {
   };
   const columns = [
     {
-      title: "Name",
+      title: "Tên môn học",
       dataIndex: "name",
     },
     {
@@ -37,7 +37,6 @@ const App = (props) => {
       render: (_, record) => (
         <Space size="middle" className="text-l">
           <a onClick={() => navigate(`/subject/info/${record.id}`)}>Detail</a>
-          <a className="hover:text-red-500">Delete</a>
         </Space>
       ),
     },
@@ -53,7 +52,9 @@ const App = (props) => {
       />
 
       <Table
+        className="shadow-lg"
         columns={columns}
+        bordered={true}
         dataSource={data ? data.map((row) => ({ ...row, key: row.id })) : []}
       />
     </>

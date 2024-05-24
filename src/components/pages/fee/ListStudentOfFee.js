@@ -82,6 +82,7 @@ const App = forwardRef((props, ref) => {
       ></DeleteStudentOfFee>
 
       <Table
+        bordered={true}
         columns={columns}
         dataSource={data ? data.map((row) => ({ ...row, key: row.id })) : []}
       />

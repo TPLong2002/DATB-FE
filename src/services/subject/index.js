@@ -51,3 +51,11 @@ export const addTeacherToSubject = async (data) => {
     console.log(error);
   }
 };
+export const getSubjectByGradeId = async (id) => {
+  try {
+    const res = Axios.get(`/subject/grade`, { params: { grade_id: id } });
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};

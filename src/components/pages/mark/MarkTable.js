@@ -1,11 +1,17 @@
 import { useEffect, useState } from "react";
 import { getAllMarkType } from "@/services/markType";
 import { getMatksOfStudentsInClass } from "@/services/mark";
-import { Table, Space } from "antd";
+import { Table, Space, Button } from "antd";
 import EditMark from "./EditMark";
 
 function MarkTable(props) {
-  const { class_id, subject_id, fetchSubjectsByClassId } = props;
+  const {
+    class_id,
+    subject_id,
+    fetchSubjectsByClassId,
+    schoolyear_id,
+    semester_id,
+  } = props;
   const [markTypes, setMarkTypes] = useState([]);
   const [data, setData] = useState([]);
   const [student, setStudent] = useState();
@@ -23,7 +29,7 @@ function MarkTable(props) {
           name: `${item.User.Profile.firstName} ${item.User.Profile.lastName}`,
         };
       }
-      students[userId][item.Marktype.name] = item.mark;
+      students[userId][item?.Marktype?.name] = item.mark;
     });
 
     return Object.values(students);
@@ -31,12 +37,17 @@ function MarkTable(props) {
   const fetchMarkType = async () => {
     const res = await getAllMarkType();
     setMarkTypes(res.data);
-    const res2 = await getMatksOfStudentsInClass(class_id, subject_id);
+    const res2 = await getMatksOfStudentsInClass(
+      class_id,
+      subject_id,
+      schoolyear_id,
+      semester_id
+    );
     setData(transformData(res2.data));
   };
   useEffect(() => {
     fetchMarkType();
-  }, [class_id, subject_id]);
+  }, [class_id, subject_id, schoolyear_id, semester_id]);
 
   let columns = [{ title: "Tên học sinh", dataIndex: "name" }];
 
@@ -63,7 +74,7 @@ function MarkTable(props) {
       render: (_, record) => (
         <Space size="middle" className="text-l">
           <a onClick={() => handleEditMark(record.id)}>Edit</a>
-          <a className="hover:text-red-500">Delete</a>
+          {/* <a className="hover:text-red-500">Delete</a> */}
         </Space>
       ),
     },
@@ -84,7 +95,13 @@ function MarkTable(props) {
         )}
       </div>
       {data && (
-        <Table columns={columns} dataSource={data} pagination={false}></Table>
+        <Table
+          className="shadow-lg"
+          columns={columns}
+          dataSource={data}
+          pagination={false}
+          bordered={true}
+        ></Table>
       )}
     </div>
   );

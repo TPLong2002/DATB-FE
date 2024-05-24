@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
-    <>
+    <div className="">
       <Components />
       <ToastContainer
         position="top-right"
@@ -19,7 +19,7 @@ function App() {
         pauseOnHover
         theme="light"
       />
-    </>
+    </div>
   );
 }
 

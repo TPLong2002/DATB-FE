@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { getAssignments } from "@/services/assignment";
 import AssignmentTable from "@/components/pages/assignment/AssignmentTable";
 import dayjs from "dayjs";
+import CreateAssignment from "@/components/pages/assignment/CreateAssignment";
+
 const format = "YYYY/MM/DD";
 
 function Assignment() {
@@ -30,11 +32,15 @@ function Assignment() {
     limit: 10,
   });
   useEffect(() => {
+    document.title = "Bài tập";
+  }, []);
+  useEffect(() => {
     fetchAssignments();
   }, [pagination]);
 
   return (
     <>
+      <CreateAssignment></CreateAssignment>
       <AssignmentTable
         data={data}
         fetchAssignments={fetchAssignments}

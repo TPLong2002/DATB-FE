@@ -4,26 +4,31 @@ import {
   updateProfile,
   getRelativesProfile,
 } from "@/services/profile";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Button, Input, DatePicker, Radio } from "antd";
 import { getGroupByUserId } from "@/services/group";
 import dayjs from "dayjs";
 import UploadAvatar from "@/components/pages/profile/UploadAvatar";
 import { toast } from "react-toastify";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
-import { useParams } from "react-router-dom";
 
-function Profile() {
+const Profile = () => {
   const params = useParams();
-  console.log(params);
   const format = "YYYY/MM/DD";
-  const [profiles, setProfiles] = useState([{}]);
+  const [profiles, setProfiles] = useState([]);
   const [group, setGroup] = useState({});
   const [options, setOptions] = useState(1);
-
   const [originalImg, setOriginalImg] = useState([]);
   const cloud_name = "depfh6rnw";
   const preset_key = "rsnt801s";
+
+  useEffect(() => {
+    document.title = "Thông tin cá nhân";
+  }, []);
+
+  useEffect(() => {
+    fetchProfile(params.user_id);
+  }, [params.user_id, options]);
 
   const fetchProfile = async (id) => {
     const group = await getGroupByUserId(id);
@@ -31,7 +36,6 @@ function Profile() {
     if (options === 1) {
       const res = await getProfile(id);
       setProfiles(res.data);
-
       setOriginalImg(
         res?.data?.map((row) => ({ avt: row.avt, id: res.data.id }))
       );
@@ -39,20 +43,12 @@ function Profile() {
     if (options === 2) {
       const res = await getRelativesProfile(id);
       setProfiles(res.data);
-
       setOriginalImg(
         res.data.map((row) => ({ avt: row.avt, id: res.data.id }))
       );
     }
   };
-  useEffect(() => {
-    fetchProfile(params.user_id);
-  }, [params.user_id, options]);
-  const onChange = (date, dateString, index) => {
-    const newProfile = [...profiles];
-    newProfile[index] = { ...newProfile[index], dateOfBirth: dateString };
-    setProfiles(newProfile);
-  };
+
   const handleChange = (e, index) => {
     const { name, value } = e.target;
     const newProfile = [...profiles];
@@ -60,12 +56,16 @@ function Profile() {
     setProfiles(newProfile);
   };
 
+  const onChangeDate = (date, dateString, index) => {
+    const newProfile = [...profiles];
+    newProfile[index] = { ...newProfile[index], dateOfBirth: dateString };
+    setProfiles(newProfile);
+  };
+
   const onSubmit = async (index) => {
     const newProfile = [...profiles];
-    if (profiles[index].avt && profiles[index].avt != originalImg[index]) {
-      console.log(1);
+    if (profiles[index].avt && profiles[index].avt !== originalImg[index]) {
       const formData = new FormData();
-      console.log(profiles[index].avt);
       formData.append("file", profiles[index].avt);
       formData.append("upload_preset", preset_key);
       try {
@@ -77,13 +77,11 @@ function Profile() {
           }
         );
         const data = await res.json();
-        console.log(data);
         if (data?.secure_url) {
           newProfile[index] = { ...newProfile[index], avt: data.secure_url };
-          const res = await updateProfile(newProfile[index]);
-
-          if (res.code === 0) {
-            toast.success(res.message);
+          const response = await updateProfile(newProfile[index]);
+          if (response.code === 0) {
+            toast.success(response.message);
           }
         }
       } catch (error) {
@@ -96,117 +94,99 @@ function Profile() {
       }
     }
   };
+
   return (
-    <div className="flex flex-col space-y-3">
-      <div className="mt-3 space-x-2">
-        <Radio.Group value={options}>
-          <Radio.Button value={1} onClick={() => setOptions(1)}>
-            thông tin cá nhân
-          </Radio.Button>
+    <div className="flex flex-col space-y-5">
+      <div className="mt-5 space-x-3">
+        <Radio.Group
+          value={options}
+          onChange={(e) => setOptions(e.target.value)}
+        >
+          <Radio.Button value={1}>Thông tin cá nhân</Radio.Button>
           {group.name === "student" && (
-            <Radio.Button value={2} onClick={() => setOptions(2)}>
-              thông tin phụ huynh
-            </Radio.Button>
+            <Radio.Button value={2}>Thông tin phụ huynh</Radio.Button>
           )}
           {group.name === "parent" && (
-            <Radio.Button value={2} onClick={() => setOptions(2)}>
-              thông tin học sinh
-            </Radio.Button>
+            <Radio.Button value={2}>Thông tin học sinh</Radio.Button>
           )}
         </Radio.Group>
       </div>
-      {profiles &&
-        profiles.map((profile, index) => (
-          <div className="border rounded-sm border-gray-400" key={index}>
-            {/* <Avatar
-            shape="square"
-            size={{ xs: 24, sm: 32, md: 40, lg: 64, xl: 80, xxl: 100 }}
-            src={profile?.avt}
-            className="border rounded-sm border-gray-400"
-          /> */}
-            {profile && (
-              <UploadAvatar
-                profiles={profiles}
-                setProfiles={setProfiles}
-                index={index}
-              />
-            )}
 
-            <div>
-              <Input
-                value={profile?.firstName}
-                name="firstName"
-                onChange={(e) => handleChange(e, index)}
-                placeholder="Thêm họ"
-              ></Input>
-              <Input
-                value={profile?.lastName}
-                name="lastName"
-                onChange={(e) => handleChange(e, index)}
-                placeholder="Thêm tên"
-              ></Input>
-              <Input
-                value={profile?.email}
-                name="email"
-                readOnly
-                onChange={(e) => handleChange(e, index)}
-                placeholder="Thêm email"
-              ></Input>
-              <Input.Password
-                value={profile?.password}
-                type="password"
-                name="password"
-                onChange={(e) => handleChange(e, index)}
-                placeholder="Mật khẩu"
-                iconRender={(visible) =>
-                  visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-                }
-              ></Input.Password>
-              <Input
-                value={profile?.phoneNumber}
-                name="phoneNumber"
-                onChange={(e) => handleChange(e, index)}
-                placeholder="Thêm số điện thoại"
-              ></Input>
-              <Input
-                value={profile?.address}
-                name="address"
-                onChange={(e) => handleChange(e, index)}
-                placeholder="Thêm địa chỉ"
-              ></Input>
-              <Input
-                value={profile?.CCCD}
-                name="CCCD"
-                onChange={handleChange}
-                placeholder="Thêm CCCD"
-              ></Input>
-              {!profile?.dateOfBirth && (
-                <DatePicker
-                  format={format}
-                  onChange={(date, dateString) =>
-                    onChange(date, dateString, index)
-                  }
-                />
-              )}
-              {profile?.dateOfBirth && (
-                <DatePicker
-                  defaultValue={dayjs(profile.dateOfBirth)}
-                  format={format}
-                  onChange={(date, dateString) =>
-                    onChange(date, dateString, index)
-                  }
-                />
-              )}
-            </div>
-            <div className="text-center">
-              <Button type="primary" onClick={() => onSubmit(index)}>
-                Save
-              </Button>
-            </div>
+      {profiles.map((profile, index) => (
+        <div className="border rounded-sm border-gray-400 p-5" key={index}>
+          {profile && (
+            <UploadAvatar
+              profiles={profiles}
+              setProfiles={setProfiles}
+              index={index}
+            />
+          )}
+          <div className="grid grid-cols-1 gap-4 mt-3">
+            <Input
+              value={profile?.firstName}
+              name="firstName"
+              onChange={(e) => handleChange(e, index)}
+              placeholder="Thêm họ"
+            />
+            <Input
+              value={profile?.lastName}
+              name="lastName"
+              onChange={(e) => handleChange(e, index)}
+              placeholder="Thêm tên"
+            />
+            <Input
+              value={profile?.email}
+              name="email"
+              readOnly
+              onChange={(e) => handleChange(e, index)}
+              placeholder="Thêm email"
+            />
+            <Input.Password
+              value={profile?.password}
+              type="password"
+              name="password"
+              onChange={(e) => handleChange(e, index)}
+              placeholder="Mật khẩu"
+              iconRender={(visible) =>
+                visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+              }
+            />
+            <Input
+              value={profile?.phoneNumber}
+              name="phoneNumber"
+              onChange={(e) => handleChange(e, index)}
+              placeholder="Thêm số điện thoại"
+            />
+            <Input
+              value={profile?.address}
+              name="address"
+              onChange={(e) => handleChange(e, index)}
+              placeholder="Thêm địa chỉ"
+            />
+            <Input
+              value={profile?.CCCD}
+              name="CCCD"
+              onChange={(e) => handleChange(e, index)}
+              placeholder="Thêm CCCD"
+            />
+            <DatePicker
+              value={profile?.dateOfBirth ? dayjs(profile.dateOfBirth) : null}
+              format={format}
+              onChange={(date, dateString) =>
+                onChangeDate(date, dateString, index)
+              }
+              placeholder="Chọn ngày sinh"
+            />
           </div>
-        ))}
+          <div className="text-center mt-4">
+            <Button type="primary" onClick={() => onSubmit(index)}>
+              Save
+            </Button>
+          </div>
+        </div>
+      ))}
     </div>
   );
-}
+};
 
 export default Profile;

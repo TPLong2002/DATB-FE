@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { getClasses } from "@/services/class";
 import { getSubjectsByClassId } from "@/services/class/classSubject";
+import { getAllSchoolyear } from "@/services/schoolyear";
+import { getAllSemester } from "@/services/semester";
 import MarkTable from "./MarkTable";
 
 import { Select } from "antd";
 function Transcript() {
   const [allClass, setAllClass] = useState([{}]);
   const [allSubject, setAllSubject] = useState([{}]);
-  const [selectClass, setSelectClass] = useState(1);
-  const [selectSubject, setSelectSubject] = useState(1);
+  const [selectClass, setSelectClass] = useState(0);
+  const [selectSubject, setSelectSubject] = useState(0);
+  const [allSchoolyear, setAllSchoolyear] = useState([{}]);
+  const [selectSchoolyear, setSelectSchoolyear] = useState(0);
+  const [selectSemester, setSelectSemester] = useState(0);
+  const [allSemester, setAllSemester] = useState([{}]);
 
   const fetchClasses = async () => {
     const res_class = await getClasses();
@@ -18,12 +24,27 @@ function Transcript() {
     const res_subject = await getSubjectsByClassId(selectClass);
     setAllSubject(res_subject.data.Class_Subjects);
   };
+  const fetchSchoolyear = async () => {
+    const res_schoolyear = await getAllSchoolyear();
+    setAllSchoolyear(res_schoolyear.data);
+  };
+  const fetchSemester = async () => {
+    const res_semester = await getAllSemester();
+    setAllSemester(res_semester.data);
+  };
   useEffect(() => {
-    fetchClasses();
+    document.title = "Bảng điểm";
   }, []);
   useEffect(() => {
+    fetchSchoolyear();
+    fetchSemester();
+    fetchClasses();
+  }, []);
+
+  useEffect(() => {
     fetchSubjectsByClassId();
-  }, [selectClass]);
+  }, [selectClass, selectSchoolyear, selectSemester]);
+
   const onClassChange = (value) => {
     setSelectClass(value);
   };
@@ -32,44 +53,102 @@ function Transcript() {
   const onSubjectChange = (value) => {
     setSelectSubject(value);
   };
+  const onSchoolyearChange = (value) => {
+    setSelectSchoolyear(value);
+  };
+  const onSemesterChange = (value) => {
+    setSelectSemester(value);
+  };
   const onSearch = (value) => {
     console.log("search:", value);
   };
+
   return (
-    <div>
-      <div className="space-x-3">
-        <Select
-          showSearch
-          placeholder="Chọn lớp"
-          optionFilterProp="children"
-          onChange={onClassChange}
-          onSearch={onSearch}
-          filterOption={filterOption}
-          options={allClass?.map((item) => {
-            return {
-              value: item.id,
-              label: item.name,
-            };
-          })}
-          style={{ width: 150 }}
-        />
-        <Select
-          showSearch
-          placeholder="Chọn môn học"
-          optionFilterProp="children"
-          onChange={onSubjectChange}
-          onSearch={onSearch}
-          filterOption={filterOption}
-          options={allSubject?.map((item) => ({
-            value: item.id,
-            label: item.name,
-          }))}
-          style={{ width: 150 }}
-        />
+    <div className="space-y-3">
+      <div className="flex space-x-3 mt-4 justify-center border rounded-md p-2">
+        <div className="flex space-x-2 items-center">
+          <div>Chọn năm học</div>
+          <div>
+            <Select
+              showSearch
+              placeholder="Chọn năm học"
+              optionFilterProp="children"
+              onChange={onSchoolyearChange}
+              onSearch={onSearch}
+              filterOption={filterOption}
+              options={allSchoolyear?.map((item) => ({
+                value: item.id,
+                label: item.name,
+              }))}
+              style={{ width: 150 }}
+            />
+          </div>
+        </div>
+        <div className="flex space-x-2 items-center">
+          <div>Chọn học kỳ</div>
+          <div>
+            <Select
+              showSearch
+              placeholder="Chọn học kỳ"
+              optionFilterProp="children"
+              onChange={onSemesterChange}
+              onSearch={onSearch}
+              filterOption={filterOption}
+              options={allSemester?.map((item) => ({
+                value: item.id,
+                label: item.name,
+              }))}
+              style={{ width: 150 }}
+            />
+          </div>
+        </div>
+        <div className="flex space-x-2 items-center">
+          <div>Chọn lớp</div>
+          <div>
+            <Select
+              showSearch
+              placeholder="Chọn lớp"
+              optionFilterProp="children"
+              onChange={onClassChange}
+              onSearch={onSearch}
+              filterOption={filterOption}
+              options={allClass?.map((item) => {
+                return {
+                  value: item.id,
+                  label: item.name,
+                };
+              })}
+              style={{ width: 150 }}
+            />
+          </div>
+        </div>
+        <div className="flex space-x-2 items-center">
+          <div>Chọn môn</div>
+          <div>
+            <Select
+              showSearch
+              placeholder="Chọn môn học"
+              optionFilterProp="children"
+              onChange={onSubjectChange}
+              onSearch={onSearch}
+              filterOption={filterOption}
+              options={allSubject?.map((item) => ({
+                value: item.id,
+                label: item.name,
+              }))}
+              style={{ width: 150 }}
+            />
+          </div>
+        </div>
       </div>
-      {selectSubject && (
-        <MarkTable class_id={selectClass} subject_id={selectSubject} />
-      )}
+      {
+        <MarkTable
+          class_id={selectClass}
+          subject_id={selectSubject}
+          schoolyear_id={selectSchoolyear}
+          semester_id={selectSemester}
+        />
+      }
     </div>
   );
 }

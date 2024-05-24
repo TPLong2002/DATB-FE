@@ -1,3 +1,38 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.custom-sider {
+  @apply fixed top-0 left-0 h-full overflow-hidden z-50; /* Ensures the sider is fixed and always visible */
+}
+
+.custom-sider:hover {
+  @apply overflow-y-auto; /* Show the scrollbar when hovering */
+}
+
+.custom-sider::-webkit-scrollbar {
+  width: 5px; /* Make the scrollbar narrower */
+}
+
+.custom-sider::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.5); /* Custom scrollbar color */
+  border-radius: 10px; /* Make the scrollbar thumb rounded */
+}
+
+.custom-sider::-webkit-scrollbar-track {
+  background-color: transparent; /* Make the track transparent */
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}

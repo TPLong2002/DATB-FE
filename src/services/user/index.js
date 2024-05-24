@@ -1,10 +1,14 @@
 import Axios from "@/services/axios";
-export const getUsers = async (page, limit) => {
+export const getUsers = async (page, limit, group_id, typeSelected, search) => {
   try {
+    console.log(page, limit, group_id, typeSelected);
     const res = await Axios.get("/user/users", {
       params: {
         page: page,
         limit: limit,
+        group_id: group_id,
+        isdeleted: typeSelected,
+        search: search,
       },
     });
     return res;
@@ -12,11 +16,12 @@ export const getUsers = async (page, limit) => {
     console.log(error);
   }
 };
-export const deleteUser = async (id) => {
+export const deleteUser = async (id, ishidden) => {
   try {
     const res = await Axios.delete(`/user`, {
       data: {
         id: id,
+        ishidden: ishidden,
       },
     });
     return res;
