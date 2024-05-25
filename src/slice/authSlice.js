@@ -9,14 +9,12 @@ const initialState = {
   access_token: "",
   email: "",
   id: "",
-  roles: {},
+  group_id: "",
 };
 // Define the initial state using that type
 
 export const accountUser = createAsyncThunk("/account", async () => {
-  const response = await axios.get("/account", {
-    withCredentials: true,
-  });
+  const response = await axios.get("/account");
   if (response?.code === 0) {
     localStorage.setItem("isAuth", response.data.isAuth);
     localStorage.setItem("prePath", window.location.pathname);
@@ -36,7 +34,15 @@ export const authSlice = createSlice({
       return { ...state, ...action.payload };
     },
     logout: (state) => {
-      return { ...initialState };
+      return {
+        ...state,
+        isAuth: false,
+        username: "",
+        access_token: "",
+        email: "",
+        id: "",
+        group_id: "",
+      };
     },
   },
   extraReducers: (builder) => {
@@ -46,8 +52,9 @@ export const authSlice = createSlice({
       state.username = action.payload.username;
       state.access_token = action.payload.access_token;
       state.email = action.payload.email;
-      state.roles = action.payload.roles;
+      state.group_id = action.payload.group_id;
       state.id = action.payload.id;
+      state.name = action.payload.name;
     });
   },
 });

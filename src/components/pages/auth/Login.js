@@ -53,7 +53,7 @@ function Login() {
         toast.success(res.message);
         dispatch(login({ ...res.data, isAuth: true }));
         localStorage.setItem("isAuth", true);
-        // navigate(localStorage.getItem("prePath") || "/");
+        console.log(localStorage.getItem("isAuth"));
       }
       if (res && +res.code !== 0) {
         toast.error(res.message);

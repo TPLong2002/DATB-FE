@@ -12,18 +12,19 @@ import { useSelector, useDispatch } from "react-redux";
 import { accountUser } from "@/slice/authSlice";
 function App() {
   const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+  const isAuth = localStorage.getItem("isAuth");
   useEffect(() => {
     dispatch(accountUser()).then((res) => {
       localStorage.setItem("isAuth", res.payload.isAuth);
     });
   }, []);
-  const auth = useSelector((state) => state.auth);
-  const isAuth = localStorage.getItem("isAuth");
+
   return (
     <Router>
       <Routes>
         {authRoutes.map((route, index) => {
-          if (isAuth === "true" || isAuth == undefined) {
+          if (isAuth === "true") {
             return (
               <Route
                 key={index}
