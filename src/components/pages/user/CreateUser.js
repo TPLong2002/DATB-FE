@@ -10,7 +10,7 @@ const App = (props) => {
   const [users, setUsers] = useState([
     { username: "", password: "", email: "" },
   ]);
-  const [groups, setGroups] = useState([]);
+  const [groups, setGroups] = useState([{}]);
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState(
@@ -82,11 +82,11 @@ const App = (props) => {
     };
     reader.readAsText(file);
   };
-  const admin = groups.filter((group) => group.name === "admin");
-  const school_staff = groups.filter(
+  const admin = groups?.filter((group) => group.name === "admin");
+  const school_staff = groups?.filter(
     (group) => group.name === "teacher" || group.name === "accountant"
   );
-  const parent_student = groups.filter(
+  const parent_student = groups?.filter(
     (group) => group.name === "student" || group.name === "parent"
   );
 

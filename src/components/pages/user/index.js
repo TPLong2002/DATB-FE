@@ -16,6 +16,7 @@ function App() {
     page: 1,
     limit: 10,
   });
+
   const fetchUser = async () => {
     try {
       const res = await getUsers(
@@ -27,7 +28,7 @@ function App() {
       );
       setData(res.data);
       const res2 = await getGroups();
-      setGroups(res2.data);
+      setGroups(res2?.data);
     } catch (error) {
       console.log(error);
     }

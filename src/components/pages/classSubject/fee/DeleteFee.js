@@ -1,35 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { deleteUser } from "@/services/user";
-
+import { deleteFee } from "@/services/fee";
 import { Modal } from "antd";
-
+import { toast } from "react-toastify";
+const defaultText = "Bạn có chắc muốn xóa khoảng phí này không ?";
 const App = (props) => {
-  const { open, setOpen, userDelete, fetchData } = props;
+  const { open, setOpen, feeDetele, fetchData } = props;
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState(
-    +userDelete.ishidden == 1
-      ? "Bạn có chắc muốn xóa người dùng này không ?"
-      : "Bạn có chắc muốn khôi phục người dùng này không ?"
+    +feeDetele.ishidden == 1
+      ? defaultText
+      : "Bạn có chắc muốn hiện khoảng phí này không ?"
   );
-
   useEffect(() => {
     setModalText(
-      +userDelete.ishidden == 1
-        ? "Bạn có chắc muốn xóa người dùng này không ?"
-        : "Bạn có chắc muốn khôi phục người dùng này không ?"
+      +feeDetele.ishidden == 1
+        ? defaultText
+        : "Bạn có chắc muốn hiện khoảng phí này không ?"
     );
-  }, [userDelete]);
+  }, [feeDetele]);
   const handleOk = () => {
-    if (userDelete.ishidden === 1) {
-      setModalText("Bạn có chắc muốn khôi phục người dùng này không ?");
-    }
-    deleteUser(userDelete.id, userDelete.ishidden).then((res) => {
+    deleteFee(feeDetele).then((res) => {
       setModalText(res.message);
       setConfirmLoading(true);
-      setModalText(res.message);
       setTimeout(() => {
         setOpen(false);
         fetchData();
+        setModalText(defaultText);
+        toast.success("Xóa khoảng phí thành công");
         setConfirmLoading(false);
       }, 2000);
     });
@@ -43,7 +40,7 @@ const App = (props) => {
   return (
     <>
       <Modal
-        title="Xóa người dùng"
+        title="Xóa lớp học"
         open={open}
         onOk={handleOk}
         confirmLoading={confirmLoading}

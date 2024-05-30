@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "@/img/logo.png";
@@ -19,6 +19,7 @@ import {
 } from "@ant-design/icons";
 
 import Marquee from "react-fast-marquee";
+import Calendar from "@/components/components/public/Calendar";
 
 const { Header, Content, Footer, Sider } = Layout;
 function getItem(label, key, icon, children) {
@@ -39,64 +40,6 @@ const items = [
   getItem("Bài tập", "/assignment", <ReadOutlined />),
   getItem("Vai trò", "/role", <UserSwitchOutlined />),
 ];
-const navigation = [
-  {
-    name: "Người dùng",
-    link: "/user",
-    imgIcon: "https://cdn-icons-png.flaticon.com/512/1144/1144760.png",
-  },
-  {
-    name: "Lớp học",
-    link: "/class",
-    imgIcon: "https://cdn-icons-png.flaticon.com/512/45/45962.png",
-  },
-  {
-    name: "Môn Học",
-    link: "/subject",
-    imgIcon: "https://static.thenounproject.com/png/3858302-200.png",
-  },
-  {
-    name: "Khoảng phí",
-    link: "/fee",
-    imgIcon:
-      "https://cdn3.iconfinder.com/data/icons/fees-payment/741/service_fees_plan_charge-512.png",
-  },
-  {
-    name: "Điểm",
-    link: "/mark",
-    imgIcon: "https://cdn-icons-png.flaticon.com/512/2343/2343465.png",
-  },
-  {
-    name: "Bài tập",
-    link: "/assignment",
-    imgIcon: "https://cdn-icons-png.flaticon.com/512/3775/3775707.png",
-  },
-  {
-    name: "Vai trò",
-    link: "/role",
-    imgIcon: "https://static.thenounproject.com/png/281793-200.png",
-  },
-];
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
-
-function mapPath(path) {
-  if (path.startsWith("/subject/")) {
-    return "/subject";
-  }
-  if (path.startsWith("/user/")) {
-    return "/user";
-  }
-  if (path.startsWith("/class")) {
-    return "/class";
-  }
-  if (path.startsWith("/assignment/")) {
-    return "/assignment";
-  }
-  return path;
-}
 
 export default function Example({ children }) {
   const navigate = useNavigate();
@@ -152,7 +95,7 @@ export default function Example({ children }) {
     return <Breadcrumb.Item key={url}>{snippet}</Breadcrumb.Item>;
   });
   return (
-    <Layout style={{ minHeight: "100vh" }}>
+    <Layout style={{ minHeight: "100vh" }} className="min-h-screen">
       <Sider
         collapsible
         collapsed={collapsed}
@@ -161,6 +104,7 @@ export default function Example({ children }) {
           position: "fixed", // Fix the position of the sidebar
           height: "100vh", // Make sure it covers the full height of the viewport
           overflowY: "auto", // Enable vertical scrolling
+          background: "white",
         }}
         className="custom-sider"
       >
@@ -172,7 +116,7 @@ export default function Example({ children }) {
           ></img>
         </div>
         <Menu
-          theme="dark"
+          theme="light"
           defaultSelectedKeys={[`${location.pathname}`]}
           mode="inline"
           items={items}
@@ -180,7 +124,7 @@ export default function Example({ children }) {
         />
       </Sider>
       <Layout style={{ marginLeft: collapsed ? 80 : 200 }}>
-        <Header style={{ padding: 0, background: colorBgContainer }}>
+        <Header style={{ padding: 0 }} className="text-white bg-[#002140]">
           <div className="flex justify-between items-center pr-4">
             <Marquee className="flex-1">
               Chào mừng đến với website trường Trường THPT Nguyễn Hiền
@@ -197,21 +141,28 @@ export default function Example({ children }) {
             )}
           </div>
         </Header>
-        <Content style={{ margin: "0 16px" }}>
-          <Breadcrumb style={{ margin: "16px 0" }}>
-            {breadcrumbItems}
-          </Breadcrumb>
-          <div
-            style={{
-              padding: 24,
-              minHeight: 360,
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG,
-            }}
-          >
-            {children}
+        <div className=" flex-col flex-grow">
+          <div className="flex">
+            <Content style={{ margin: "0 16px" }} className="">
+              <Breadcrumb style={{ margin: "16px 0" }}>
+                {breadcrumbItems}
+              </Breadcrumb>
+              <div
+                style={{
+                  padding: 24,
+                  minHeight: 360,
+                  background: colorBgContainer,
+                  borderRadius: borderRadiusLG,
+                }}
+              >
+                {children}
+              </div>
+            </Content>
+            <div className="w-fit py-8">
+              <Calendar></Calendar>
+            </div>
           </div>
-        </Content>
+        </div>
         <Footer style={{ textAlign: "center" }}>
           Ant Design ©{new Date().getFullYear()} Created by Ant UED
         </Footer>

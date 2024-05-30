@@ -1,5 +1,5 @@
-import Home from "@/components/pages";
-import DefaultLayout from "@/components/layouts/DefaultLayout";
+import Home from "@/components/publicPages/index";
+import PublicLayout from "@/components/layouts/PublicLayout";
 export const publicRoutes = [
-  { path: "/", component: Home, layout: DefaultLayout },
+  { path: "/", component: Home, layout: PublicLayout },
 ];

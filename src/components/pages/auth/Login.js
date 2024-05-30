@@ -51,9 +51,12 @@ function Login() {
       if (res && +res.code === 0) {
         localStorage.setItem("token", `${res.data.access_token}`);
         toast.success(res.message);
-        dispatch(login({ ...res.data, isAuth: true }));
+        console.log(res.data);
         localStorage.setItem("isAuth", true);
-        console.log(localStorage.getItem("isAuth"));
+        localStorage.setItem("username", res.data.name);
+        localStorage.setItem("group_id", res.data.group_id);
+        localStorage.setItem("role", res.data.role);
+        dispatch(login({ ...res.data, isAuth: true }));
       }
       if (res && +res.code !== 0) {
         toast.error(res.message);

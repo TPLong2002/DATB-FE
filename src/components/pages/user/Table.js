@@ -76,7 +76,7 @@ const App = (props) => {
             onChange={onSelectChange}
             onSearch={onSearch}
             filterOption={filterOption}
-            options={groups.map((group) => ({
+            options={groups?.map((group) => ({
               value: group.id,
               label: group.name,
             }))}
@@ -107,7 +107,7 @@ const App = (props) => {
 
       <Table
         bordered={true}
-        dataSource={rows ? rows.map((row) => ({ ...row, key: row.id })) : []}
+        dataSource={rows ? rows?.map((row) => ({ ...row, key: row.id })) : []}
         pagination={{
           total: count,
           defaultPageSize: pagination.limit,

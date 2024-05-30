@@ -1,7 +1,6 @@
 import Axios from "@/services/axios";
 export const getUsers = async (page, limit, group_id, typeSelected, search) => {
   try {
-    console.log(page, limit, group_id, typeSelected);
     const res = await Axios.get("/user/users", {
       params: {
         page: page,

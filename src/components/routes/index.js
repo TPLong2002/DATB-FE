@@ -7,17 +7,18 @@ import {
 } from "react-router-dom";
 import { authRoutes } from "@/components/routes/authRoutes";
 import { publicRoutes } from "@/components/routes/publicRoutes";
-import { privateRoutes } from "./privateRoutes";
+import { privateRoutes } from "@/components/routes/privateRoutes";
+import { studentRoutes } from "@/components/routes/studentRoutes";
+
 import { useSelector, useDispatch } from "react-redux";
 import { accountUser } from "@/slice/authSlice";
 function App() {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
   const isAuth = localStorage.getItem("isAuth");
+  const role = localStorage.getItem("role");
   useEffect(() => {
-    dispatch(accountUser()).then((res) => {
-      localStorage.setItem("isAuth", res.payload.isAuth);
-    });
+    dispatch(accountUser()).then((res) => {});
   }, []);
 
   return (
@@ -45,20 +46,8 @@ function App() {
             />
           );
         })}
-        {publicRoutes.map((route, index) => {
-          return (
-            <Route
-              key={index}
-              path={route.path}
-              element={
-                <route.layout>
-                  <route.component />
-                </route.layout>
-              }
-            />
-          );
-        })}
-        {privateRoutes.map((route, index) => {
+
+        {/* {privateRoutes.map((route, index) => {
           if (isAuth === "true") {
             return (
               <Route
@@ -74,6 +63,53 @@ function App() {
           }
           return (
             <Route key={index} path="*" element={<Navigate to={"/login"} />} />
+          );
+        })} */}
+        {isAuth === "true" && role === "admin" ? (
+          privateRoutes.map((route, index) => {
+            return (
+              <Route
+                key={index}
+                path={route.path}
+                element={
+                  <route.layout>
+                    <route.component />
+                  </route.layout>
+                }
+              />
+            );
+          })
+        ) : (
+          <Route path="*" element={<Navigate to={"/login"} />} />
+        )}
+        {isAuth === "true" && role === "student" ? (
+          studentRoutes.map((route, index) => {
+            return (
+              <Route
+                key={index}
+                path={route.path}
+                element={
+                  <route.layout>
+                    <route.component />
+                  </route.layout>
+                }
+              />
+            );
+          })
+        ) : (
+          <Route path="*" element={<Navigate to={"/login"} />} />
+        )}
+        {publicRoutes.map((route, index) => {
+          return (
+            <Route
+              key={index}
+              path={route.path}
+              element={
+                <route.layout>
+                  <route.component />
+                </route.layout>
+              }
+            />
           );
         })}
       </Routes>
