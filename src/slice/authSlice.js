@@ -10,6 +10,7 @@ const initialState = {
   email: "",
   id: "",
   group_id: "",
+  name: "",
   role: "",
 };
 // Define the initial state using that type
@@ -21,6 +22,7 @@ export const accountUser = createAsyncThunk("/account", async () => {
   if (+response?.code === 0) {
     localStorage.setItem("isAuth", response.data.isAuth);
     localStorage.setItem("prePath", window.location.pathname);
+
     return response.data;
   } else {
     return { ...initialState };
