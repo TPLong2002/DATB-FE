@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getNewsById } from "@/services/news";
-import { Avatar, Image, Input, Select, Typography } from "antd";
+import { getNewsById, updateNews } from "@/services/news";
+import { Button, Image, Select, Typography } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { getAllSchoolyear } from "@/services/schoolyear";
 import { getAllSemester } from "@/services/semester";
-import { getCategory, getnews } from "@/services/news";
+import { getCategory } from "@/services/news";
+import UploadThumbnail from "@/components/pages/detailNews/UploadThumbnail";
+import { toast } from "react-toastify";
 
+const cloud_name = "depfh6rnw";
+const preset_key = "rsnt801s";
 function DetailNews() {
   const { id } = useParams();
   const [data, setData] = useState({});
+  const [originalImg, setOriginalImg] = useState();
   const [allSchoolyear, setAllSchoolyear] = useState([{}]);
   const [selectSchoolyear, setSelectSchoolyear] = useState();
   const [selectSemester, setSelectSemester] = useState();
@@ -20,6 +25,10 @@ function DetailNews() {
   const fetchNews = async () => {
     const res_news = await getNewsById(id);
     setData(res_news?.data);
+    setOriginalImg(res_news?.data?.thumbnail);
+    setSelectSchoolyear(res_news?.data?.schoolyear_id);
+    setSelectSemester(res_news?.data?.semester_id);
+    setSelectCategory(res_news?.data?.category_id);
   };
   const fetchSchoolyear = async () => {
     const res_schoolyear = await getAllSchoolyear();
@@ -34,11 +43,12 @@ function DetailNews() {
     setAllCategory(res_Category.data);
   };
   useEffect(() => {
-    // fetchNews();
+    fetchNews();
     fetchSemester();
     fetchSchoolyear();
     fetchCategory();
   }, []);
+  console.log(data);
   const onSearch = (value) => {
     console.log("search:", value);
   };
@@ -53,11 +63,62 @@ function DetailNews() {
   const onCategoryChange = (value) => {
     setSelectCategory(value);
   };
+  const handleChanges = (e) => {
+    const { name, value } = e.target;
+    console.log(name, value);
+    setData({ ...data, [name]: value });
+  };
+  const handleTitleChange = (newTitle) => {
+    setData({ ...data, title: newTitle });
+  };
+  const handleSubmits = async () => {
+    const formatData = {
+      ...data,
+      schoolyear_id: selectSchoolyear,
+      semester_id: selectSemester,
+      category_id: selectCategory,
+    };
+    if (data.thumbnail && data.thumbnail !== originalImg) {
+      const formData = new FormData();
+      formData.append("file", data.thumbnail);
+      formData.append("upload_preset", preset_key);
+      try {
+        const res = await fetch(
+          `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        const dataURL = await res.json();
+        if (dataURL?.secure_url) {
+          const response = await updateNews({
+            ...formatData,
+            thumbnail: dataURL.secure_url,
+          });
+          if (+response.code === 0) {
+            toast.success(response.message);
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      const res = await updateNews(data);
+      if (+res.code === 0) {
+        toast.success(res.message);
+      }
+    }
+  };
   return (
-    <div className="flex-col">
+    <div className="flex-col space-y-5">
       <div className="mb-5 border-b-2">
-        <Typography.Title editable level={1} style={{ marginBottom: 5 }}>
-          Tiêu đề
+        <Typography.Title
+          editable={{ onChange: handleTitleChange }}
+          level={1}
+          style={{ marginBottom: 5 }}
+        >
+          {data?.title}
         </Typography.Title>
       </div>
       <div className="flex space-x-5">
@@ -71,6 +132,8 @@ function DetailNews() {
               showSearch
               placeholder="Chọn danh mục"
               optionFilterProp="children"
+              name="category_id"
+              value={selectCategory}
               onChange={onCategoryChange}
               onSearch={onSearch}
               filterOption={filterOption}
@@ -90,6 +153,8 @@ function DetailNews() {
               showSearch
               placeholder="Chọn năm học"
               optionFilterProp="children"
+              name="schoolyear_id"
+              value={selectSchoolyear}
               onChange={onSchoolyearChange}
               onSearch={onSearch}
               filterOption={filterOption}
@@ -109,6 +174,8 @@ function DetailNews() {
               showSearch
               placeholder="Chọn học kỳ"
               optionFilterProp="children"
+              name="semester_id"
+              value={selectSemester}
               onChange={onSemesterChange}
               onSearch={onSearch}
               filterOption={filterOption}
@@ -122,21 +189,26 @@ function DetailNews() {
           </div>
           <div className="flex items-center">
             <Typography.Title level={5} className="w-1/3">
-              Ảnh:
+              Ảnh
             </Typography.Title>
-            <div className="w-2/3 mx-auto">
-              <Image
-                src={
-                  "https://file3.qdnd.vn/data/images/0/2023/05/03/vuhuyen/khanhphan.jpg?dpi=150&quality=100&w=870"
-                }
-              />
+            <div className="w-2/3 flex items-center text-center justify-center">
+              <UploadThumbnail news={data} setNews={setData} />
             </div>
           </div>
         </div>
         <div className="w-3/4">
           <Typography.Title level={5}>Nội dung</Typography.Title>
-          <TextArea placeholder="Nội dung" rows={10}></TextArea>
+          <TextArea
+            placeholder="Nội dung"
+            rows={10}
+            value={data?.content}
+            name="content"
+            onChange={handleChanges}
+          ></TextArea>
         </div>
+      </div>
+      <div className="flex items-center text-center justify-center">
+        <Button onClick={handleSubmits}>Lưu</Button>
       </div>
     </div>
   );

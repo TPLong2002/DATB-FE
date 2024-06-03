@@ -89,8 +89,11 @@ function MarkTable(props) {
             student={student}
             class_id={class_id}
             subject_id={subject_id}
+            semester_id={semester_id}
+            schoolyear_id={schoolyear_id}
             markTypes={markTypes}
             fetchMarkType={fetchMarkType}
+            fetchSubjectsByClassId={fetchSubjectsByClassId}
           ></EditMark>
         )}
       </div>

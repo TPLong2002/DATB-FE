@@ -32,8 +32,8 @@ function getItem(label, key, icon, children) {
 }
 
 const items = [
-  getItem("Khoảng phí", "/fee", <TransactionOutlined />),
-  getItem("Điểm của Student", "/mark", <FileTextOutlined />),
+  getItem("Khoảng phí", "/parent/fee", <TransactionOutlined />),
+  getItem("Điểm của Student", "/parent/mark", <FileTextOutlined />),
 ];
 
 export default function Example({ children }) {
@@ -138,7 +138,7 @@ export default function Example({ children }) {
         </Header>
         <div className=" flex-col flex-grow">
           <div className="flex">
-            <Content style={{ margin: "0 16px" }} className="">
+            <Content style={{ margin: "0 16px" }}>
               <Breadcrumb style={{ margin: "16px 0" }}>
                 {breadcrumbItems}
               </Breadcrumb>
@@ -153,7 +153,7 @@ export default function Example({ children }) {
                 {children}
               </div>
             </Content>
-            <div className="w-fit py-8">
+            <div className="mr-4 mt-[3.25rem]">
               <Calendar></Calendar>
             </div>
           </div>

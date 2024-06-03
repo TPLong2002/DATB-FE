@@ -12,6 +12,8 @@ function EditMark(props) {
     subject_id,
     markTypes,
     fetchMarkType,
+    semester_id,
+    schoolyear_id,
   } = props;
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState("loading...");
@@ -20,11 +22,17 @@ function EditMark(props) {
   const [transcript_id, setTranscript_id] = useState();
   useEffect(() => {
     const fetch = async () => {
-      const res = await getMarkByStudentId(class_id, subject_id, student);
+      const res = await getMarkByStudentId(
+        class_id,
+        subject_id,
+        student,
+        semester_id,
+        schoolyear_id
+      );
       setTranscript_id(res.data[0].transcript_id);
       const m = {};
       res.data.forEach((item) => {
-        m[item.Marktype.name] = item.mark;
+        m[item?.Marktype?.name] = item?.mark;
       });
       setData(m);
       setMarks(res.data);
@@ -40,6 +48,8 @@ function EditMark(props) {
           marktype_id: item.id,
           mark: +data[item.name],
           transcript_id: transcript_id,
+          schoolyear_id: schoolyear_id,
+          semester_id: semester_id,
         });
       }
       return acc;

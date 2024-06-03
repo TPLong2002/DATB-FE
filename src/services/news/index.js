@@ -28,4 +28,12 @@ const getNewsById = async (id) => {
     throw error;
   }
 };
-export { getCategory, getnews, getNewsById };
+const updateNews = async (data) => {
+  try {
+    const response = await Axios.put(`/news/update`, data);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+export { getCategory, getnews, getNewsById, updateNews };
