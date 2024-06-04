@@ -29,6 +29,7 @@ const getNewsById = async (id) => {
   }
 };
 const updateNews = async (data) => {
+  console.log(data);
   try {
     const response = await Axios.put(`/news/update`, data);
     return response;
@@ -36,4 +37,12 @@ const updateNews = async (data) => {
     throw error;
   }
 };
-export { getCategory, getnews, getNewsById, updateNews };
+const createNews = async (data) => {
+  try {
+    const response = await Axios.post(`/news/create`, data);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+export { getCategory, getnews, getNewsById, updateNews, createNews };

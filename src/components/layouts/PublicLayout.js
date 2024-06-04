@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "@/img/logo.png";
@@ -17,6 +17,7 @@ import {
   LogoutOutlined,
   MenuUnfoldOutlined,
 } from "@ant-design/icons";
+import { getCategory } from "@/services/news";
 
 import Marquee from "react-fast-marquee";
 import Calendar from "@/components/components/public/Calendar";
@@ -31,21 +32,38 @@ function getItem(label, key, icon, children) {
   };
 }
 
-const items = [
-  getItem("Giới thiệu", "/user", <UserOutlined />),
-  getItem("Tổ chức", "/class", <TableOutlined />),
-  getItem("Kế hoạch công tác", "/subject", <BookOutlined />),
-  getItem("Tin tức thông báo", "/fee", <TransactionOutlined />),
-  getItem("Trao đổi thông tin", "/mark", <FileTextOutlined />),
-  getItem("Tài nguyên", "/assignment", <ReadOutlined />),
-  getItem("Thư viện ảnh", "/role", <UserSwitchOutlined />),
-  getItem("Liên hệ góp ý", "/role", <UserSwitchOutlined />),
+let items = [
+  getItem("Thi kiểm tra", "/news/test", <UserOutlined />),
+  getItem("Thời khóa biểu", "/news/tkb", <TableOutlined />),
+  getItem("Học phí", "/news/fee", <ReadOutlined />),
+  getItem("Sự kiện", "/news/event", <BookOutlined />),
+  getItem("Giới thiệu", "/news/introduce", <TransactionOutlined />),
+  getItem("Quy chế văn bản", "/news/statute", <FileTextOutlined />),
 ];
 
 export default function Example({ children }) {
   const navigate = useNavigate();
   const auth = useSelector((state) => state.auth);
 
+  // useEffect(() => {
+  //   const fetchCategory = async () => {
+  //     try {
+  //       const res = await getCategory();
+  //       if (+res.code === 0) {
+  //         items = res.data.map((item) => {
+  //           return {
+  //             ...item,
+  //             key: `/news/${item.id}`,
+  //             label: item.description,
+  //           };
+  //         });
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   fetchCategory();
+  // }, []);
   const dispatch = useDispatch();
   let location = useLocation();
 
@@ -91,8 +109,14 @@ export default function Example({ children }) {
   };
   const menu = <Menu onClick={handleMenuClick} items={dropdownItems} />;
   const pathSnippets = location.pathname.split("/").filter((i) => i);
+  if (pathSnippets.length === 0) {
+    pathSnippets.push("");
+  }
   const breadcrumbItems = pathSnippets.map((snippet, index) => {
     const url = `/${pathSnippets.slice(0, index + 1).join("/")}`;
+    if (snippet === "") {
+      return <Breadcrumb.Item key="home">Home</Breadcrumb.Item>;
+    }
     return <Breadcrumb.Item key={url}>{snippet}</Breadcrumb.Item>;
   });
   return (
@@ -159,7 +183,7 @@ export default function Example({ children }) {
                 {children}
               </div>
             </Content>
-            <div className="w-fit py-8">
+            <div className="mr-4 mt-[3.25rem]">
               <Calendar></Calendar>
             </div>
           </div>

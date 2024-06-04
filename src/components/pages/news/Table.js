@@ -75,7 +75,7 @@ const App = (props) => {
           key="action"
           render={(_, record) => (
             <Space size="middle" className="text-l">
-              <Link to={`/news/detail/${record.id}`}>Chi tiết</Link>
+              <Link to={`/admin/news/detail/${record.id}`}>Chi tiết</Link>
 
               <a
                 onClick={() => handleDelete(record.id)}

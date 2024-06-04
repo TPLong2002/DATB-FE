@@ -39,7 +39,7 @@ const items = [
   getItem("Điểm", "/mark", <FileTextOutlined />),
   getItem("Bài tập", "/assignment", <ReadOutlined />),
   getItem("Vai trò", "/role", <UserSwitchOutlined />),
-  getItem("Tin tức", "/news", <NotificationOutlined />),
+  getItem("Tin tức", "/admin/news", <NotificationOutlined />),
 ];
 const navigation = [
   {

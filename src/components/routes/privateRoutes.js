@@ -14,6 +14,7 @@ import AssignmentDetail from "@/components/pages/assignment/DetailAssignment";
 import Role from "@/components/pages/role";
 import News from "@/components/pages/news";
 import NewsDetail from "@/components/pages/detailNews";
+import CreateNews from "@/components/pages/news/createNews";
 export const privateRoutes = [
   { path: "/user", component: User, layout: DefaultLayout },
   { path: "/user/profile/:user_id", component: Profile, layout: DefaultLayout },
@@ -40,6 +41,15 @@ export const privateRoutes = [
     layout: DefaultLayout,
   },
   { path: "/role", component: Role, layout: DefaultLayout },
-  { path: "/news", component: News, layout: DefaultLayout },
-  { path: "/news/detail/:id", component: NewsDetail, layout: DefaultLayout },
+  { path: "/admin/news", component: News, layout: DefaultLayout },
+  {
+    path: "/admin/news/detail/:id",
+    component: NewsDetail,
+    layout: DefaultLayout,
+  },
+  {
+    path: "/admin/news/create",
+    component: CreateNews,
+    layout: DefaultLayout,
+  },
 ];

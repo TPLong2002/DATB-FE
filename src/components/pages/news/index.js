@@ -3,9 +3,11 @@ import { getAllSchoolyear } from "@/services/schoolyear";
 import { getAllSemester } from "@/services/semester";
 import { getCategory, getnews } from "@/services/news";
 import Table from "@/components/pages/news/Table";
-import { Select } from "antd";
+import { Button, Select } from "antd";
+import { useNavigate } from "react-router-dom";
 
 function News() {
+  const navigate = useNavigate();
   const [allSchoolyear, setAllSchoolyear] = useState([{}]);
   const [selectSchoolyear, setSelectSchoolyear] = useState();
   const [selectSemester, setSelectSemester] = useState();
@@ -70,46 +72,53 @@ function News() {
 
   return (
     <div className="flex-col space-y-5">
-      <div className="flex space-x-3">
-        <Select
-          showSearch
-          placeholder="Chọn năm học"
-          optionFilterProp="children"
-          onChange={onSchoolyearChange}
-          onSearch={onSearch}
-          filterOption={filterOption}
-          options={allSchoolyear?.map((item) => ({
-            value: item.id,
-            label: item.name,
-          }))}
-          style={{ width: 150 }}
-        />
-        <Select
-          showSearch
-          placeholder="Chọn học kỳ"
-          optionFilterProp="children"
-          onChange={onSemesterChange}
-          onSearch={onSearch}
-          filterOption={filterOption}
-          options={allSemester?.map((item) => ({
-            value: item.id,
-            label: item.name,
-          }))}
-          style={{ width: 150 }}
-        />
-        <Select
-          showSearch
-          placeholder="Chọn mục lục"
-          optionFilterProp="children"
-          onChange={onCategoryChange}
-          onSearch={onSearch}
-          filterOption={filterOption}
-          options={allCategory?.map((item) => ({
-            value: item.id,
-            label: item.description,
-          }))}
-          style={{ width: 150 }}
-        />
+      <div className="flex justify-between">
+        <div className="flex space-x-3">
+          <Select
+            showSearch
+            placeholder="Chọn năm học"
+            optionFilterProp="children"
+            onChange={onSchoolyearChange}
+            onSearch={onSearch}
+            filterOption={filterOption}
+            options={allSchoolyear?.map((item) => ({
+              value: item.id,
+              label: item.name,
+            }))}
+            style={{ width: 150 }}
+          />
+          <Select
+            showSearch
+            placeholder="Chọn học kỳ"
+            optionFilterProp="children"
+            onChange={onSemesterChange}
+            onSearch={onSearch}
+            filterOption={filterOption}
+            options={allSemester?.map((item) => ({
+              value: item.id,
+              label: item.name,
+            }))}
+            style={{ width: 150 }}
+          />
+          <Select
+            showSearch
+            placeholder="Chọn mục lục"
+            optionFilterProp="children"
+            onChange={onCategoryChange}
+            onSearch={onSearch}
+            filterOption={filterOption}
+            options={allCategory?.map((item) => ({
+              value: item.id,
+              label: item.description,
+            }))}
+            style={{ width: 150 }}
+          />
+        </div>
+        <div>
+          <Button type="primary" onClick={() => navigate("/admin/news/create")}>
+            Tạo tin
+          </Button>
+        </div>
       </div>
       <div>
         <Table

@@ -158,7 +158,7 @@ export default function Example({ children }) {
                 {children}
               </div>
             </Content>
-            <div className="w-fit py-8">
+            <div className="mr-4 mt-[3.25rem]">
               <Calendar></Calendar>
             </div>
           </div>

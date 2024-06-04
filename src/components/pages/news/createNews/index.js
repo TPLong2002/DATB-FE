@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getNewsById, updateNews } from "@/services/news";
+import { createNews } from "@/services/news";
 import { Button, Image, Select, Typography } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { getAllSchoolyear } from "@/services/schoolyear";
 import { getAllSemester } from "@/services/semester";
 import { getCategory } from "@/services/news";
-import UploadThumbnail from "@/components/pages/detailNews/UploadThumbnail";
+import UploadThumbnail from "@/components/pages/news/createNews/UploadThumbnail";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 
@@ -14,7 +14,6 @@ const cloud_name = "depfh6rnw";
 const preset_key = "rsnt801s";
 function DetailNews() {
   const auth = useSelector((state) => state.auth);
-  const { id } = useParams();
   const [data, setData] = useState({});
   const [originalImg, setOriginalImg] = useState();
   const [allSchoolyear, setAllSchoolyear] = useState([{}]);
@@ -24,14 +23,6 @@ function DetailNews() {
   const [selectCategory, setSelectCategory] = useState();
   const [allCategory, setAllCategory] = useState([{}]);
 
-  const fetchNews = async () => {
-    const res_news = await getNewsById(id);
-    setData(res_news?.data);
-    setOriginalImg(res_news?.data?.thumbnail);
-    setSelectSchoolyear(res_news?.data?.schoolyear_id);
-    setSelectSemester(res_news?.data?.semester_id);
-    setSelectCategory(res_news?.data?.category_id);
-  };
   const fetchSchoolyear = async () => {
     const res_schoolyear = await getAllSchoolyear();
     setAllSchoolyear(res_schoolyear.data);
@@ -45,7 +36,6 @@ function DetailNews() {
     setAllCategory(res_Category.data);
   };
   useEffect(() => {
-    fetchNews();
     fetchSemester();
     fetchSchoolyear();
     fetchCategory();
@@ -81,36 +71,29 @@ function DetailNews() {
       user_id: auth.id,
     };
 
-    if (data.thumbnail && data.thumbnail !== originalImg) {
-      const formData = new FormData();
-      formData.append("file", data.thumbnail);
-      formData.append("upload_preset", preset_key);
-      try {
-        const res = await fetch(
-          `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
-        const dataURL = await res.json();
-        if (dataURL?.secure_url) {
-          const response = await updateNews({
-            ...formatData,
-            thumbnail: dataURL.secure_url,
-          });
-          if (+response.code === 0) {
-            toast.success(response.message);
-          }
+    const formData = new FormData();
+    formData.append("file", data.thumbnail);
+    formData.append("upload_preset", preset_key);
+    try {
+      const res = await fetch(
+        `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
+        {
+          method: "POST",
+          body: formData,
         }
-      } catch (error) {
-        console.log(error);
+      );
+      const dataURL = await res.json();
+      if (dataURL?.secure_url) {
+        const response = await createNews({
+          ...formatData,
+          thumbnail: dataURL.secure_url,
+        });
+        if (+response.code === 0) {
+          toast.success(response.message);
+        }
       }
-    } else {
-      const res = await updateNews(formatData);
-      if (+res.code === 0) {
-        toast.success(res.message);
-      }
+    } catch (error) {
+      console.log(error);
     }
   };
   return (
