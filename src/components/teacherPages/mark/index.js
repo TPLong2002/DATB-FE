@@ -22,11 +22,7 @@ function Transcript() {
   const [allSemester, setAllSemester] = useState([{}]);
 
   const fetchClassOfSubjectIsTeaching = async () => {
-    const res_class = await getClassOfSubjectIsTeaching(
-      auth.id,
-      selectSchoolyear,
-      selectSemester
-    );
+    const res_class = await getClassOfSubjectIsTeaching(auth.id, selectSubject);
     setAllClass(res_class?.data?.Teacher_Classes);
   };
   const fetchSubjectIsTeaching = async () => {
@@ -46,9 +42,11 @@ function Transcript() {
     const res_semester = await getAllSemester();
     setAllSemester(res_semester.data);
   };
+
   useEffect(() => {
     document.title = "Bảng điểm";
   }, []);
+
   useEffect(() => {
     fetchSchoolyear();
     fetchSemester();
@@ -57,9 +55,11 @@ function Transcript() {
   useEffect(() => {
     fetchSubjectIsTeaching();
   }, [selectSemester]);
+
   useEffect(() => {
     fetchClassOfSubjectIsTeaching();
   }, [selectSubject]);
+
   const onSchoolyearChange = (value) => {
     setSelectSchoolyear(value);
   };
@@ -78,7 +78,6 @@ function Transcript() {
   const onSearch = (value) => {
     console.log("search:", value);
   };
-
   return (
     <div className="space-y-3">
       <div className="flex space-x-3 mt-4 justify-center border rounded-md p-2">

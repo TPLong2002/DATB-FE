@@ -15,7 +15,6 @@ const preset_key = "rsnt801s";
 function DetailNews() {
   const auth = useSelector((state) => state.auth);
   const [data, setData] = useState({});
-  const [originalImg, setOriginalImg] = useState();
   const [allSchoolyear, setAllSchoolyear] = useState([{}]);
   const [selectSchoolyear, setSelectSchoolyear] = useState();
   const [selectSemester, setSelectSemester] = useState();

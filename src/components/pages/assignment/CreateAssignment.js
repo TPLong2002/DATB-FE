@@ -37,20 +37,14 @@ const App = (props) => {
     console.log("Clicked cancel button");
     setOpen(false);
   };
-  const handleAdd = () => {
-    setAssignment([...assignment, { name: "" }]);
-  };
-  const handleDelete = (index) => {
-    const newAssignment = assignment.filter((role, i) => i !== index);
-    setAssignment(newAssignment);
-  };
+
   return (
-    <>
+    <div>
       <Button type="primary" onClick={() => setOpen(true)}>
-        Tạo môn học
+        Tạo bài tập mới
       </Button>
       <Modal
-        title="Tạo lớp học"
+        title="Tạo bài tập mới"
         open={open}
         onOk={handleOk}
         confirmLoading={confirmLoading}
@@ -67,9 +61,9 @@ const App = (props) => {
         {confirmLoading ? (
           <p>{modalText}</p>
         ) : (
-          <div>
+          <div className="flex-col space-y-2">
             <Input
-              placeholder="Tền bài"
+              placeholder="Tên bài"
               name="name"
               value={assignment.name}
               onChange={(e) => handleChange(e)}
@@ -83,7 +77,7 @@ const App = (props) => {
           </div>
         )}
       </Modal>
-    </>
+    </div>
   );
 };
 

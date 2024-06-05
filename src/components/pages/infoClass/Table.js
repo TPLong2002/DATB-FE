@@ -29,8 +29,9 @@ const App = (props) => {
         email: student.email,
       };
     });
+    console.log(data);
     setClass_id(data?.id);
-    setSchoolyear(data?.Schoolyear?.name?.substring(2, 4));
+    setSchoolyear(data?.schoolyear_id);
     setRows(datasrc);
   }, [data]);
   const handleDelete = (id) => {

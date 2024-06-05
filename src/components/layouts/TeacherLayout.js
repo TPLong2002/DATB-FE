@@ -28,8 +28,8 @@ function getItem(label, key, icon, children) {
 }
 
 const items = [
-  getItem("Khoảng phí", "/parent/fee", <TransactionOutlined />),
-  getItem("Điểm của Student", "/parent/mark", <FileTextOutlined />),
+  getItem("Điểm của Student", "/teacher/mark", <FileTextOutlined />),
+  getItem("Quản lý bài tập", "/teacher/assignment", <FileTextOutlined />),
 ];
 
 export default function Example({ children }) {

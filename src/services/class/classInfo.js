@@ -28,7 +28,7 @@ export const getStudentBySchoolyear = async (schoolyear) => {
   try {
     const res = await Axios.get(`/student/schoolyear`, {
       params: {
-        schoolyear: schoolyear,
+        schoolyear_id: schoolyear,
       },
     });
     return res;

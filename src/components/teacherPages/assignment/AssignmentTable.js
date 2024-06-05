@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Table, Space, Checkbox } from "antd";
 import { useNavigate } from "react-router-dom";
-import { updateAssignment } from "@/services/assignment";
+import { updateAssignment } from "@/services/assignment/teacher_assignment";
 
 function InfoSubject(props) {
   const { data, fetchAssignments, pagination, setPagination } = props;
@@ -22,10 +22,7 @@ function InfoSubject(props) {
       title: "Tên bài tập",
       dataIndex: "name",
     },
-    {
-      title: "Lớp",
-      dataIndex: "class",
-    },
+
     {
       title: "Giáo viên",
       dataIndex: "teacher",
@@ -57,7 +54,9 @@ function InfoSubject(props) {
       key: "action",
       render: (_, record) => (
         <Space size="middle" className="text-l">
-          <a onClick={() => navigate(`/assignment/detail/${record.id}`)}>
+          <a
+            onClick={() => navigate(`/teacher/assignment/detail/${record.id}`)}
+          >
             Detail
           </a>
         </Space>

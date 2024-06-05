@@ -4,6 +4,7 @@ import { getStudentBySchoolyear } from "@/services/class/classInfo";
 import { UploadOutlined, DeleteOutlined } from "@ant-design/icons";
 import Papa from "papaparse";
 import { Modal, Input, Select, Button } from "antd";
+import { toast } from "react-toastify";
 
 const App = (props) => {
   const { fetchData, class_id, schoolyear } = props;
@@ -43,6 +44,7 @@ const App = (props) => {
       setConfirmLoading(true);
       setTimeout(async () => {
         fetchData().then(() => {
+          toast.success(addStudent.message);
           setOpen(false);
           setConfirmLoading(false);
         });

@@ -10,11 +10,6 @@ import {
 import { useSelector } from "react-redux";
 import dayjs from "dayjs";
 
-const items = [
-  { key: "1", label: "Action 1" },
-  { key: "2", label: "Action 2" },
-];
-
 const format = "HH:mm:ss DD/MM/YYYY";
 
 const App = () => {

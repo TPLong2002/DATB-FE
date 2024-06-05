@@ -1,15 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { getAssignments } from "@/services/assignment";
-import AssignmentTable from "@/components/pages/assignment/AssignmentTable";
+import { getAssignmentByTeacherId } from "@/services/assignment/teacher_assignment";
+import AssignmentTable from "./AssignmentTable";
 import dayjs from "dayjs";
-import CreateAssignment from "@/components/pages/assignment/CreateAssignment";
+import CreateAssignment from "./CreateAssignment";
+import { useSelector } from "react-redux";
+
 const format = "YYYY/MM/DD HH:mm:ss";
 
 function Assignment() {
+  const auth = useSelector((state) => state.auth);
   const [data, setData] = useState({ rows: [{ key: 0 }], count: 0 });
   const fetchAssignments = async () => {
     try {
-      const res = await getAssignments();
+      const res = await getAssignmentByTeacherId(
+        auth.id,
+        pagination.limit,
+        pagination.page
+      );
+      console.log(res?.data?.rows);
       setData({
         rows: res?.data?.rows?.map((item, index) => ({
           ...item,
@@ -35,12 +43,14 @@ function Assignment() {
     document.title = "Bài tập";
   }, []);
   useEffect(() => {
-    fetchAssignments();
-  }, [pagination]);
+    if (auth.id) {
+      fetchAssignments();
+    }
+  }, [pagination, auth.id]);
 
   return (
     <div className="flex-col space-y-3">
-      <CreateAssignment></CreateAssignment>
+      <CreateAssignment fetchAssignments={fetchAssignments}></CreateAssignment>
       <AssignmentTable
         data={data}
         fetchAssignments={fetchAssignments}
