@@ -22,10 +22,7 @@ function InfoSubject(props) {
       title: "Tên bài tập",
       dataIndex: "name",
     },
-    {
-      title: "Lớp",
-      dataIndex: "class",
-    },
+
     {
       title: "Giáo viên",
       dataIndex: "teacher",

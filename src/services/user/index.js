@@ -36,3 +36,16 @@ export const createUser = async (data) => {
     console.log(error);
   }
 };
+export const getTeaherBySubjectClass = async (subject_id, class_id) => {
+  try {
+    const res = await Axios.get(`/teacher/teacherbyclasssubject`, {
+      params: {
+        subject_id: subject_id,
+        class_id: class_id,
+      },
+    });
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};

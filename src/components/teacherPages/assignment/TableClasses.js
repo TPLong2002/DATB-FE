@@ -175,7 +175,7 @@ const App = (props) => {
   const filterOption = (input, option) =>
     (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
   return (
-    <div className="flex-col">
+    <div className="flex-col mt-2">
       <Modal
         open={open}
         title="Thêm lớp vào bài tập"

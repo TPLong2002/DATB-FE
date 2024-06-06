@@ -52,3 +52,19 @@ export const updateAssignment = async (data) => {
     console.error(error);
   }
 };
+export const getAllClasses = async () => {
+  try {
+    const res = await Axios.get("/class");
+    return res;
+  } catch (error) {
+    console.error(error);
+  }
+};
+export const createAssignment = async (data) => {
+  try {
+    const res = await Axios.post("/assignment", data);
+    return res;
+  } catch (error) {
+    console.error(error);
+  }
+};

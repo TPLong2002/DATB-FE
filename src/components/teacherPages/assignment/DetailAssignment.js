@@ -10,6 +10,7 @@ import dayjs from "dayjs";
 import { Button, DatePicker, Input, Typography } from "antd";
 import { toast } from "react-toastify";
 import TableClass from "./TableClasses";
+import UploadImage from "@/components/teacherPages/assignment/UploadImage";
 
 const format = "YYYY/MM/DD";
 const { Title } = Typography;
@@ -104,101 +105,103 @@ function DetailFee() {
   const filterOption = (input, option) =>
     (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
   return (
-    <div className="flex space-x-3">
-      <div className="flex flex-col w-1/3 space-x-4">
-        <Title level={2}>Thông tin bài tập</Title>
-        {assignment && (
-          <div className="space-y-3">
-            <div className=" space-y-3">
-              <div className="flex space-x-2">
-                <div className="w-1/2">Tên bài</div>
-                <Input
-                  value={assignment.name}
-                  name="name"
-                  onChange={handleChange}
-                ></Input>
-              </div>
-              <div className="flex space-x-2">
-                <div className="w-1/2">Môn</div>
-                <Input
-                  value={assignment.subject}
-                  name="subject"
-                  onChange={handleChange}
-                  readOnly
-                ></Input>
-              </div>
-              <div className="flex space-x-2">
-                <div className="w-1/2">Giáo viên</div>
-                <Input
-                  value={assignment.teacher}
-                  name="teacher"
-                  onChange={handleChange}
-                  readOnly
-                ></Input>
-              </div>
-              {/* <div className="flex space-x-2">
-                <div className="w-1/2">Lớp</div>
-                <Select
-                  showSearch
-                  value={defaultSelect}
-                  onChange={onSelectChange}
-                  onSearch={onSearch}
-                  filterOption={filterOption}
-                  options={classes}
-                  style={{ width: "100%" }}
-                />
-              </div> */}
-              <div className="flex space-x-2">
-                <div className="w-1/2">Nội dung</div>
-                <Input
-                  value={assignment.content}
-                  name="content"
-                  onChange={handleChange}
-                ></Input>
-              </div>
-            </div>
-            <div className="space-y-3">
-              <div className="flex space-x-2">
-                <div className="w-1/2">Ngày bắt đầu</div>
-                <DatePicker
-                  value={
-                    assignment?.startdate ? dayjs(assignment.startdate) : null
-                  }
-                  format={format}
-                  onChange={(date, dateString) =>
-                    onChange(date, dateString, "startdate")
-                  }
-                />
-              </div>
-              <div className="flex space-x-2">
-                <div className="w-1/2">Ngày hết hạn</div>
+    <div>
+      {assignment && (
+        <div className="flex-col space-y-3">
+          <Title level={2}>Thông tin bài tập</Title>
+          <div className="flex space-x-3">
+            <div className="flex flex-col w-1/3 space-x-4">
+              <div className="space-y-3">
+                <div className=" space-y-3">
+                  <div className="flex space-x-2">
+                    <div className="w-1/2">Tên bài</div>
+                    <Input
+                      value={assignment.name}
+                      name="name"
+                      onChange={handleChange}
+                    ></Input>
+                  </div>
+                  <div className="flex space-x-2">
+                    <div className="w-1/2">Môn</div>
+                    <Input
+                      value={assignment.subject}
+                      name="subject"
+                      onChange={handleChange}
+                      readOnly
+                    ></Input>
+                  </div>
+                  <div className="flex space-x-2">
+                    <div className="w-1/2">Giáo viên</div>
+                    <Input
+                      value={assignment.teacher}
+                      name="teacher"
+                      onChange={handleChange}
+                      readOnly
+                    ></Input>
+                  </div>
+                  <div className="flex space-x-2">
+                    <div className="w-1/2">Ngày bắt đầu</div>
+                    <DatePicker
+                      value={
+                        assignment?.startdate
+                          ? dayjs(assignment.startdate)
+                          : null
+                      }
+                      format={format}
+                      onChange={(date, dateString) =>
+                        onChange(date, dateString, "startdate")
+                      }
+                    />
+                  </div>
+                  <div className="flex space-x-2">
+                    <div className="w-1/2">Ngày hết hạn</div>
 
-                <DatePicker
-                  defaultValue={
-                    assignment?.deadline ? dayjs(assignment.deadline) : null
-                  }
-                  format={format}
-                  onChange={(date, dateString) =>
-                    onChange(date, dateString, "deadline")
-                  }
-                />
+                    <DatePicker
+                      defaultValue={
+                        assignment?.deadline ? dayjs(assignment.deadline) : null
+                      }
+                      format={format}
+                      onChange={(date, dateString) =>
+                        onChange(date, dateString, "deadline")
+                      }
+                    />
+                  </div>
+                  <div className="flex space-x-2">
+                    <div className="w-1/2">Nội dung</div>
+                    <Input.TextArea
+                      value={assignment?.content}
+                      rows={5}
+                      name="content"
+                      onChange={handleChange}
+                    ></Input.TextArea>
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="text-center">
-              <Button type="primary" onClick={onSubmit}>
-                Lưu
-              </Button>
+            <div className="flex-col w-2/3 border-l-2 pl-3 space-y-3">
+              <div className="flex space-x-2">
+                <div className="w-1/5">Ảnh</div>
+                <UploadImage
+                  assignment={assignment}
+                  setAssignment={setAssignment}
+                ></UploadImage>
+              </div>
             </div>
           </div>
-        )}
-      </div>
-      <div className="flex-col w-2/3">
-        <TableClass
-          assignment_id={id}
-          subject_id={subject_id}
-          teacher_id={teacher_id}
-        ></TableClass>
-      </div>
+          <div className="text-center pt-5">
+            <Button type="primary" onClick={onSubmit}>
+              Lưu
+            </Button>
+          </div>
+          <div className="border-t-2">
+            <TableClass
+              assignment_id={id}
+              subject_id={subject_id}
+              teacher_id={teacher_id}
+            ></TableClass>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

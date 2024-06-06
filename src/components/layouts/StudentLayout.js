@@ -32,13 +32,9 @@ function getItem(label, key, icon, children) {
 }
 
 const items = [
-  getItem("Người dùng", "/user", <UserOutlined />),
   getItem("Lớp học", "/class", <TableOutlined />),
   getItem("Môn học", "/subject", <BookOutlined />),
-  getItem("Khoảng phí", "/fee", <TransactionOutlined />),
-  getItem("Điểm", "/mark", <FileTextOutlined />),
-  getItem("Bài tập", "/assignment", <ReadOutlined />),
-  getItem("Vai trò", "/role", <UserSwitchOutlined />),
+  getItem("Điểm", "/student/mark", <FileTextOutlined />),
 ];
 
 export default function Example({ children }) {
