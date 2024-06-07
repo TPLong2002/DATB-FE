@@ -21,7 +21,6 @@ const App = () => {
     try {
       if (auth.id) {
         const response = await getFeesByParentId(auth.id);
-        console.log(response.data);
 
         const dataTable = [];
         let User_Parents = await Promise.all(
@@ -32,8 +31,7 @@ const App = () => {
             const User_Fees = await Promise.all(
               item.User_Fees.map(async (fee) => {
                 const res = await getFeesHistory(
-                  response.data.id,
-                  item.id,
+                  item.Parent_Student.id,
                   fee.id
                 );
                 if (+res.data.paymentstatus_id == 1) {
@@ -116,23 +114,6 @@ const App = () => {
         dataIndex: "payType",
         key: "payType",
       },
-      {
-        title: "Action",
-        key: "operation",
-        render: (record) => (
-          <Space size="middle">
-            {+record.paymentstatus == -1 ? (
-              <Button
-                onClick={() => handleCreatePayment(record.id, record.fee_id)}
-              >
-                Thanh toán ngay
-              </Button>
-            ) : (
-              <></>
-            )}
-          </Space>
-        ),
-      },
     ];
 
     let chillTable = [];
@@ -168,7 +149,6 @@ const App = () => {
     { title: "Năm", dataIndex: "schoolyear", key: "schoolyear" },
     { title: "Số phi chưa thanh toán", dataIndex: "paid", key: "paid" },
     { title: "Số phi đã thanh toán", dataIndex: "unpaid", key: "unpaid" },
-    { title: "Action", key: "operation", render: () => <a>Publish</a> },
   ];
 
   return (

@@ -180,7 +180,7 @@ function DetailFee() {
             </div>
             <div className="flex-col w-2/3 border-l-2 pl-3 space-y-3">
               <div className="flex space-x-2">
-                <div className="w-1/5">Ảnh</div>
+                <div className="w-1/12">Ảnh</div>
                 <UploadImage
                   assignment={assignment}
                   setAssignment={setAssignment}

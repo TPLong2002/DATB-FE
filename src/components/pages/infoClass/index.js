@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { getStudentByClassId } from "@/services/class/classInfo";
 import Table from "@/components/pages/infoClass/Table";
 function App() {
-  let { state } = useLocation();
+  let { class_id } = useParams();
   const [data, setData] = useState();
   const fetchStudent = async () => {
     try {
-      const res = await getStudentByClassId(state.id);
+      const res = await getStudentByClassId(class_id);
       setData(res.data);
     } catch (error) {
       console.log(error);
@@ -15,7 +15,7 @@ function App() {
   };
   useEffect(() => {
     fetchStudent();
-  }, [state.id]);
+  }, [class_id]);
   return (
     <div>
       <Table data={data} fetchStudent={fetchStudent}></Table>

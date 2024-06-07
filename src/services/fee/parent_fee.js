@@ -8,10 +8,11 @@ const getFeesByParentId = async (id) => {
   }
 };
 
-const getFeesHistory = async (parent_student_id, fee_id) => {
+const getFeesHistory = async (parent_id, student_id, fee_id) => {
   try {
     const response = await Axios.post("/paymenthistory/feeOfStudent", {
-      parent_student_id,
+      parent_id,
+      student_id,
       fee_id,
     });
     return response;

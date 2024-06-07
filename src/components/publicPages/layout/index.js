@@ -37,7 +37,7 @@ function Layout(props) {
                 <div className="p-4">
                   <h3 className="text-xl font-semibold">{row.title}</h3>
                   <p className="text-gray-600 line-clamp-1">{row.content}</p>
-                  <p className="text-gray-400 text-sm">{row.createAt}</p>
+                  <p className="text-gray-400 text-sm">{row.createdAt}</p>
                 </div>
               </Link>
             </div>

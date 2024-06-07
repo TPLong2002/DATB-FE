@@ -26,6 +26,7 @@ function App() {
         selectGrade,
         selectSchoolyear
       );
+      console.log(res.data);
       setData(res.data);
     } catch (error) {
       console.log(error);

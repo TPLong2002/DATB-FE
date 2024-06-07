@@ -15,11 +15,14 @@ import Role from "@/components/pages/role";
 import News from "@/components/pages/news";
 import NewsDetail from "@/components/pages/detailNews";
 import CreateNews from "@/components/pages/news/createNews";
+import UserDashboard from "@/components/pages/dashboard/user";
+import FeeDashboard from "@/components/pages/dashboard/fee";
+import HomeDashboard from "@/components/pages/dashboard/home";
 export const privateRoutes = [
   { path: "/user", component: User, layout: DefaultLayout },
   { path: "/user/profile/:user_id", component: Profile, layout: DefaultLayout },
   { path: "/class", component: Class, layout: DefaultLayout },
-  { path: "/classinfo", component: ClassInfo, layout: DefaultLayout },
+  { path: "/class/:class_id", component: ClassInfo, layout: DefaultLayout },
   { path: "/subject", component: Subject, layout: DefaultLayout },
   {
     path: "/subject/info/:subject_id",
@@ -50,6 +53,21 @@ export const privateRoutes = [
   {
     path: "/admin/news/create",
     component: CreateNews,
+    layout: DefaultLayout,
+  },
+  {
+    path: "/dashboard",
+    component: HomeDashboard,
+    layout: DefaultLayout,
+  },
+  {
+    path: "/dashboard/user",
+    component: UserDashboard,
+    layout: DefaultLayout,
+  },
+  {
+    path: "/dashboard/fee",
+    component: FeeDashboard,
     layout: DefaultLayout,
   },
 ];

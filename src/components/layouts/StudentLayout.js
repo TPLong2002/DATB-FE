@@ -32,8 +32,7 @@ function getItem(label, key, icon, children) {
 }
 
 const items = [
-  getItem("Lớp học", "/class", <TableOutlined />),
-  getItem("Môn học", "/subject", <BookOutlined />),
+  getItem("Bài tập", "/student/assignment", <TableOutlined />),
   getItem("Điểm", "/student/mark", <FileTextOutlined />),
 ];
 

@@ -5,36 +5,39 @@ import {
   getClassesNotInAssignmentOfTeacher,
   changeClass,
   updateAssignment,
-} from "@/services/assignment";
+} from "@/services/assignment/teacher_assignment";
 import dayjs from "dayjs";
-import { Button, DatePicker, Input, Typography, Select } from "antd";
+import { Button, DatePicker, Input, Typography } from "antd";
 import { toast } from "react-toastify";
+import TableClass from "./TableClasses";
+import UploadImage from "./UploadImage";
 
 const format = "YYYY/MM/DD";
 const { Title } = Typography;
 function DetailFee() {
   const { id } = useParams();
-  const [assignment, setAssignment] = useState({ id: 0 });
+  const [assignment, setAssignment] = useState();
   const [classes, setClasses] = useState([]);
   const [defaultSelect, setDefaultSelect] = useState({
     value: 0,
     label: "Chọn lớp",
   });
+  const [subject_id, setSubject_id] = useState();
+  const [teacher_id, setTeacher_id] = useState();
 
-  const fetchClassesNotInAssignmentOfTeacher = async () => {
-    const res = getClassesNotInAssignmentOfTeacher(
-      assignment?.id,
-      assignment?.User?.id,
-      assignment?.Subject?.id
-    );
-    if (+res.code === 0) {
-      setClasses(res.data);
-    }
-  };
+  // const fetchClassesNotInAssignmentOfTeacher = async () => {
+  //   const res = getClassesNotInAssignmentOfTeacher(
+  //     assignment?.id,
+  //     assignment?.User?.id,
+  //     assignment?.Subject?.id
+  //   );
+  //   if (+res.code === 0) {
+  //     setClasses(res.data);
+  //   }
+  // };
   const fetchAssignment = async () => {
     const res = await getAssignmentById(id);
     if (+res.code === 0) {
-      console.log(res.data);
       setAssignment({
         ...res.data,
         subject: res.data.Subject.name,
@@ -43,6 +46,8 @@ function DetailFee() {
           " " +
           res.data.User.Profile.lastName,
       });
+      setSubject_id(res.data.Subject.id);
+      setTeacher_id(res.data.User.id);
       setDefaultSelect({
         value: res.data.Assignment_Classes.id,
         label: res.data.Assignment_Classes.name,
@@ -82,7 +87,8 @@ function DetailFee() {
       id: assignment.id,
       name: assignment.name,
       content: assignment.content,
-      deadline: assignment.deadline,
+      deadline: dayjs(assignment.deadline).format("YYYY/MM/DD HH:mm:ss"),
+      startdate: dayjs(assignment.startdate).format("YYYY/MM/DD HH:mm:ss"),
     });
     if (+res2.code === 0) {
       toast.success("Cập nhật thành công");
@@ -98,89 +104,104 @@ function DetailFee() {
   };
   const filterOption = (input, option) =>
     (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
-  console.log(assignment);
   return (
-    <div className="flex space-x-3">
-      <div className="flex flex-col w-1/3 space-x-4">
-        <Title level={2}>Thông tin bài tập</Title>
-        {assignment && (
-          <div className="space-y-3">
-            <div className=" space-y-3">
-              <div className="flex space-x-2">
-                <div className="w-1/2">Tên bài</div>
-                <Input
-                  value={assignment.name}
-                  name="name"
-                  onChange={handleChange}
-                ></Input>
-              </div>
-              <div className="flex space-x-2">
-                <div className="w-1/2">Môn</div>
-                <Input
-                  value={assignment.subject}
-                  name="subject"
-                  onChange={handleChange}
-                  readOnly
-                ></Input>
-              </div>
-              <div className="flex space-x-2">
-                <div className="w-1/2">Giáo viên</div>
-                <Input
-                  value={assignment.teacher}
-                  name="teacher"
-                  onChange={handleChange}
-                  readOnly
-                ></Input>
-              </div>
-              <div className="flex space-x-2">
-                <div className="w-1/2">Lớp</div>
-                <Select
-                  showSearch
-                  value={defaultSelect}
-                  onChange={onSelectChange}
-                  onSearch={onSearch}
-                  filterOption={filterOption}
-                  options={classes}
-                  style={{ width: "100%" }}
-                />
-              </div>
-              <div className="flex space-x-2">
-                <div className="w-1/2">Nội dung</div>
-                <Input
-                  value={assignment.content}
-                  name="content"
-                  onChange={handleChange}
-                ></Input>
+    <div>
+      {assignment && (
+        <div className="flex-col space-y-3">
+          <Title level={2}>Thông tin bài tập</Title>
+          <div className="flex space-x-3">
+            <div className="flex flex-col w-1/3 space-x-4">
+              <div className="space-y-3">
+                <div className=" space-y-3">
+                  <div className="flex space-x-2">
+                    <div className="w-1/2">Tên bài</div>
+                    <Input
+                      value={assignment.name}
+                      name="name"
+                      onChange={handleChange}
+                    ></Input>
+                  </div>
+                  <div className="flex space-x-2">
+                    <div className="w-1/2">Môn</div>
+                    <Input
+                      value={assignment.subject}
+                      name="subject"
+                      onChange={handleChange}
+                      readOnly
+                    ></Input>
+                  </div>
+                  <div className="flex space-x-2">
+                    <div className="w-1/2">Giáo viên</div>
+                    <Input
+                      value={assignment.teacher}
+                      name="teacher"
+                      onChange={handleChange}
+                      readOnly
+                    ></Input>
+                  </div>
+                  <div className="flex space-x-2">
+                    <div className="w-1/2">Ngày bắt đầu</div>
+                    <DatePicker
+                      value={
+                        assignment?.startdate
+                          ? dayjs(assignment.startdate)
+                          : null
+                      }
+                      format={format}
+                      onChange={(date, dateString) =>
+                        onChange(date, dateString, "startdate")
+                      }
+                    />
+                  </div>
+                  <div className="flex space-x-2">
+                    <div className="w-1/2">Ngày hết hạn</div>
+
+                    <DatePicker
+                      defaultValue={
+                        assignment?.deadline ? dayjs(assignment.deadline) : null
+                      }
+                      format={format}
+                      onChange={(date, dateString) =>
+                        onChange(date, dateString, "deadline")
+                      }
+                    />
+                  </div>
+                  <div className="flex space-x-2">
+                    <div className="w-1/2">Nội dung</div>
+                    <Input.TextArea
+                      value={assignment?.content}
+                      rows={5}
+                      name="content"
+                      onChange={handleChange}
+                    ></Input.TextArea>
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="space-y-3">
+            <div className="flex-col w-2/3 border-l-2 pl-3 space-y-3">
               <div className="flex space-x-2">
-                <div className="w-1/2">Ngày hết hạn</div>
-                {assignment.deadline ? (
-                  <DatePicker
-                    defaultValue={dayjs(assignment.deadline)}
-                    format={format}
-                    onChange={(date, dateString) =>
-                      onChange(date, dateString, "deadline")
-                    }
-                  />
-                ) : (
-                  <DatePicker
-                    onChange={(date, dateString) =>
-                      onChange(date, dateString, "deadline")
-                    }
-                  />
-                )}
+                <div className="w-1/12">Ảnh</div>
+                <UploadImage
+                  assignment={assignment}
+                  setAssignment={setAssignment}
+                ></UploadImage>
               </div>
-            </div>
-            <div className="text-center">
-              <Button type="primary" onClick={onSubmit}>
-                Lưu
-              </Button>
             </div>
           </div>
-        )}
-      </div>
+          <div className="text-center pt-5">
+            <Button type="primary" onClick={onSubmit}>
+              Lưu
+            </Button>
+          </div>
+          <div className="border-t-2">
+            <TableClass
+              assignment_id={id}
+              subject_id={subject_id}
+              teacher_id={teacher_id}
+            ></TableClass>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

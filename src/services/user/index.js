@@ -49,3 +49,15 @@ export const getTeaherBySubjectClass = async (subject_id, class_id) => {
     console.log(error);
   }
 };
+export const countUsersOfGroup = async (group_id) => {
+  try {
+    const res = await Axios.get(`/user/countusersofgroup`, {
+      params: {
+        group_id: group_id,
+      },
+    });
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};

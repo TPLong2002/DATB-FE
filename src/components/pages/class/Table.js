@@ -2,6 +2,12 @@ import React, { useState } from "react";
 import { Button, Space, Table, Tag } from "antd";
 import DeleteClass from "@/components/pages/class/DeleteClass";
 import { Link, useNavigate } from "react-router-dom";
+import {
+  EditOutlined,
+  OrderedListOutlined,
+  DeleteOutlined,
+  BookOutlined,
+} from "@ant-design/icons";
 
 const { Column } = Table;
 
@@ -43,6 +49,7 @@ const App = (props) => {
                 } else {
                   row.gvcn = "chưa có GVCN";
                 }
+                row.schoolyear = row?.Schoolyear?.name;
                 return { ...row, key: row.id };
               })
             : []
@@ -66,22 +73,27 @@ const App = (props) => {
           key="action"
           render={(_, record) => (
             <Space size="middle" className="text-l">
-              <Link to="/classinfo" state={{ id: record.id }}>
-                Danh sách {record.username}
-              </Link>
-              <a
+              <Button
+                icon={<OrderedListOutlined />}
+                onClick={() => {
+                  navigate(`/class/${record.id}`);
+                }}
+              ></Button>
+              <Button
+                type="primary"
+                icon={<BookOutlined />}
                 onClick={() => {
                   navigate(`/class/subject/${record.id}`);
                 }}
-              >
-                Môn học
-              </a>
-              <a
+              ></Button>
+              <Button
+                type="primary"
+                danger
+                icon={<DeleteOutlined />}
                 onClick={() => handleDelete(record.id)}
-                className="hover:text-red-500"
-              >
-                Delete
-              </a>
+              ></Button>
+
+              <Button icon={<EditOutlined />}></Button>
             </Space>
           )}
         />

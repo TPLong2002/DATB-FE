@@ -17,6 +17,7 @@ import {
   LogoutOutlined,
   MenuUnfoldOutlined,
   NotificationOutlined,
+  DashboardOutlined,
 } from "@ant-design/icons";
 
 import Marquee from "react-fast-marquee";
@@ -32,6 +33,11 @@ function getItem(label, key, icon, children) {
 }
 
 const items = [
+  getItem("Dashboard", "/dashboard", <DashboardOutlined />, [
+    getItem("Overview", "/dashboard"),
+    getItem("User", "/dashboard/user"),
+    getItem("Fee", "/dashboard/fee"),
+  ]),
   getItem("Người dùng", "/user", <UserOutlined />),
   getItem("Lớp học", "/class", <TableOutlined />),
   getItem("Môn học", "/subject", <BookOutlined />),
@@ -131,14 +137,14 @@ export default function Example({ children }) {
       icon: <UserOutlined />,
     },
     {
+      label: "Dashboard",
+      key: "/dashboard",
+      icon: <DashboardOutlined />,
+    },
+    {
       label: "Logout",
       key: "/logout",
       icon: <LogoutOutlined />,
-    },
-    {
-      label: "Dashboard",
-      key: "/user",
-      icon: <MenuUnfoldOutlined />,
     },
   ];
   const handleMenuClick = (e) => {
@@ -176,6 +182,7 @@ export default function Example({ children }) {
         <Menu
           theme="dark"
           defaultSelectedKeys={[`${location.pathname}`]}
+          selectedKeys={[mapPath(location.pathname)]}
           mode="inline"
           items={items}
           onClick={(e) => navigate(e.key)}

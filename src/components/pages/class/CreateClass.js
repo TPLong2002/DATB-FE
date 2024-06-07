@@ -87,10 +87,9 @@ const App = (props) => {
   const filterOption = (input, option) =>
     (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
   const onSelectGradeChange = (value, index) => {
-    console.log(value, index);
     const newClasses = [...classes];
-    console.log(newClasses[index]);
     newClasses[index] = { ...classes[index], grade_id: value };
+    console.log(newClasses);
     setClasses(newClasses);
     setSelectGrade(value);
   };
@@ -100,7 +99,6 @@ const App = (props) => {
     setClasses(newClasses);
     setSelectSchoolyear(value);
   };
-  console.log(classes);
   return (
     <>
       <Button type="primary" onClick={() => setOpen(true)}>

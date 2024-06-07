@@ -28,7 +28,7 @@ const AvatarUpload = (props) => {
   };
 
   return (
-    <div className="bg-gray-100 flex items-center w-4/5 h-full min-h-32">
+    <div className="bg-gray-100 flex items-center w-full h-full min-h-32">
       <div className="bg-gray rounded-lg shadow-md w-full h-full min-h-32">
         <div className="relative h-full min-h-32 overflow-hidden rounded-sm border border-gray-200">
           {img ? (
