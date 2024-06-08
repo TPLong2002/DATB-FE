@@ -119,7 +119,6 @@ const App = (props) => {
         }}
         className="shadow-xl"
       >
-        <Column title="ID" dataIndex="id" key="id" />
         <Column title="Username" dataIndex="username" key="username" />
         <Column title="Email" dataIndex="email" key="email" />
         <Column

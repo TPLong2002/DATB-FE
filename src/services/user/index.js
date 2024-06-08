@@ -61,3 +61,19 @@ export const countUsersOfGroup = async (group_id) => {
     console.log(error);
   }
 };
+export const countStudentsByGrade = async () => {
+  try {
+    const res = await Axios.get(`/student/countgrade`);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const countStudentBySchoolyear = async () => {
+  try {
+    const res = await Axios.get(`/student/countschoolyear`);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};

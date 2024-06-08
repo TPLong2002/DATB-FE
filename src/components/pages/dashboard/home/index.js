@@ -10,12 +10,18 @@ import LineChart from "../components/chart/LineChart";
 import TableClass from "../components/tableClass";
 import { countUsersOfGroup } from "@/services/user";
 import { getnews } from "@/services/news";
+import { countFeeAvailable } from "@/services/fee";
+import { countClassesByGrade } from "@/services/class";
 import { Link } from "react-router-dom";
 
 function HomeDashboard() {
   const [studentCount, setStudentCount] = useState(0);
   const [parentCount, setParentCount] = useState(0);
   const [teacherCount, setTeacherCount] = useState(0);
+  const [classCount10, setClassCount10] = useState(0);
+  const [classCount11, setClassCount11] = useState(0);
+  const [classCount12, setClassCount12] = useState(0);
+  const [feeCount, setFeeCount] = useState(0);
   const [news, setNews] = useState([]);
   const fetchCounts = async () => {
     try {
@@ -40,8 +46,28 @@ function HomeDashboard() {
       console.log(error);
     }
   };
+  const fetchFee = async () => {
+    try {
+      const res = await countFeeAvailable();
+      setFeeCount(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const fetchClass = async () => {
+    try {
+      const res10 = await countClassesByGrade(1);
+      const res11 = await countClassesByGrade(2);
+      const res12 = await countClassesByGrade(3);
+      setClassCount10(res10.data);
+      setClassCount11(res11.data);
+      setClassCount12(res12.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
-    Promise.all([fetchCounts(), fetchNews()]);
+    Promise.all([fetchCounts(), fetchNews(), fetchFee(), fetchClass()]);
   }, []);
   return (
     <div className="flex-col space-y-5">
@@ -72,7 +98,7 @@ function HomeDashboard() {
         </div>
         <div className="w-1/4">
           <UserCard
-            userCount={1234}
+            userCount={feeCount}
             bg={"bg-red-400"}
             icon={<DollarOutlined className="text-5xl text-white" />}
             typeUser={"Khoảng phí"}
@@ -114,21 +140,21 @@ function HomeDashboard() {
             userCount={"Khối lớp 12"}
             bg={"bg-blue-400"}
             icon={<UserOutlined className="text-5xl text-white" />}
-            typeUser={8 + " Lớp"}
+            typeUser={classCount10 + " Lớp"}
             h={16}
           ></UserCard>
           <UserCard
             userCount={"Khối lớp 11"}
             bg={"bg-blue-400"}
             icon={<UserOutlined className="text-5xl text-white" />}
-            typeUser={8 + " Lớp"}
+            typeUser={classCount11 + " Lớp"}
             h={16}
           ></UserCard>
           <UserCard
             userCount={"Khối lớp 10"}
             bg={"bg-blue-400"}
             icon={<UserOutlined className="text-5xl text-white" />}
-            typeUser={8 + " Lớp"}
+            typeUser={classCount12 + " Lớp"}
             h={16}
           ></UserCard>
         </div>

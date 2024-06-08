@@ -97,7 +97,7 @@ export default function Example({ children }) {
     },
     {
       label: "Dashboard",
-      key: "/user",
+      key: "/dashboard",
       icon: <MenuUnfoldOutlined />,
     },
   ];

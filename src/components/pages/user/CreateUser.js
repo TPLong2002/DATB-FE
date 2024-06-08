@@ -1,7 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
 import { createUser } from "@/services/user";
 import { getGroups } from "@/services/group";
-import { UploadOutlined } from "@ant-design/icons";
+import {
+  UploadOutlined,
+  DeleteOutlined,
+  PlusCircleOutlined,
+} from "@ant-design/icons";
 import Papa from "papaparse";
 import { Modal, Input, Select, Button } from "antd";
 
@@ -77,7 +81,6 @@ const App = (props) => {
         header: true,
       });
       const parsedData = csv?.data;
-
       setUsers(parsedData);
     };
     reader.readAsText(file);
@@ -89,6 +92,13 @@ const App = (props) => {
   const parent_student = groups?.filter(
     (group) => group.name === "student" || group.name === "parent"
   );
+  const handleAdd = () => {
+    setUsers([...users, { username: "", password: "", email: "" }]);
+  };
+  const handleDelete = (index) => {
+    const newUsers = users.filter((role, i) => i !== index);
+    setUsers(newUsers);
+  };
 
   return (
     <>
@@ -128,74 +138,92 @@ const App = (props) => {
         {confirmLoading ? (
           <p>{modalText}</p>
         ) : (
-          users.map((user, index) => (
-            <div key={index} className="space-y-2">
-              <Input
-                placeholder="Username"
-                name="username"
-                value={user.username}
-                onChange={(e) => handleChange(e, index)}
-              ></Input>
-              <Input
-                placeholder="Password"
-                name="password"
-                value={user.password}
-                onChange={(e) => handleChange(e, index)}
-              ></Input>
-              <Input
-                placeholder="Email"
-                name="email"
-                value={user.email}
-                onChange={(e) => handleChange(e, index)}
-              ></Input>
-              <Select
-                placeholder="Chọn nhóm quyền"
-                value={+user.group_id || null}
-                name="group_id"
-                style={{ width: 200 }}
-                onChange={(value) => handleSelectChange(value, index)}
-                options={[
-                  {
-                    label: <span>Manager</span>,
-                    title: "Manager",
-                    options: admin.map((ad) => {
-                      return {
-                        key: ad.id,
-                        label: <span>{ad.description}</span>,
-                        value: ad.id,
-                      };
-                    }),
-                  },
-                  {
-                    label: <span>School Staff</span>,
-                    title: "School Staff",
-                    options:
-                      school_staff &&
-                      school_staff.map((school) => {
-                        return {
-                          key: school.id,
-                          label: <span>{school.description}</span>,
-                          value: school.id,
-                        };
-                      }),
-                  },
-                  {
-                    label: <span>Student & Parent</span>,
-                    title: "Student & Parent",
-                    options:
-                      parent_student &&
-                      parent_student.map((school) => {
-                        return {
-                          key: school.id,
-                          label: <span>{school.description}</span>,
-                          value: school.id,
-                        };
-                      }),
-                  },
-                ]}
+          <div>
+            {users.map((user, index) => (
+              <div key={index} className=" border-t-2 py-3 flex space-x-2">
+                <div className="space-y-2 w-11/12">
+                  <Input
+                    placeholder="Username"
+                    name="username"
+                    value={user.username}
+                    onChange={(e) => handleChange(e, index)}
+                  ></Input>
+                  <Input
+                    placeholder="Password"
+                    name="password"
+                    value={user.password}
+                    onChange={(e) => handleChange(e, index)}
+                  ></Input>
+                  <Input
+                    placeholder="Email"
+                    name="email"
+                    value={user.email}
+                    onChange={(e) => handleChange(e, index)}
+                  ></Input>
+                  <Select
+                    placeholder="Chọn nhóm quyền"
+                    value={+user.group_id || null}
+                    name="group_id"
+                    style={{ width: 200 }}
+                    onChange={(value) => handleSelectChange(value, index)}
+                    options={[
+                      {
+                        label: <span>Manager</span>,
+                        title: "Manager",
+                        options: admin.map((ad) => {
+                          return {
+                            key: ad.id,
+                            label: <span>{ad.description}</span>,
+                            value: ad.id,
+                          };
+                        }),
+                      },
+                      {
+                        label: <span>School Staff</span>,
+                        title: "School Staff",
+                        options:
+                          school_staff &&
+                          school_staff.map((school) => {
+                            return {
+                              key: school.id,
+                              label: <span>{school.description}</span>,
+                              value: school.id,
+                            };
+                          }),
+                      },
+                      {
+                        label: <span>Student & Parent</span>,
+                        title: "Student & Parent",
+                        options:
+                          parent_student &&
+                          parent_student.map((school) => {
+                            return {
+                              key: school.id,
+                              label: <span>{school.description}</span>,
+                              value: school.id,
+                            };
+                          }),
+                      },
+                    ]}
+                  />
+                </div>
+
+                <Button
+                  className="w-1/12"
+                  danger
+                  icon={<DeleteOutlined />}
+                  onClick={() => handleDelete(index)}
+                ></Button>
+              </div>
+            ))}
+            <div className="flex justify-center">
+              <Button
+                type="primary"
+                icon={<PlusCircleOutlined />}
+                onClick={handleAdd}
               />
             </div>
-          ))
+          </div>
         )}
       </Modal>
     </>

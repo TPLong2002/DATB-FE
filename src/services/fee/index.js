@@ -39,3 +39,21 @@ export const deleteFee = async (data) => {
     throw error;
   }
 };
+export const countFeeAvailable = async () => {
+  try {
+    const response = await Axios.get("/fee/countfeeavailable");
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+export const getAllAmountByYear = async (sort) => {
+  try {
+    const response = await Axios.get("/paymenthistory/amountByYear", {
+      params: { sort },
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};

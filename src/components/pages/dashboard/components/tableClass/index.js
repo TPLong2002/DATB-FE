@@ -9,7 +9,6 @@ function App() {
   const fetchClass = async () => {
     try {
       const res = await getClasses();
-      console.log(res);
       setData(res.data);
     } catch (error) {
       console.log(error);
