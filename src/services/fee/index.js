@@ -57,3 +57,39 @@ export const getAllAmountByYear = async (sort) => {
     throw error;
   }
 };
+export const amountOfFees = async () => {
+  try {
+    const response = await Axios.get("/fee/amountoffees");
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+export const getFeeBySchoolyearGrade = async (schoolyear_id, grade_id) => {
+  try {
+    const response = await Axios.get("/fee/feebyschoolyeargrade", {
+      params: { schoolyear_id, grade_id },
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+export const amountOfFee = async (fee_id) => {
+  try {
+    const response = await Axios.get("/fee/amountoffee", {
+      params: { fee_id },
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+export const amountOfFeesAvailable = async () => {
+  try {
+    const response = await Axios.get("/fee/amountoffeesavailable");
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};

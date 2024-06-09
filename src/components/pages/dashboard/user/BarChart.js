@@ -1,7 +1,6 @@
 import { Bar } from "react-chartjs-2";
 function Chart(props) {
   const { data } = props;
-  console.log(data);
   return (
     <Bar
       data={{

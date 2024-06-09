@@ -5,10 +5,10 @@ import { Line, Bar } from "react-chartjs-2";
 import { getAllAmountByYear } from "@/services/fee";
 
 Chart.register(CategoryScale);
-function LineChart() {
+function LineChart({ indexAxis = "y", orderBy = "desc" }) {
   const [data, setData] = useState([]);
   const fetchData = async () => {
-    const res = await getAllAmountByYear("desc");
+    const res = await getAllAmountByYear(orderBy);
     console.log(res.data);
     if (res.data) {
       const totalPaymentsByYear = [];
@@ -40,7 +40,7 @@ function LineChart() {
   }, []);
 
   const options = {
-    indexAxis: "y",
+    indexAxis: indexAxis,
     responsive: true,
     plugins: {
       legend: {

@@ -77,3 +77,11 @@ export const countStudentBySchoolyear = async () => {
     console.log(error);
   }
 };
+export const countTeacherBySubject = async () => {
+  try {
+    const res = await Axios.get(`/teacher/countteacherbysubject`);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};

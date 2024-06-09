@@ -15,6 +15,7 @@ import {
 } from "@/services/user";
 import BarChart from "./BarChart";
 import TeacherBySubjects from "./TeacherBySubjects";
+import { countTeacherBySubject } from "@/services/user";
 
 function HomeDashboard() {
   const [studentCount, setStudentCount] = useState(0);
@@ -22,6 +23,7 @@ function HomeDashboard() {
   const [teacherCount, setTeacherCount] = useState(0);
   const [countStudentGrade, setCountStudentGrade] = useState();
   const [countStudentSchoolyear, setCountStudentSchoolyear] = useState();
+  const [countTeacherSubject, setCountTeacherSubject] = useState();
 
   const [feeCount, setFeeCount] = useState(0);
 
@@ -32,12 +34,16 @@ function HomeDashboard() {
       const teacherCount = await countUsersOfGroup(4);
       const studentsCountGrade = await countStudentsByGrade();
       const studentsCountSchoolyear = await countStudentBySchoolyear();
+      const teacherBySubject = await countTeacherBySubject();
+
+      console.log(teacherBySubject.data);
 
       setCountStudentGrade(studentsCountGrade.data);
       setTeacherCount(teacherCount.data);
       setStudentCount(studentCount.data);
       setParentCount(parentCount.data);
       setCountStudentSchoolyear(studentsCountSchoolyear.data);
+      setCountTeacherSubject(teacherBySubject.data);
     } catch (error) {
       console.log(error);
     }
@@ -100,10 +106,10 @@ function HomeDashboard() {
           <BarChart data={countStudentSchoolyear}></BarChart>
         </div>
       </div>
-      <div className="flex space-x-4">
-        <div>
-          <TeacherBySubjects data></TeacherBySubjects>
-        </div>
+      <div className="">
+        {countTeacherSubject && (
+          <TeacherBySubjects data={countTeacherSubject}></TeacherBySubjects>
+        )}
       </div>
     </div>
   );
