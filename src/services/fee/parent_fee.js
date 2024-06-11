@@ -31,4 +31,30 @@ const createPayment = async (id, fee_id) => {
     throw error;
   }
 };
-export { getFeesByParentId, getFeesHistory, createPayment };
+const countFeesByParentId = async (parent_id) => {
+  try {
+    const response = await Axios.get(`/parent/countfees`, {
+      params: { parent_id },
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+const getFeesUnPaidByParentId = async (parent_id) => {
+  try {
+    const response = await Axios.get(`/parent/getfeesunpaid`, {
+      params: { parent_id },
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+export {
+  getFeesByParentId,
+  getFeesHistory,
+  createPayment,
+  countFeesByParentId,
+  getFeesUnPaidByParentId,
+};

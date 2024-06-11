@@ -4,6 +4,7 @@ import { Button, Checkbox, Space, Table, Tag, Typography, Text } from "antd";
 import { getSubjectsByClassId } from "@/services/class/classSubject";
 import DeleteSubject from "@/components/pages/classSubject/DeleteSubject";
 import { Link, useNavigate } from "react-router-dom";
+import AddTeacherSubjectToClass from "@/components/pages/classSubject/AddTeacherSubjectToClass";
 
 const { Column } = Table;
 const { Title } = Typography;
@@ -60,6 +61,11 @@ const App = () => {
 
   return (
     <>
+      <AddTeacherSubjectToClass
+        class_id={class_id}
+        fetchData={fetchSubjectOfClass}
+        grade_id={data?.grade_id}
+      ></AddTeacherSubjectToClass>
       <DeleteSubject
         open={openDelete}
         setOpen={setOpenDelete}

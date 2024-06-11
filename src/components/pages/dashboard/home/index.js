@@ -5,6 +5,7 @@ import {
   UserOutlined,
   UsergroupDeleteOutlined,
   DollarOutlined,
+  UserDeleteOutlined,
 } from "@ant-design/icons";
 import LineChart from "../components/chart/LineChart";
 import TableClass from "../components/tableClass";
@@ -92,7 +93,7 @@ function HomeDashboard() {
           <UserCard
             userCount={teacherCount}
             bg={"bg-blue-400"}
-            icon={<UserOutlined className="text-5xl text-white" />}
+            icon={<UserDeleteOutlined className="text-5xl text-white" />}
             typeUser={"Giáo viên"}
           ></UserCard>
         </div>

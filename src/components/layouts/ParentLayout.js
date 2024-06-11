@@ -12,6 +12,7 @@ import {
   FileTextOutlined,
   LogoutOutlined,
   MenuUnfoldOutlined,
+  DashboardOutlined,
 } from "@ant-design/icons";
 
 import Marquee from "react-fast-marquee";
@@ -28,6 +29,7 @@ function getItem(label, key, icon, children) {
 }
 
 const items = [
+  getItem("Khoảng phí", "/parent", <DashboardOutlined />),
   getItem("Khoảng phí", "/parent/fee", <TransactionOutlined />),
   getItem("Điểm của Student", "/parent/mark", <FileTextOutlined />),
 ];
@@ -58,6 +60,11 @@ export default function Example({ children }) {
 
   const dropdownItems = [
     {
+      label: "Dashboard",
+      key: "/parent",
+      icon: <DashboardOutlined />,
+    },
+    {
       label: "Profile",
       key: `/user/profile/${auth.id}`,
       icon: <UserOutlined />,
@@ -66,11 +73,6 @@ export default function Example({ children }) {
       label: "Logout",
       key: "/logout",
       icon: <LogoutOutlined />,
-    },
-    {
-      label: "Dashboard",
-      key: "/user",
-      icon: <MenuUnfoldOutlined />,
     },
   ];
   const handleMenuClick = (e) => {

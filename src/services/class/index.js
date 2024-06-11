@@ -67,3 +67,15 @@ export const countClassesByGrade = async (grade_id) => {
     throw error;
   }
 };
+export const getGradeByClassId = async (class_id) => {
+  try {
+    const res = await Axios.get(`/class/grade`, {
+      params: {
+        class_id: class_id,
+      },
+    });
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};

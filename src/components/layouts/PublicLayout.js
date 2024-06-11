@@ -84,7 +84,21 @@ export default function Example({ children }) {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
+  const getDashboardKey = (role) => {
+    if (role === "admin") {
+      return "/dashboard";
+    } else if (role === "parent") {
+      return "/parent";
+    } else {
+      return "/default"; // default case, you can change it as needed
+    }
+  };
   const dropdownItems = [
+    {
+      label: "Dashboard",
+      key: getDashboardKey(auth.role),
+      icon: <MenuUnfoldOutlined />,
+    },
     {
       label: "Profile",
       key: `/user/profile/${auth.id}`,
@@ -94,11 +108,6 @@ export default function Example({ children }) {
       label: "Logout",
       key: "/logout",
       icon: <LogoutOutlined />,
-    },
-    {
-      label: "Dashboard",
-      key: "/dashboard",
-      icon: <MenuUnfoldOutlined />,
     },
   ];
   const handleMenuClick = (e) => {

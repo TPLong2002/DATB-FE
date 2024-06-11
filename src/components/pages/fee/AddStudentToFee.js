@@ -30,6 +30,7 @@ const App = forwardRef((props, ref) => {
       const data = res.data.map((student) => ({
         value: student?.id,
         label: student?.Profile?.firstname + " " + student?.Profile?.lastname,
+        parent_id: student.User_Students[0]?.id,
       }));
       setAllStudents(data);
     } catch (error) {
@@ -45,12 +46,12 @@ const App = forwardRef((props, ref) => {
       return fetchAllStudents();
     },
   }));
-
   const handleOk = async () => {
     setConfirmLoading(true);
     const data = students.map((student) => ({
-      user_id: student.id,
-      fee_id: fee_id,
+      user_id: +student.id,
+      fee_id: +fee_id,
+      parent_id: +student.parent_id,
     }));
 
     const addStudent = await addStudentToFee(data);
@@ -63,6 +64,11 @@ const App = forwardRef((props, ref) => {
         setConfirmLoading(false);
         setOpen(false);
         setStudents([]);
+      }, 2000);
+    } else {
+      setModalText(addStudent.message);
+      setTimeout(() => {
+        setConfirmLoading(false);
       }, 2000);
     }
   };
@@ -98,7 +104,11 @@ const App = forwardRef((props, ref) => {
   };
   const onChange = (value, label) => {
     const newStudents = [...students];
-    newStudents.push({ id: value, label: label.label });
+    newStudents.push({
+      id: value,
+      label: label.label,
+      parent_id: label.parent_id,
+    });
     setStudents(newStudents);
 
     const updatedAllStudents = allStudents.filter((student) => {

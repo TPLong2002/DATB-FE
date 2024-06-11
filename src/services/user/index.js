@@ -85,3 +85,15 @@ export const countTeacherBySubject = async () => {
     console.log(error);
   }
 };
+export const countStudentsByParentId = async (parent_id) => {
+  try {
+    const res = await Axios.get(`/parent/countstudents`, {
+      params: {
+        parent_id: parent_id,
+      },
+    });
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};

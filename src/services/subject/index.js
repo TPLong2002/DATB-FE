@@ -67,3 +67,31 @@ export const getSubjectByClassId = async (class_id, schoolyear_id) => {
     console.log(error);
   }
 };
+export const getSubjectByGradeIdNotInClass = async (grade_id, class_id) => {
+  try {
+    const res = await Axios.get(`/subject/grade/notinclass`, {
+      params: { grade_id: grade_id, class_id: class_id },
+    });
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const getTeachersBySubject = async (subject_id) => {
+  try {
+    const res = await Axios.get(`/teacher/teachersbysubject`, {
+      params: { subject_id: subject_id },
+    });
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const addSubjectUserToClass = async (data) => {
+  try {
+    const res = await Axios.post("/csu", data);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
