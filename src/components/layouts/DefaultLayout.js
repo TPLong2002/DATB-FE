@@ -142,6 +142,11 @@ export default function Example({ children }) {
       icon: <DashboardOutlined />,
     },
     {
+      label: "Đổi mật khẩu",
+      key: "/changepassword",
+      icon: <LogoutOutlined />,
+    },
+    {
       label: "Logout",
       key: "/logout",
       icon: <LogoutOutlined />,

@@ -8,6 +8,7 @@ import {
 } from "@ant-design/icons";
 import Papa from "papaparse";
 import { Modal, Input, Select, Button } from "antd";
+import { toast } from "react-toastify";
 
 const App = (props) => {
   const { fetchData } = props;
@@ -18,7 +19,7 @@ const App = (props) => {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState(
-    "Bạn có chắc muốn xóa người dùng này không ?"
+    "Loading, please wait a moment..."
   );
   // const [importedFile, setImportedFile] = useState(null);
   const fileInputRef = useRef(null); // Use useRef to create a ref
@@ -37,16 +38,21 @@ const App = (props) => {
   }, []);
 
   const handleOk = async () => {
-    console.log(users);
+    setConfirmLoading(true);
     const create = await createUser(users);
     if (+create.code === 0) {
-      setModalText(create.message);
-      setConfirmLoading(true);
+      toast.success(create.message);
       setTimeout(async () => {
         fetchData().then(() => {
           setOpen(false);
           setConfirmLoading(false);
         });
+      }, 1000);
+    } else {
+      toast.error(create.message);
+      setTimeout(() => {
+        setOpen(false);
+        setConfirmLoading(false);
       }, 1000);
     }
   };
@@ -130,7 +136,12 @@ const App = (props) => {
           <Button key="back" onClick={handleCancel}>
             Cancel
           </Button>,
-          <Button key="submit" type="primary" onClick={handleOk}>
+          <Button
+            key="submit"
+            type="primary"
+            onClick={handleOk}
+            loading={confirmLoading}
+          >
             Submit
           </Button>,
         ]}

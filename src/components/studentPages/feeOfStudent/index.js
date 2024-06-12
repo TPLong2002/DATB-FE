@@ -2,11 +2,8 @@ import React, { useEffect, useState } from "react";
 import { DownOutlined } from "@ant-design/icons";
 import { Button, Dropdown, Space, Table, Tag } from "antd";
 import { CheckCircleOutlined, ClockCircleOutlined } from "@ant-design/icons";
-import {
-  getFeesByParentId,
-  getFeesHistory,
-  createPayment,
-} from "@/services/fee/parent_fee";
+import { getFeesByStudentId } from "@/services/fee/studentOfFee";
+import { getFeesHistory } from "@/services/fee/parent_fee";
 import { useSelector } from "react-redux";
 import dayjs from "dayjs";
 
@@ -20,20 +17,21 @@ const App = () => {
   const getFees = async () => {
     try {
       if (auth.id) {
-        const response = await getFeesByParentId(auth.id);
-
+        const response = await getFeesByStudentId(auth.id);
         const dataTable = [];
-        let User_Parents = await Promise.all(
-          response.data.User_Parents.map(async (item, index) => {
+        let User_Students = await Promise.all(
+          response.data.User_Students.map(async (item, index) => {
             let paid = 0;
             let unpaid = 0;
 
             const User_Fees = await Promise.all(
-              item.User_Fees.map(async (fee) => {
+              response.data.User_Fees.map(async (fee) => {
                 const res = await getFeesHistory(
-                  item.Parent_Student.id,
+                  item.id,
+                  response.data.id,
                   fee.id
                 );
+                console.log(res.data);
                 if (+res.data.paymentstatus_id == 1) {
                   paid++;
                 } else {
@@ -44,22 +42,22 @@ const App = () => {
             );
             dataTable.push({
               key: index.toString(),
-              parentName:
+              parentName: item.Profile.firstName + " " + item.Profile.lastName,
+              parent_id: item.id,
+              studentName:
                 response.data.Profile.firstName +
                 " " +
                 response.data.Profile.lastName,
-              parent_id: response.data.id,
-              studentName: item.Profile.firstName + " " + item.Profile.lastName,
-              student_id: item.id,
-              class: item.Student_Classes[0].name,
-              schoolyear: item.Student_Classes[0].Schoolyear.name,
+              student_id: response.data.id,
+              class: response.data.Student_Classes[0].name,
+              schoolyear: response.data.Student_Classes[0].Schoolyear.name,
               paid: paid,
               unpaid: unpaid,
             });
             return { ...item, User_Fees };
           })
         );
-        setData({ ...response.data, User_Parents });
+        setData({ ...response.data, User_Students });
         setTable(dataTable);
       }
     } catch (error) {
@@ -69,19 +67,9 @@ const App = () => {
   useEffect(() => {
     getFees();
   }, [auth.id]);
-
-  const handleCreatePayment = async (id, parent_student_id) => {
-    try {
-      const response = await createPayment(id, parent_student_id);
-      if (+response.data.resultCode === 0) {
-        window.open(response.data.payUrl, "_blank", "noopener,noreferrer");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
+  console.log(data);
   const expandedRowRender = (record, index, indent, expanded) => {
+    console.log(record);
     const columns = [
       { title: "Tên phí", dataIndex: "name", key: "name" },
       { title: "Số tiền", dataIndex: "amount", key: "amount" },
@@ -118,23 +106,18 @@ const App = () => {
 
     let chillTable = [];
     if (expanded) {
-      data?.User_Parents.map((item) => {
-        if (record.student_id == item.id) {
-          item.User_Fees.map((fee) => {
-            chillTable.push({
-              key: fee.id,
-              id: fee.paymenthistory.id,
-              name: fee.name,
-              amount: fee.price,
-              fee_id: fee.id,
-              parent_student_id: item.Parent_Student.id,
-              paymentstatus: fee.paymenthistory.Paymentstatus.code,
-              time: dayjs(fee.paymenthistory.time).format(format),
-              payType: fee.paymenthistory.payType,
-              orderType: fee.paymenthistory.orderType,
-            });
-          });
-        }
+      data.User_Students[0].User_Fees.map((fee) => {
+        chillTable.push({
+          key: fee.id,
+          id: fee.paymenthistory.id,
+          name: fee.name,
+          amount: fee.price,
+          fee_id: fee.id,
+          paymentstatus: fee.paymenthistory.Paymentstatus.code,
+          time: dayjs(fee.paymenthistory.time).format(format),
+          payType: fee.paymenthistory.payType,
+          orderType: fee.paymenthistory.orderType,
+        });
       });
     }
     return (

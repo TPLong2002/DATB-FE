@@ -33,6 +33,7 @@ function getItem(label, key, icon, children) {
 
 const items = [
   getItem("Bài tập", "/student/assignment", <TableOutlined />),
+  getItem("Các khoảng phí", "/student/fee", <TransactionOutlined />),
   getItem("Điểm", "/student/mark", <FileTextOutlined />),
 ];
 
@@ -67,14 +68,19 @@ export default function Example({ children }) {
       icon: <UserOutlined />,
     },
     {
-      label: "Logout",
-      key: "/logout",
+      label: "Bài tập",
+      key: "/student/assignment",
+      icon: <MenuUnfoldOutlined />,
+    },
+    {
+      label: "Đổi mật khẩu",
+      key: "/changepassword",
       icon: <LogoutOutlined />,
     },
     {
-      label: "Dashboard",
-      key: "/user",
-      icon: <MenuUnfoldOutlined />,
+      label: "Logout",
+      key: "/logout",
+      icon: <LogoutOutlined />,
     },
   ];
   const handleMenuClick = (e) => {

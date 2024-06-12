@@ -63,14 +63,20 @@ export default function Example({ children }) {
       icon: <UserOutlined />,
     },
     {
-      label: "Logout",
-      key: "/logout",
-      icon: <LogoutOutlined />,
-    },
-    {
       label: "Dashboard",
       key: "/user",
       icon: <MenuUnfoldOutlined />,
+    },
+
+    {
+      label: "Đổi mật khẩu",
+      key: "/changepassword",
+      icon: <LogoutOutlined />,
+    },
+    {
+      label: "Logout",
+      key: "/logout",
+      icon: <LogoutOutlined />,
     },
   ];
   const handleMenuClick = (e) => {

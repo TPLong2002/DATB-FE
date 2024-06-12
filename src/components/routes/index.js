@@ -11,6 +11,7 @@ import { privateRoutes } from "@/components/routes/privateRoutes";
 import { studentRoutes } from "@/components/routes/studentRoutes";
 import { parentRoutes } from "@/components/routes/parentRoutes";
 import { teacherRoutes } from "@/components/routes/teacherRoutes";
+import { commonRoutes } from "@/components/routes/commonRoutes";
 
 import { useSelector, useDispatch } from "react-redux";
 import { accountUser } from "@/slice/authSlice";
@@ -120,6 +121,23 @@ function App() {
         )}
         {isAuth === "true" && role === "teacher" ? (
           teacherRoutes.map((route, index) => {
+            return (
+              <Route
+                key={index}
+                path={route.path}
+                element={
+                  <route.layout>
+                    <route.component />
+                  </route.layout>
+                }
+              />
+            );
+          })
+        ) : (
+          <Route path="*" element={<Navigate to={"/login"} />} />
+        )}
+        {isAuth === "true" ? (
+          commonRoutes.map((route, index) => {
             return (
               <Route
                 key={index}

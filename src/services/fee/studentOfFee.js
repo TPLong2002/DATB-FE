@@ -35,3 +35,13 @@ export const addStudentToFee = async (data) => {
     console.log(error);
   }
 };
+export const getFeesByStudentId = async (student_id) => {
+  try {
+    const res = await Axios.get(`/student/fees`, {
+      params: { student_id },
+    });
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};

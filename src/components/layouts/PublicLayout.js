@@ -86,23 +86,30 @@ export default function Example({ children }) {
 
   const getDashboardKey = (role) => {
     if (role === "admin") {
-      return "/dashboard";
+      return { label: "Dashboard", key: "/dashboard" };
     } else if (role === "parent") {
-      return "/parent";
+      return { label: "Dashboard", key: "/parent" };
+    } else if (role === "student") {
+      return { label: "Bài tập", key: "/student/assignment" };
     } else {
-      return "/default"; // default case, you can change it as needed
+      return { label: "Dashboard", key: "/dashboard" };
     }
   };
   const dropdownItems = [
     {
-      label: "Dashboard",
-      key: getDashboardKey(auth.role),
+      label: getDashboardKey(auth.role).label,
+      key: getDashboardKey(auth.role).key,
       icon: <MenuUnfoldOutlined />,
     },
     {
       label: "Profile",
       key: `/user/profile/${auth.id}`,
       icon: <UserOutlined />,
+    },
+    {
+      label: "Đổi mật khẩu",
+      key: "/changepassword",
+      icon: <LogoutOutlined />,
     },
     {
       label: "Logout",

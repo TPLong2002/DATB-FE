@@ -12,7 +12,6 @@ const App = (props) => {
 
   const handleOk = () => {
     deleteUsersOfFee(studentDetele).then((res) => {
-      console.log(res);
       setModalText(res.message);
       setConfirmLoading(true);
       if (+res.code === 0) {

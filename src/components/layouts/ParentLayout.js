@@ -30,7 +30,7 @@ function getItem(label, key, icon, children) {
 
 const items = [
   getItem("Khoảng phí", "/parent", <DashboardOutlined />),
-  getItem("Khoảng phí", "/parent/fee", <TransactionOutlined />),
+  getItem("Các khoảng phí", "/parent/fee", <TransactionOutlined />),
   getItem("Điểm của Student", "/parent/mark", <FileTextOutlined />),
 ];
 
@@ -68,6 +68,11 @@ export default function Example({ children }) {
       label: "Profile",
       key: `/user/profile/${auth.id}`,
       icon: <UserOutlined />,
+    },
+    {
+      label: "Đổi mật khẩu",
+      key: "/changepassword",
+      icon: <LogoutOutlined />,
     },
     {
       label: "Logout",
