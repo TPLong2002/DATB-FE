@@ -39,6 +39,7 @@ const items = [
     getItem("Fee", "/dashboard/fee"),
   ]),
   getItem("Người dùng", "/user", <UserOutlined />),
+  getItem("Quan hệ", "/parent_student", <UserSwitchOutlined />),
   getItem("Lớp học", "/class", <TableOutlined />),
   getItem("Môn học", "/subject", <BookOutlined />),
   getItem("Khoảng phí", "/fee", <TransactionOutlined />),

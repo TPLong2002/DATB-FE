@@ -60,8 +60,8 @@ function App() {
     setSelectSchoolyear(value);
   };
   return (
-    <div className="flex flex-col space-y-3">
-      <div className=" flex mt-3 justify-between">
+    <div className="flex flex-col space-y-3 py-4">
+      <div className=" flex justify-between">
         <div className="flex space-x-2">
           <Select
             showSearch

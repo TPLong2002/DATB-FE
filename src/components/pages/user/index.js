@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Table from "@/components/pages/user/Table";
 import { getUsers } from "@/services/user";
 import { getGroups } from "@/services/group";
+import { getAllSchoolyear } from "@/services/schoolyear";
 function App() {
   const [data, setData] = useState({
     rows: [{ key: 1, id: 0 }],
@@ -16,6 +17,8 @@ function App() {
     page: 1,
     limit: 10,
   });
+  const [allSchoolyear, setAllSchoolyear] = useState([{}]);
+  const [selectSchoolyear, setSelectSchoolyear] = useState();
 
   const fetchUser = async () => {
     try {
@@ -24,11 +27,14 @@ function App() {
         pagination.limit,
         groupSelected,
         typeSelected,
-        search
+        search,
+        selectSchoolyear
       );
       setData(res.data);
       const res2 = await getGroups();
       setGroups(res2?.data);
+      const res3 = await getAllSchoolyear();
+      setAllSchoolyear(res3?.data);
     } catch (error) {
       console.log(error);
     }
@@ -42,13 +48,13 @@ function App() {
   }, []);
   useEffect(() => {
     fetchUser();
-  }, [pagination, groupSelected, typeSelected, search]);
+  }, [pagination, groupSelected, typeSelected, search, selectSchoolyear]);
   useEffect(() => {
     setPagination({
       page: 1,
       limit: 10,
     });
-  }, [groupSelected, typeSelected, search]);
+  }, [groupSelected, typeSelected, search, selectSchoolyear]);
   return (
     <div>
       <Table
@@ -65,6 +71,8 @@ function App() {
         typeSelected={typeSelected}
         search={search}
         setSearch={setSearch}
+        allSchoolyear={allSchoolyear}
+        setSelectSchoolyear={setSelectSchoolyear}
       ></Table>
     </div>
   );

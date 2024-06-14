@@ -18,6 +18,7 @@ import CreateNews from "@/components/pages/news/createNews";
 import UserDashboard from "@/components/pages/dashboard/user";
 import FeeDashboard from "@/components/pages/dashboard/fee";
 import HomeDashboard from "@/components/pages/dashboard/home";
+import Parent_Student from "@/components/pages/parent_student";
 export const privateRoutes = [
   { path: "/user", component: User, layout: DefaultLayout },
   { path: "/user/profile/:user_id", component: Profile, layout: DefaultLayout },
@@ -68,6 +69,11 @@ export const privateRoutes = [
   {
     path: "/dashboard/fee",
     component: FeeDashboard,
+    layout: DefaultLayout,
+  },
+  {
+    path: "/parent_student",
+    component: Parent_Student,
     layout: DefaultLayout,
   },
 ];

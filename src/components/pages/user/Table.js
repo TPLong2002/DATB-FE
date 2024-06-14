@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Space, Table, Tag, Select, Input } from "antd";
+import { Space, Table, Tag, Select, Input, Button } from "antd";
 import DeleteUser from "@/components/pages/user/DeleteUser";
 import CreateUser from "@/components/pages/user/CreateUser";
 import { useNavigate } from "react-router-dom";
+import { CSVLink } from "react-csv";
+import { DownloadOutlined } from "@ant-design/icons";
 
 const { Column } = Table;
 
@@ -13,7 +15,12 @@ const tags = [
   { id: 4, name: "teacher", color: "gold" },
   { id: 5, name: "accountant", color: "purple" },
 ];
-
+const headers = [
+  { label: "id", key: "id" },
+  { label: "username", key: "username" },
+  { label: "name", key: "name" },
+];
+const filename = "exported_data.csv";
 const App = (props) => {
   const {
     data,
@@ -28,6 +35,8 @@ const App = (props) => {
     typeSelected,
     search,
     setSearch,
+    allSchoolyear,
+    setSelectSchoolyear,
   } = props;
   const [openDelete, setOpenDelete] = useState(false);
   const [userDelete, setUserDelete] = useState({ id: 0, ishidden: 0 });
@@ -39,7 +48,7 @@ const App = (props) => {
     setOpenDelete(true);
     setUserDelete({ id: id, ishidden: +isdeleted ^ 1 });
   };
-
+  console.log("rows", rows);
   const filterOption = (input, option) =>
     (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
   const onSearch = (value) => {
@@ -56,6 +65,14 @@ const App = (props) => {
   };
   const handleSearch = (value) => {
     setSearch(value);
+  };
+  const onSchoolyearChange = (value) => {
+    setSelectSchoolyear(value);
+  };
+  const clearFilter = () => {
+    setGroupSelected();
+    setTypeSelected(0);
+    setSelectSchoolyear();
   };
   return (
     <>
@@ -91,13 +108,43 @@ const App = (props) => {
             onSearch={onSearch}
             filterOption={filterOption}
             options={type}
-            style={{ width: 160 }}
+            style={{ width: 140 }}
           />
+          <Select
+            showSearch
+            placeholder="Chọn năm học"
+            optionFilterProp="children"
+            onChange={onSchoolyearChange}
+            onSearch={onSearch}
+            filterOption={filterOption}
+            options={allSchoolyear?.map((item) => ({
+              value: item.id,
+              label: item.name,
+            }))}
+            style={{ width: 140 }}
+          />
+          <Button danger type="primary" onClick={() => clearFilter()}>
+            Xóa lọc
+          </Button>
         </div>
         <div className="flex space-x-2">
+          <Button icon={<DownloadOutlined />}>
+            <CSVLink
+              data={rows?.map((row) => ({
+                id: row?.id,
+                username: row?.username,
+                name: row?.Profile?.firstName + " " + row?.Profile?.lastName,
+              }))}
+              headers={headers}
+              filename={filename}
+            >
+              Export to CSV
+            </CSVLink>
+          </Button>
           <Input.Search
             placeholder="search"
             value={textSearch}
+            enterButton
             onSearch={handleSearch}
             onChange={handleChange}
           ></Input.Search>

@@ -6,6 +6,7 @@ import {
   DeleteOutlined,
   PlusCircleOutlined,
 } from "@ant-design/icons";
+import { getAllSchoolyear } from "@/services/schoolyear";
 import Papa from "papaparse";
 import { Modal, Input, Select, Button } from "antd";
 import { toast } from "react-toastify";
@@ -21,6 +22,7 @@ const App = (props) => {
   const [modalText, setModalText] = useState(
     "Loading, please wait a moment..."
   );
+  const [allSchoolyear, setAllSchoolyear] = useState([{}]);
   // const [importedFile, setImportedFile] = useState(null);
   const fileInputRef = useRef(null); // Use useRef to create a ref
 
@@ -32,9 +34,13 @@ const App = (props) => {
       console.log(error);
     }
   };
-
+  const fetchSchoolyear = async () => {
+    const res_schoolyear = await getAllSchoolyear();
+    setAllSchoolyear(res_schoolyear.data);
+  };
   useEffect(() => {
     fetchGroup();
+    fetchSchoolyear();
   }, []);
 
   const handleOk = async () => {
@@ -105,7 +111,17 @@ const App = (props) => {
     const newUsers = users.filter((role, i) => i !== index);
     setUsers(newUsers);
   };
-
+  const onSearch = (value) => {
+    console.log("search:", value);
+  };
+  const filterOption = (input, option) =>
+    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
+  const onSchoolyearChange = (value, index) => {
+    const newUsers = [...users];
+    newUsers[index] = { ...users[index], schoolyear_id: value };
+    console.log("newUsers", newUsers);
+    setUsers(newUsers);
+  };
   return (
     <>
       <Button type="primary" onClick={() => setOpen(true)}>
@@ -152,7 +168,7 @@ const App = (props) => {
           <div>
             {users.map((user, index) => (
               <div key={index} className=" border-t-2 py-3 flex space-x-2">
-                <div className="space-y-2 w-11/12">
+                <div className="space-y-3 w-11/12">
                   <Input
                     placeholder="Username"
                     name="username"
@@ -171,52 +187,67 @@ const App = (props) => {
                     value={user.email}
                     onChange={(e) => handleChange(e, index)}
                   ></Input>
-                  <Select
-                    placeholder="Chọn nhóm quyền"
-                    value={+user.group_id || null}
-                    name="group_id"
-                    style={{ width: 200 }}
-                    onChange={(value) => handleSelectChange(value, index)}
-                    options={[
-                      {
-                        label: <span>Manager</span>,
-                        title: "Manager",
-                        options: admin.map((ad) => {
-                          return {
-                            key: ad.id,
-                            label: <span>{ad.description}</span>,
-                            value: ad.id,
-                          };
-                        }),
-                      },
-                      {
-                        label: <span>School Staff</span>,
-                        title: "School Staff",
-                        options:
-                          school_staff &&
-                          school_staff.map((school) => {
+                  <div className="flex justify-between space-x-4">
+                    <Select
+                      placeholder="Chọn nhóm quyền"
+                      value={+user.group_id || null}
+                      name="group_id"
+                      style={{ width: "50%" }}
+                      onChange={(value) => handleSelectChange(value, index)}
+                      options={[
+                        {
+                          label: <span>Manager</span>,
+                          title: "Manager",
+                          options: admin.map((ad) => {
                             return {
-                              key: school.id,
-                              label: <span>{school.description}</span>,
-                              value: school.id,
+                              key: ad.id,
+                              label: <span>{ad.description}</span>,
+                              value: ad.id,
                             };
                           }),
-                      },
-                      {
-                        label: <span>Student & Parent</span>,
-                        title: "Student & Parent",
-                        options:
-                          parent_student &&
-                          parent_student.map((school) => {
-                            return {
-                              key: school.id,
-                              label: <span>{school.description}</span>,
-                              value: school.id,
-                            };
-                          }),
-                      },
-                    ]}
-                  />
+                        },
+                        {
+                          label: <span>School Staff</span>,
+                          title: "School Staff",
+                          options:
+                            school_staff &&
+                            school_staff.map((school) => {
+                              return {
+                                key: school.id,
+                                label: <span>{school.description}</span>,
+                                value: school.id,
+                              };
+                            }),
+                        },
+                        {
+                          label: <span>Student & Parent</span>,
+                          title: "Student & Parent",
+                          options:
+                            parent_student &&
+                            parent_student.map((school) => {
+                              return {
+                                key: school.id,
+                                label: <span>{school.description}</span>,
+                                value: school.id,
+                              };
+                            }),
+                        },
+                      ]}
+                    />
+                    <Select
+                      showSearch
+                      placeholder="Chọn năm học"
+                      optionFilterProp="children"
+                      onChange={(value) => onSchoolyearChange(value, index)}
+                      onSearch={onSearch}
+                      filterOption={filterOption}
+                      options={allSchoolyear?.map((item) => ({
+                        value: item.id,
+                        label: item.name,
+                      }))}
+                      style={{ width: "50%" }}
+                    />
+                  </div>
                 </div>
 
                 <Button
