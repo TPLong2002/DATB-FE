@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // const baseURL = "http://localhost:3002/api/v1";
-const baseURL = "https://1f95-116-98-163-125.ngrok-free.app";
+const baseURL = "https://datn-be-42k8.onrender.com";
 const instance = axios.create({
   baseURL: baseURL,
 });
