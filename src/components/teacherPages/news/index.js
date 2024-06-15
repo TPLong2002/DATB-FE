@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getAllSchoolyear } from "@/services/schoolyear";
 import { getAllSemester } from "@/services/semester";
 import { getCategory, getnewsWithToken } from "@/services/news";
-import Table from "@/components/pages/news/Table";
+import Table from "@/components/teacherPages/news/Table";
 import { Button, Select } from "antd";
 import { useNavigate } from "react-router-dom";
 

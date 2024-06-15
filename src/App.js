@@ -2,6 +2,7 @@ import "@/App";
 import Components from "@/components";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { FloatButton } from "antd";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         pauseOnHover
         theme="light"
       />
+      <FloatButton.BackTop />
     </div>
   );
 }

@@ -62,8 +62,7 @@ const App = (props) => {
         dataSource={rows ? rows.map((row) => ({ ...row, key: row.id })) : []}
         pagination={false}
       >
-        <Column title="ID" dataIndex="id" key="id" />
-        <Column title="Username" dataIndex="username" key="username" />
+        <Column title="Tên học sinh" dataIndex="username" key="username" />
         <Column title="Email" dataIndex="email" key="email" />
         {/* <Column
           title="Group"

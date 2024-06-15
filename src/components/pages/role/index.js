@@ -49,6 +49,7 @@ export default function BasicTable() {
   };
 
   React.useEffect(() => {
+    document.title = "Vai trò";
     fetch();
   }, []);
   const handleChange = async (value) => {

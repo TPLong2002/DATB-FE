@@ -68,6 +68,7 @@ function HomeDashboard() {
     }
   };
   useEffect(() => {
+    document.title = "Dashboard";
     Promise.all([fetchCounts(), fetchNews(), fetchFee(), fetchClass()]);
   }, []);
   return (

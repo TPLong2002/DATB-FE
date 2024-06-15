@@ -43,7 +43,7 @@ function MarkTable(props) {
       schoolyear_id,
       semester_id
     );
-    setData(transformData(res2?.data));
+    if (+res2?.code === 0) setData(transformData(res2?.data));
   };
   useEffect(() => {
     fetchMarkType();

@@ -11,9 +11,11 @@ import dayjs from "dayjs";
 import UploadAvatar from "@/components/pages/profile/UploadAvatar";
 import { toast } from "react-toastify";
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
+import { useSelector } from "react-redux";
 
 const Profile = () => {
   const params = useParams();
+  const auth = useSelector((state) => state.auth);
   const format = "YYYY/MM/DD";
   const [profiles, setProfiles] = useState([]);
   const [group, setGroup] = useState({});
@@ -22,32 +24,35 @@ const Profile = () => {
   const cloud_name = "depfh6rnw";
   const preset_key = "rsnt801s";
 
+  const fetchProfile = async (id) => {
+    const group = await getGroupByUserId(id);
+    setGroup(group?.data?.Group);
+    if (+auth.id === +id || auth.role === "admin") {
+      if (options === 1) {
+        const res = await getProfile(id);
+        setProfiles(res?.data);
+        setOriginalImg(
+          res?.data?.map((row) => ({ avt: row.avt, id: res.data.id }))
+        );
+      }
+      if (options === 2) {
+        const res = await getRelativesProfile(id);
+        setProfiles(res?.data);
+        setOriginalImg(
+          res.data.map((row) => ({ avt: row.avt, id: res.data.id }))
+        );
+      }
+    } else {
+      toast.error("Bạn không có quyền truy cập thông tin này");
+    }
+  };
   useEffect(() => {
     document.title = "Thông tin cá nhân";
   }, []);
 
   useEffect(() => {
-    fetchProfile(params.user_id);
-  }, [params.user_id, options]);
-
-  const fetchProfile = async (id) => {
-    const group = await getGroupByUserId(id);
-    setGroup(group.data.Group);
-    if (options === 1) {
-      const res = await getProfile(id);
-      setProfiles(res.data);
-      setOriginalImg(
-        res?.data?.map((row) => ({ avt: row.avt, id: res.data.id }))
-      );
-    }
-    if (options === 2) {
-      const res = await getRelativesProfile(id);
-      setProfiles(res.data);
-      setOriginalImg(
-        res.data.map((row) => ({ avt: row.avt, id: res.data.id }))
-      );
-    }
-  };
+    if (params.user_id && auth.id) fetchProfile(params.user_id);
+  }, [params.user_id, options, auth.id]);
 
   const handleChange = (e, index) => {
     const { name, value } = e.target;
@@ -141,16 +146,19 @@ const Profile = () => {
               onChange={(e) => handleChange(e, index)}
               placeholder="Thêm email"
             />
-            <Input.Password
-              value={profile?.password}
-              type="password"
-              name="password"
-              onChange={(e) => handleChange(e, index)}
-              placeholder="Mật khẩu"
-              iconRender={(visible) =>
-                visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
-              }
-            />
+            {auth.role === "admin" && (
+              <Input.Password
+                value={profile?.password}
+                type="password"
+                name="password"
+                onChange={(e) => handleChange(e, index)}
+                placeholder="Mật khẩu"
+                iconRender={(visible) =>
+                  visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                }
+              />
+            )}
+
             <Input
               value={profile?.phoneNumber}
               name="phoneNumber"

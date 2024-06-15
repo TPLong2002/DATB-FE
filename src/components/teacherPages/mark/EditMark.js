@@ -23,15 +23,15 @@ function EditMark(props) {
   useEffect(() => {
     const fetch = async () => {
       const res = await getMarkByStudentId(
-        class_id,
-        subject_id,
         student,
+        schoolyear_id,
         semester_id,
-        schoolyear_id
+        subject_id
       );
-      setTranscript_id(res.data[0].transcript_id);
+      console.log(res.data);
+      setTranscript_id(res?.data?.Marks[0]?.transcript_id);
       const m = {};
-      res.data.forEach((item) => {
+      res.data.Marks.forEach((item) => {
         m[item?.Marktype?.name] = item?.mark;
       });
       setData(m);
@@ -81,38 +81,43 @@ function EditMark(props) {
   return (
     <>
       <Modal
-        title={
-          "Chỉnh sửa điểm của học sinh " +
-          marks[0]?.User?.Profile?.firstName +
-          " " +
-          marks[0]?.User?.Profile?.lastName
-        }
+        title={"Chỉnh sửa điểm của học sinh "}
         open={openEditMark}
         onOk={handleOk}
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
+        width={400}
       >
         {confirmLoading ? (
           <p>{modalText}</p>
         ) : (
-          <div>
-            <Input
-              placeholder="Tên học sinh"
-              readOnly
-              onChange={handleChange}
-              value={
-                marks[0]?.User?.Profile?.firstName +
-                " " +
-                marks[0]?.User?.Profile?.lastName
-              }
-            />
-            {markTypes?.map((markType, index) => (
+          <div className="flex-col space-y-3">
+            <div className="flex space-x-3 items-center">
+              <p className="w-2/5 text-lg">Tên học sinh</p>
               <Input
-                placeholder={"Điểm" + markType.name}
-                name={markType.name}
                 onChange={handleChange}
-                value={data[markType.name]}
+                value={
+                  marks?.Profile?.firstName + " " + marks?.Profile?.lastName
+                }
+                size="large"
+                className="w-3/5"
               />
+            </div>
+            {markTypes?.map((markType, index) => (
+              <div className="flex space-x-3 items-center">
+                <p className="w-2/5 text-lg">
+                  {"Điểm " + markType.name.toLowerCase()}
+                </p>
+                <Input
+                  key={index}
+                  placeholder={"Điểm " + markType.name}
+                  name={markType.name}
+                  onChange={handleChange}
+                  value={data[markType.name]}
+                  size="large"
+                  className="w-3/5"
+                />
+              </div>
             ))}
           </div>
         )}

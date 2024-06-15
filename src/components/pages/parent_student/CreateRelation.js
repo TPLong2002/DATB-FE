@@ -10,6 +10,7 @@ import { getAllSchoolyear } from "@/services/schoolyear";
 import {
   getStudentsBySchoolyear,
   getParentsBySchoolyear,
+  addRelation,
 } from "@/services/user/parent_student";
 
 import Papa from "papaparse";
@@ -17,7 +18,7 @@ import { Modal, Input, Select, Button, Table } from "antd";
 import { toast } from "react-toastify";
 
 const App = (props) => {
-  const { fetchData } = props;
+  const { fetchUser } = props;
   const [users, setUsers] = useState([
     { username: "", password: "", email: "" },
   ]);
@@ -91,23 +92,27 @@ const App = (props) => {
 
   const handleOk = async () => {
     setConfirmLoading(true);
-    console.log(parent_students);
-    // const create = await createUser(users);
-    // if (+create.code === 0) {
-    //   toast.success(create.message);
-    //   setTimeout(async () => {
-    //     fetchData().then(() => {
-    //       setOpen(false);
-    //       setConfirmLoading(false);
-    //     });
-    //   }, 1000);
-    // } else {
-    //   toast.error(create.message);
-    //   setTimeout(() => {
-    //     setOpen(false);
-    //     setConfirmLoading(false);
-    //   }, 1000);
-    // }
+    const create = await addRelation(
+      parent_students.map((item) => ({
+        student_id: item.student_id,
+        parent_id: item.parent_id,
+      }))
+    );
+    if (+create.code === 0) {
+      toast.success(create.message);
+      setTimeout(async () => {
+        fetchUser().then(() => {
+          setOpen(false);
+          setConfirmLoading(false);
+        });
+      }, 1000);
+    } else {
+      toast.error(create.message);
+      setTimeout(() => {
+        setOpen(false);
+        setConfirmLoading(false);
+      }, 1000);
+    }
   };
   const onStudentChange = (value, label) => {
     setSelectStudent({
@@ -128,6 +133,7 @@ const App = (props) => {
     const newParent_students = [
       ...parent_students,
       {
+        key: parent_students.length + 1,
         student_id: selectStudent.id,
         studentName: selectStudent.name,
         studentUsername: selectStudent.username,
@@ -171,7 +177,7 @@ const App = (props) => {
         header: true,
       });
       const parsedData = csv?.data;
-      setUsers(parsedData);
+      setParent_students(parsedData);
     };
     reader.readAsText(file);
   };
@@ -193,7 +199,7 @@ const App = (props) => {
         Tạo mới người dùng
       </Button>
       <Modal
-        title="Tạo mới người dùng"
+        title="Thêm phụ huynh - học sinh"
         open={open}
         onOk={handleOk}
         confirmLoading={confirmLoading}
@@ -231,7 +237,7 @@ const App = (props) => {
         {confirmLoading ? (
           <p>{modalText}</p>
         ) : (
-          <div>
+          <div className="flex-col space-y-4">
             <div className="flex space-x-4">
               <div className="flex space-x-4 w-11/12">
                 <Select
@@ -248,7 +254,7 @@ const App = (props) => {
                 />
                 <Select
                   showSearch
-                  value={selectStudent.name}
+                  value={selectStudent.student_id}
                   placeholder="Select a person"
                   optionFilterProp="children"
                   onChange={(value, label) => onStudentChange(value, label)}
@@ -258,7 +264,7 @@ const App = (props) => {
                 />
                 <Select
                   showSearch
-                  value={selectParent.name}
+                  value={selectParent.parent_id}
                   placeholder="Select a person"
                   optionFilterProp="children"
                   onChange={(value, label) => onParentChange(value, label)}

@@ -16,6 +16,8 @@ import {
   UserSwitchOutlined,
   LogoutOutlined,
   MenuUnfoldOutlined,
+  LoginOutlined,
+  RetweetOutlined,
 } from "@ant-design/icons";
 import { getCategory } from "@/services/news";
 
@@ -91,6 +93,8 @@ export default function Example({ children }) {
       return { label: "Dashboard", key: "/parent" };
     } else if (role === "student") {
       return { label: "Bài tập", key: "/student/assignment" };
+    } else if (role === "teacher") {
+      return { label: "Quản lý điểm", key: "/teacher/mark" };
     } else {
       return { label: "Dashboard", key: "/dashboard" };
     }
@@ -109,7 +113,7 @@ export default function Example({ children }) {
     {
       label: "Đổi mật khẩu",
       key: "/changepassword",
-      icon: <LogoutOutlined />,
+      icon: <RetweetOutlined />,
     },
     {
       label: "Logout",
@@ -170,15 +174,25 @@ export default function Example({ children }) {
             <Marquee className="flex-1">
               Chào mừng đến với website trường Trường THPT Nguyễn Hiền
             </Marquee>
+            <div className="h-9 border"></div>
             {auth.isAuth ? (
-              <div className="flex flex-col items-end space-x-2">
+              <div className="flex items-end space-x-2 pl-1">
+                <div className="flex-col">
+                  <div className="text-xs">Welcome</div>
+                  <div className="text-xs">{auth.name}</div>
+                </div>
                 <Dropdown overlay={menu} placement="bottomRight">
                   <Button icon={<UserOutlined />}></Button>
                 </Dropdown>
-                <div className="text-xs">Welcome {auth.name}</div>
               </div>
             ) : (
-              <Link to="/login">Login</Link>
+              <Button
+                className="flex ml-1"
+                icon={<LoginOutlined />}
+                onClick={() => navigate("/login")}
+              >
+                Login
+              </Button>
             )}
           </div>
         </Header>

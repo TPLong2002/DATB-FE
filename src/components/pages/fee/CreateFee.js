@@ -74,7 +74,7 @@ const App = (props) => {
         Tạo khoảng phí
       </Button>
       <Modal
-        title="Tạo lớp học"
+        title="Tạo khoảng phí"
         open={open}
         onOk={handleOk}
         confirmLoading={confirmLoading}

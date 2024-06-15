@@ -5,10 +5,13 @@ import { getAllSemester } from "@/services/semester";
 import MarkTable from "./MarkTable";
 import { useParams } from "react-router-dom";
 import { getProfile } from "@/services/profile";
+import { getRelativesProfile } from "@/services/profile";
+import { useSelector } from "react-redux";
 
 import { Select, Typography } from "antd";
 const { Title } = Typography;
 function Transcript() {
+  const auth = useSelector((state) => state.auth);
   const { student_id } = useParams();
   const [allSchoolyear, setAllSchoolyear] = useState([{}]);
   const [selectSchoolyear, setSelectSchoolyear] = useState();
@@ -17,7 +20,8 @@ function Transcript() {
 
   const [data, setData] = useState([{ firstName: "", lastName: "" }]);
   const fetchProfile = async () => {
-    const res = await getProfile(student_id);
+    const res = await getRelativesProfile(auth.id);
+    console.log("res", res);
     setData(res.data);
   };
   const fetchSchoolyear = async () => {

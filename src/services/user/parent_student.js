@@ -43,3 +43,23 @@ export const getParentsBySchoolyear = async (schoolyear_id) => {
     console.log(error);
   }
 };
+export const addRelation = async (data) => {
+  try {
+    const res = await Axios.post("/student/addrelation", data);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const deleteRelation = async (id) => {
+  try {
+    const res = await Axios.delete(`/student/deleterelation`, {
+      params: {
+        id: id,
+      },
+    });
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};

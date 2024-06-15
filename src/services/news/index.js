@@ -28,6 +28,26 @@ const getNewsById = async (id) => {
     throw error;
   }
 };
+const getnewsWithToken = async (data) => {
+  try {
+    const response = await Axios.get(`/news/getnewsbysortwithtoken`, {
+      params: data,
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+const getNewsByIdWithToken = async (id) => {
+  try {
+    const response = await Axios.get(`/news/getnewsbysortwithtoken`, {
+      params: { id },
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
 const updateNews = async (data) => {
   console.log(data);
   try {
@@ -45,4 +65,12 @@ const createNews = async (data) => {
     throw error;
   }
 };
-export { getCategory, getnews, getNewsById, updateNews, createNews };
+export {
+  getCategory,
+  getnews,
+  getNewsById,
+  updateNews,
+  createNews,
+  getnewsWithToken,
+  getNewsByIdWithToken,
+};

@@ -55,6 +55,7 @@ function FeeDashboard() {
     setRows(res.data);
   };
   useEffect(() => {
+    document.title = "Dashboard";
     fetchFee();
     fetchGrade();
     fetchSchoolyear();

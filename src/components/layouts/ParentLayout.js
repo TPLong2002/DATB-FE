@@ -13,6 +13,7 @@ import {
   LogoutOutlined,
   MenuUnfoldOutlined,
   DashboardOutlined,
+  RetweetOutlined,
 } from "@ant-design/icons";
 
 import Marquee from "react-fast-marquee";
@@ -29,7 +30,7 @@ function getItem(label, key, icon, children) {
 }
 
 const items = [
-  getItem("Khoảng phí", "/parent", <DashboardOutlined />),
+  getItem("Dashboard", "/parent", <DashboardOutlined />),
   getItem("Các khoảng phí", "/parent/fee", <TransactionOutlined />),
   getItem("Điểm của Student", "/parent/mark", <FileTextOutlined />),
 ];
@@ -72,7 +73,7 @@ export default function Example({ children }) {
     {
       label: "Đổi mật khẩu",
       key: "/changepassword",
-      icon: <LogoutOutlined />,
+      icon: <RetweetOutlined />,
     },
     {
       label: "Logout",
@@ -127,12 +128,16 @@ export default function Example({ children }) {
             <Marquee className="flex-1">
               Chào mừng đến với website trường Trường THPT Nguyễn Hiền
             </Marquee>
+            <div className="h-9 border"></div>
             {auth.isAuth ? (
-              <div className="flex flex-col items-end space-x-2">
+              <div className="flex items-end space-x-2 pl-1">
+                <div className="flex-col">
+                  <div className="text-xs">Welcome</div>
+                  <div className="text-xs">{auth.name}</div>
+                </div>
                 <Dropdown overlay={menu} placement="bottomRight">
                   <Button icon={<UserOutlined />}></Button>
                 </Dropdown>
-                <div className="text-xs">Welcome {auth.name}</div>
               </div>
             ) : (
               <Link to="/login">Login</Link>
@@ -156,9 +161,9 @@ export default function Example({ children }) {
                 {children}
               </div>
             </Content>
-            <div className="mr-4 mt-[3.25rem]">
+            {/* <div className="mr-4 mt-[3.25rem]">
               <Calendar></Calendar>
-            </div>
+            </div> */}
           </div>
         </div>
         <Footer style={{ textAlign: "center" }}>

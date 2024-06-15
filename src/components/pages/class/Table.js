@@ -64,7 +64,6 @@ const App = (props) => {
           },
         }}
       >
-        <Column title="ID" dataIndex="id" key="id" />
         <Column title="Name" dataIndex="name" key="name" />
         <Column title="GVCN" dataIndex="gvcn" key="gvcn" />
         <Column title="Schoolyear" dataIndex="schoolyear" key="schoolyear" />

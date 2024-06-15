@@ -168,7 +168,6 @@ const App = () => {
     { title: "Năm", dataIndex: "schoolyear", key: "schoolyear" },
     { title: "Số phí đã thanh toán", dataIndex: "paid", key: "paid" },
     { title: "Số phí chưa thanh toán", dataIndex: "unpaid", key: "unpaid" },
-    { title: "Action", key: "operation", render: () => <a>Publish</a> },
   ];
 
   return (

@@ -2,6 +2,8 @@ import TeacherLayout from "@/components/layouts/TeacherLayout";
 import TeacherMark from "@/components/teacherPages/mark";
 import TeacherAssignment from "@/components/teacherPages/assignment";
 import AssignmentDetail from "@/components/teacherPages/assignment/DetailAssignment";
+import News from "@/components/teacherPages/news";
+import NewsDetail from "@/components/teacherPages/detailNews";
 
 export const teacherRoutes = [
   { path: "/teacher/mark", component: TeacherMark, layout: TeacherLayout },
@@ -11,8 +13,23 @@ export const teacherRoutes = [
     layout: TeacherLayout,
   },
   {
-    path: "teacher/assignment/detail/:id",
+    path: "/teacher/assignment/detail/:id",
     component: AssignmentDetail,
+    layout: TeacherLayout,
+  },
+  {
+    path: "/teacher/news",
+    component: News,
+    layout: TeacherLayout,
+  },
+  {
+    path: "/teacher/news",
+    component: News,
+    layout: TeacherLayout,
+  },
+  {
+    path: "/teacher/news/detail/:id",
+    component: NewsDetail,
     layout: TeacherLayout,
   },
 ];

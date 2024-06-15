@@ -22,11 +22,12 @@ export const getMatksOfStudentsInClass = async (
 export const getMarkByStudentId = async (
   student_id,
   schoolyear_id,
-  semester_id
+  semester_id,
+  subject_id
 ) => {
   try {
     const res = await Axios.get(`/mark/markofstudent`, {
-      params: { student_id, semester_id, schoolyear_id },
+      params: { student_id, semester_id, schoolyear_id, subject_id },
     });
     return res;
   } catch (error) {

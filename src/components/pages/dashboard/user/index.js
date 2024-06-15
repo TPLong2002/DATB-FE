@@ -59,6 +59,7 @@ function HomeDashboard() {
   };
 
   useEffect(() => {
+    document.title = "Dashboard";
     Promise.all([fetchCounts(), fetchFee()]);
   }, []);
   return (

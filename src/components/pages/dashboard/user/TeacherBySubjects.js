@@ -23,19 +23,19 @@ function Detail(props) {
           labels: labels,
           datasets: [
             {
-              label: "Grade 10",
+              label: "Khối 10",
               backgroundColor: "rgba(255, 99, 132, 1)",
               borderWidth: 1,
               data: labels.map((label) => groupedData[label]["10"]),
             },
             {
-              label: "Grade 11",
+              label: "Khối 11",
               backgroundColor: "rgba(54, 162, 235, 1)",
               borderWidth: 1,
               data: labels.map((label) => groupedData[label]["11"]),
             },
             {
-              label: "Grade 12",
+              label: "Khối 12",
               backgroundColor: "rgba(75, 192, 192, 1)",
               borderWidth: 1,
               data: labels.map((label) => groupedData[label]["12"]),
