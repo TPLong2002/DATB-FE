@@ -196,7 +196,7 @@ const App = (props) => {
   return (
     <>
       <Button type="primary" onClick={() => setOpen(true)}>
-        Tạo mới người dùng
+        Tạo mới quan hệ
       </Button>
       <Modal
         title="Thêm phụ huynh - học sinh"

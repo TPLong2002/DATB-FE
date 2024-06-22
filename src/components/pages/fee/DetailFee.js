@@ -57,6 +57,17 @@ function DetailFee() {
       return await addStudentToFeeRef.current.fetchAllStudents();
     }
   };
+  const convertVND = (price) => {
+    let value = String(price);
+    // Loại bỏ ký tự không phải số
+    value = value.replace(/\D/g, "");
+
+    // Định dạng lại số
+    if (value) {
+      value = parseInt(value, 10).toLocaleString("vi-VN");
+      return value;
+    }
+  };
   return (
     <div className="flex space-x-3">
       <div className="flex flex-col w-1/3 space-x-4">
@@ -75,7 +86,8 @@ function DetailFee() {
               <div className="flex space-x-2">
                 <div className="w-1/2">Số tiền</div>
                 <Input
-                  value={fee.price}
+                  value={convertVND(fee.price)}
+                  addonAfter="VNĐ"
                   name="price"
                   onChange={handleChange}
                 ></Input>

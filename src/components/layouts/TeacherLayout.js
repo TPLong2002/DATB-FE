@@ -52,6 +52,7 @@ export default function Example({ children }) {
       localStorage.setItem("username", "");
       localStorage.setItem("group_id", "");
       localStorage.setItem("role", "");
+      localStorage.setItem("preRole", auth.role);
       dispatch(logout());
     }
   };
@@ -169,7 +170,7 @@ export default function Example({ children }) {
           </div>
         </div>
         <Footer style={{ textAlign: "center" }}>
-          Ant Design ©{new Date().getFullYear()} Created by Ant UED
+          Trường THPT Nguyễn Hiền, Duy Sơn, Duy Xuyên, Quảng Nam
         </Footer>
       </Layout>
     </Layout>

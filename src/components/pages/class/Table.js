@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Space, Table, Tag } from "antd";
 import DeleteClass from "@/components/pages/class/DeleteClass";
 import { Link, useNavigate } from "react-router-dom";
+import EditClass from "@/components/pages/class/EditClass";
 import {
   EditOutlined,
   OrderedListOutlined,
@@ -15,6 +16,8 @@ const App = (props) => {
   const { data, pagination, setPagination, fetchClass } = props;
   const [openDelete, setOpenDelete] = useState(false);
   const [userDelete, setUserDelete] = useState(0);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [classEdit, setClassEdit] = useState();
   const { rows, count } = data;
 
   const navigate = useNavigate();
@@ -22,6 +25,10 @@ const App = (props) => {
   const handleDelete = (id) => {
     setOpenDelete(true);
     setUserDelete(id);
+  };
+  const handleEdit = (id) => {
+    setOpenEdit(true);
+    setClassEdit(id);
   };
   return (
     <>
@@ -31,7 +38,12 @@ const App = (props) => {
         id={userDelete}
         fetchData={fetchClass}
       />
-
+      <EditClass
+        fetchData={fetchClass}
+        class_id={classEdit}
+        openEdit={openEdit}
+        setOpenEdit={setOpenEdit}
+      />
       <Table
         bordered={true}
         className="shadow-xl"
@@ -92,7 +104,12 @@ const App = (props) => {
                 onClick={() => handleDelete(record.id)}
               ></Button>
 
-              <Button icon={<EditOutlined />}></Button>
+              <Button
+                icon={<EditOutlined />}
+                onClick={() => {
+                  handleEdit(record.id);
+                }}
+              ></Button>
             </Space>
           )}
         />

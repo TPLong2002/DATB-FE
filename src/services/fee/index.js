@@ -1,7 +1,9 @@
 import Axios from "@/services/axios";
-export const getAllFee = async (limit, page) => {
+export const getAllFee = async (limit, page, schoolyear_id, semester_id) => {
   try {
-    const response = await Axios.get("/fee", { params: { limit, page } });
+    const response = await Axios.get("/fee", {
+      params: { limit, page, schoolyear_id, semester_id },
+    });
     return response;
   } catch (error) {
     throw error;

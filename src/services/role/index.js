@@ -16,9 +16,26 @@ export const delRoles = async (id) => {
   return res;
 };
 export const getRolesByGroup = async (id) => {
-  console.log(id);
   const res = await axios.get(`/role/rolesgroup`, {
     params: { id: id },
   });
   return res;
+};
+export const getRoleById = async (id) => {
+  try {
+    const res = await axios.get(`/role/getrolebyid`, {
+      params: { id: id },
+    });
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const updateRole = async (data) => {
+  try {
+    const res = await axios.put(`/role/roles`, data);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
 };

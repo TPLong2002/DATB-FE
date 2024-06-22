@@ -9,11 +9,11 @@ import { Select } from "antd";
 function Transcript() {
   const [allClass, setAllClass] = useState([{}]);
   const [allSubject, setAllSubject] = useState([{}]);
-  const [selectClass, setSelectClass] = useState(0);
-  const [selectSubject, setSelectSubject] = useState(0);
+  const [selectClass, setSelectClass] = useState();
+  const [selectSubject, setSelectSubject] = useState();
   const [allSchoolyear, setAllSchoolyear] = useState([{}]);
-  const [selectSchoolyear, setSelectSchoolyear] = useState(0);
-  const [selectSemester, setSelectSemester] = useState(0);
+  const [selectSchoolyear, setSelectSchoolyear] = useState();
+  const [selectSemester, setSelectSemester] = useState();
   const [allSemester, setAllSemester] = useState([{}]);
 
   const fetchClasses = async () => {

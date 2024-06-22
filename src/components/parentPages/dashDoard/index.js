@@ -6,7 +6,7 @@ import {
 import { countStudentsByParentId } from "@/services/user/index";
 import { useSelector } from "react-redux";
 import UserCard from "@/components/pages/dashboard/components/UserCard";
-import { UsergroupDeleteOutlined } from "@ant-design/icons";
+import { UsergroupDeleteOutlined, DollarOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import PieChart from "./PieChart";
 
@@ -57,7 +57,7 @@ function Parent_DashBoard() {
         <div>
           <UserCard
             userCount={fees.total_count}
-            icon={<UsergroupDeleteOutlined className="text-5xl text-white" />}
+            icon={<DollarOutlined className="text-5xl text-white" />}
             bg={"bg-yellow-400"}
             typeUser={"Khoảng phí"}
           ></UserCard>
@@ -65,7 +65,7 @@ function Parent_DashBoard() {
         <div>
           <UserCard
             userCount={feesExpiringSoon}
-            icon={<UsergroupDeleteOutlined className="text-5xl text-white" />}
+            icon={<DollarOutlined className="text-5xl text-white" />}
             bg={"bg-red-400"}
             typeUser={"Phí sắp hết hạn"}
           ></UserCard>
@@ -73,7 +73,7 @@ function Parent_DashBoard() {
         <div>
           <UserCard
             userCount={feesUnPaid}
-            icon={<UsergroupDeleteOutlined className="text-5xl text-white" />}
+            icon={<DollarOutlined className="text-5xl text-white" />}
             bg={"bg-gray-400"}
             typeUser={"Chưa thanh toán"}
           ></UserCard>

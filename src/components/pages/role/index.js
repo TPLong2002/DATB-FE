@@ -8,9 +8,10 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Select } from "antd";
+import { Modal, Select } from "antd";
 
 import AddRole from "@/components/pages/role/AddRole";
+import UpdateRole from "@/components/pages/role/UpdateRole";
 import { getRoles, delRoles, getRolesByGroup } from "@/services/role";
 import { getGroups } from "@/services/group";
 import { toast } from "react-toastify";
@@ -21,6 +22,13 @@ export default function BasicTable() {
   const [groups, setGroups] = React.useState([]);
   const [group, setGroup] = React.useState();
   const [roles, setRoles] = React.useState([]);
+  const [openModal, setOpenModal] = React.useState(false);
+  const [selectedRole, setSelectedRole] = React.useState();
+  const [loading, setLoading] = React.useState(false);
+  const [text, setText] = React.useState(
+    "Bạn có chắc muốn xóa quyền này không?"
+  );
+  const [openUpdate, setOpenUpdate] = React.useState();
 
   const fetch = async () => {
     const [groups] = await Promise.all([getGroups()]);
@@ -55,12 +63,32 @@ export default function BasicTable() {
   const handleChange = async (value) => {
     await rolesGroupCheck(value);
   };
-  const handleDelete = async (id) => {
-    const res = await delRoles(id);
-    if (res) {
-      toast.success(res.message);
-      fetch();
+  const handleOk = async () => {
+    setLoading(true);
+    setText("Đang xóa quyền...");
+    const res = await delRoles(selectedRole);
+    if (+res.code === 0) {
+      setTimeout(() => {
+        toast.success(res.message);
+        fetch();
+        setLoading(false);
+        setOpenModal(false);
+      }, 1000);
+    } else {
+      setTimeout(() => {
+        toast.error(res.message);
+        setLoading(false);
+        setOpenModal(false);
+      }, 1000);
     }
+  };
+  const handleDelete = async (id) => {
+    setOpenModal(true);
+    setSelectedRole(id);
+  };
+  const handleUpdate = async (id) => {
+    setOpenUpdate(true);
+    setSelectedRole(id);
   };
   const onChange = (e, index) => {
     console.log(e.target.value);
@@ -74,6 +102,15 @@ export default function BasicTable() {
   };
   return (
     <div className="container mx-auto pt-5">
+      <Modal
+        title="Xóa quyền"
+        open={openModal}
+        onOk={handleOk}
+        onCancel={() => setOpenModal(false)}
+        confirmLoading={loading}
+      >
+        <p>{text}</p>
+      </Modal>
       <div className="py-4 flex flex-row space-x-1">
         <Select
           value={group}
@@ -85,6 +122,12 @@ export default function BasicTable() {
           }))}
         />
         <AddRole rerender={fetch} />
+        <UpdateRole
+          rerender={fetch}
+          open={openUpdate}
+          setOpen={setOpenUpdate}
+          id={selectedRole}
+        ></UpdateRole>
       </div>
       <div>
         <TableContainer component={Paper}>
@@ -125,7 +168,11 @@ export default function BasicTable() {
                         >
                           <DeleteIcon fontSize="inherit" />
                         </IconButton>
-                        <IconButton aria-label="delete" size="small">
+                        <IconButton
+                          aria-label="delete"
+                          size="small"
+                          onClick={() => handleUpdate(role.id)}
+                        >
                           Edit
                         </IconButton>
                       </div>

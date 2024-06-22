@@ -105,3 +105,11 @@ export const countStudentsByParentId = async (parent_id) => {
     console.log(error);
   }
 };
+export const getTeachersWithoutGVCN = async () => {
+  try {
+    const res = await Axios.get(`/teacher/teacherswithoutgvcn`);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};

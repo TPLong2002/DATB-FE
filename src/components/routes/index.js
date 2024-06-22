@@ -28,26 +28,38 @@ function App() {
     <Router>
       <Routes>
         {authRoutes.map((route, index) => {
+          const previousRole = localStorage.getItem("preRole");
+          const currentPath = localStorage.getItem("prePath");
           if (isAuth === "true") {
+            if (role !== previousRole) {
+              // Redirect to home page if current role is different from the previous role
+              return (
+                <Route key={index} path="*" element={<Navigate to="/" />} />
+              );
+            } else {
+              // Redirect to the previously stored path if roles match
+              return (
+                <Route
+                  key={index}
+                  path="*"
+                  element={<Navigate to={currentPath || "/"} />}
+                />
+              );
+            }
+          } else {
+            // Render the normal route structure if not authenticated
             return (
               <Route
                 key={index}
-                path="*"
-                element={<Navigate to={`${localStorage.getItem("prePath")}`} />}
+                path={route.path}
+                element={
+                  <route.layout>
+                    <route.component />
+                  </route.layout>
+                }
               />
             );
           }
-          return (
-            <Route
-              key={index}
-              path={route.path}
-              element={
-                <route.layout>
-                  <route.component />
-                </route.layout>
-              }
-            />
-          );
         })}
 
         {/* {privateRoutes.map((route, index) => {

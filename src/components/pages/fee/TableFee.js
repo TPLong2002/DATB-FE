@@ -13,6 +13,15 @@ function InfoSubject(props) {
     setFeeDetele({ id, ishidden: ishidden ^ 1 });
     setOpenDelete(true);
   };
+  const convertVND = (price) => {
+    let value = price;
+
+    // Định dạng lại số
+    if (value) {
+      value = parseInt(value, 10).toLocaleString("vi-VN");
+      return value;
+    }
+  };
   const columns = [
     {
       title: "Tên phí",
@@ -21,7 +30,10 @@ function InfoSubject(props) {
 
     {
       title: "Số tiền",
-      dataIndex: "price",
+      align: "right",
+      render: (record) => (
+        <span className="">{convertVND(record.price)} VNĐ</span>
+      ),
     },
     {
       title: "Ngày bắt đầu thu",

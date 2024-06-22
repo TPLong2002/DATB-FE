@@ -1,8 +1,14 @@
 import Axios from "@/services/axios";
-const getAssignmentByTeacherId = async (teacher_id, limit, page) => {
+const getAssignmentByTeacherId = async (
+  teacher_id,
+  limit,
+  page,
+  schoolyear_id,
+  semester_id
+) => {
   try {
     const res = await Axios.get("/teacher/assignmentbyteacherid", {
-      params: { teacher_id, limit, page },
+      params: { teacher_id, limit, page, schoolyear_id, semester_id },
     });
     return res;
   } catch (error) {

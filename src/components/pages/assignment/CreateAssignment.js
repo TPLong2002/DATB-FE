@@ -153,11 +153,7 @@ const App = (props) => {
     (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
   return (
     <div>
-      <Button
-        type="primary"
-        onClick={() => setOpen(true)}
-        className="hover:scale-50"
-      >
+      <Button type="primary" onClick={() => setOpen(true)}>
         Tạo bài tập mới
       </Button>
       <Modal
@@ -265,6 +261,7 @@ const App = (props) => {
                       <div className="flex space-x-2">
                         <div className="w-1/3">Giáo viên</div>
                         <Input
+                          readOnly
                           value={
                             teacher &&
                             teacher?.Profile?.firstName +
@@ -321,10 +318,12 @@ const App = (props) => {
                     </div>
                     <div className="flex space-x-2">
                       <div className="w-1/5">Ảnh</div>
-                      <UploadImage
-                        assignment={assignment}
-                        setAssignment={setAssignment}
-                      ></UploadImage>
+                      <div className="w-4/5">
+                        <UploadImage
+                          assignment={assignment}
+                          setAssignment={setAssignment}
+                        ></UploadImage>
+                      </div>
                     </div>
                   </div>
                 </div>

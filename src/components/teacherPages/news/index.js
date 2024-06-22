@@ -116,7 +116,10 @@ function News() {
           />
         </div>
         <div>
-          <Button type="primary" onClick={() => navigate("/admin/news/create")}>
+          <Button
+            type="primary"
+            onClick={() => navigate("/teacher/news/create")}
+          >
             Tạo tin
           </Button>
         </div>

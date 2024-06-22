@@ -111,7 +111,7 @@ function DetailFee() {
             </div>
           </div>
           <div className="text-center pt-5">
-            <Button type="primary">Nộp</Button>
+            {/* <Button type="primary">Nộp</Button> */}
           </div>
         </div>
       )}

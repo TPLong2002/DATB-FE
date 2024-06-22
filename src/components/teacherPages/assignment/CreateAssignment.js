@@ -297,10 +297,12 @@ const App = (props) => {
                     </div>
                     <div className="flex space-x-2">
                       <div className="w-1/5">Ảnh</div>
-                      <UploadImage
-                        assignment={assignment}
-                        setAssignment={setAssignment}
-                      ></UploadImage>
+                      <div className="w-4/5">
+                        <UploadImage
+                          assignment={assignment}
+                          setAssignment={setAssignment}
+                        ></UploadImage>
+                      </div>
                     </div>
                   </div>
                 </div>

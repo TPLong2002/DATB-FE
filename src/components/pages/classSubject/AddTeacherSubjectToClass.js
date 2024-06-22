@@ -194,28 +194,30 @@ const App = (props) => {
                 ></Button>
               </div>
             ))}
-            <Select
-              showSearch
-              value={defaultSubject}
-              placeholder="Select Subject"
-              optionFilterProp="children"
-              onChange={onSubjectChange}
-              onSearch={onSearch}
-              filterOption={filterOption}
-              options={allSubjects}
-              style={{ width: "50%" }}
-            />
-            <Select
-              showSearch
-              value={defaultTeacher}
-              placeholder="Select Teacher"
-              optionFilterProp="children"
-              onChange={onTeacherChange}
-              onSearch={onSearch}
-              filterOption={filterOption}
-              options={allTeachers}
-              style={{ width: "50%" }}
-            />
+            <div className="flex space-x-2">
+              <Select
+                showSearch
+                value={defaultSubject}
+                placeholder="Select Subject"
+                optionFilterProp="children"
+                onChange={onSubjectChange}
+                onSearch={onSearch}
+                filterOption={filterOption}
+                options={allSubjects}
+                style={{ width: "50%" }}
+              />
+              <Select
+                showSearch
+                value={defaultTeacher}
+                placeholder="Select Teacher"
+                optionFilterProp="children"
+                onChange={onTeacherChange}
+                onSearch={onSearch}
+                filterOption={filterOption}
+                options={allTeachers}
+                style={{ width: "50%" }}
+              />
+            </div>
           </div>
         )}
       </Modal>

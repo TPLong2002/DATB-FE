@@ -13,16 +13,17 @@ function MarkTable(props) {
 
     data?.forEach((item) => {
       const subject_id = item.subject_id;
+      console.log(subject_id);
       if (!students[subject_id]) {
         students[subject_id] = {
           key: subject_id,
           id: subject_id,
-          name: item.Subject.name,
+          name: item.Subject?.name,
         };
       }
       students[subject_id][item?.Marktype?.name] = item.mark;
     });
-
+    console.log(Object.values(students));
     return Object.values(students);
   };
   const fetchMarkType = async () => {
@@ -33,6 +34,7 @@ function MarkTable(props) {
       schoolyear_id,
       semester_id
     );
+    console.log(res2);
     setData(transformData(res2?.data?.Marks));
   };
   useEffect(() => {
@@ -52,7 +54,6 @@ function MarkTable(props) {
         },
       ])
   );
-
   return (
     <div>
       <div></div>

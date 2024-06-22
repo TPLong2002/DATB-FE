@@ -5,6 +5,7 @@ import {
   UserOutlined,
   UsergroupDeleteOutlined,
   DollarOutlined,
+  UserDeleteOutlined,
 } from "@ant-design/icons";
 import Chart from "./Chart";
 import { countUsersOfGroup } from "@/services/user";
@@ -65,7 +66,7 @@ function HomeDashboard() {
   return (
     <div className="flex-col space-y-5">
       <div className="flex space-x-4 ">
-        <div className="w-1/4">
+        <div className="w-1/3">
           <UserCard
             userCount={studentCount}
             bg={"bg-green-500"}
@@ -73,7 +74,7 @@ function HomeDashboard() {
             icon={<UsergroupDeleteOutlined className="text-5xl text-white" />}
           ></UserCard>
         </div>
-        <div className="w-1/4">
+        <div className="w-1/3">
           <UserCard
             userCount={parentCount}
             bg={"bg-yellow-400"}
@@ -81,22 +82,22 @@ function HomeDashboard() {
             typeUser={"Phụ huynh"}
           ></UserCard>
         </div>
-        <div className="w-1/4">
+        <div className="w-1/3">
           <UserCard
             userCount={teacherCount}
             bg={"bg-blue-400"}
-            icon={<UserOutlined className="text-5xl text-white" />}
+            icon={<UserDeleteOutlined className="text-5xl text-white" />}
             typeUser={"Giáo viên"}
           ></UserCard>
         </div>
-        <div className="w-1/4">
+        {/* <div className="w-1/4">
           <UserCard
             userCount={feeCount}
             bg={"bg-red-400"}
             icon={<DollarOutlined className="text-5xl text-white" />}
             typeUser={"Khoảng phí"}
           ></UserCard>
-        </div>
+        </div> */}
       </div>
       <div className="flex border space-x-2">
         <div className="w-1/3 shadow-lg">

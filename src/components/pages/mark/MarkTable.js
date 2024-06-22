@@ -46,7 +46,7 @@ function MarkTable(props) {
     setData(transformData(res2.data));
   };
   useEffect(() => {
-    fetchMarkType();
+    if (class_id && subject_id) fetchMarkType();
   }, [class_id, subject_id, schoolyear_id, semester_id]);
 
   let columns = [{ title: "Tên học sinh", dataIndex: "name" }];

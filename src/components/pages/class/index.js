@@ -5,6 +5,7 @@ import CreateClass from "@/components/pages/class/CreateClass";
 import { Select } from "antd";
 import { getAllGrade } from "@/services/grade";
 import { getAllSchoolyear } from "@/services/schoolyear";
+
 function App() {
   const [data, setData] = useState({
     rows: [{ key: 1, id: 0 }],
@@ -26,7 +27,6 @@ function App() {
         selectGrade,
         selectSchoolyear
       );
-      console.log(res.data);
       setData(res.data);
     } catch (error) {
       console.log(error);

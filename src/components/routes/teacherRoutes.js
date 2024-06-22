@@ -4,6 +4,7 @@ import TeacherAssignment from "@/components/teacherPages/assignment";
 import AssignmentDetail from "@/components/teacherPages/assignment/DetailAssignment";
 import News from "@/components/teacherPages/news";
 import NewsDetail from "@/components/teacherPages/detailNews";
+import CreateNews from "@/components/teacherPages/news/createNews";
 
 export const teacherRoutes = [
   { path: "/teacher/mark", component: TeacherMark, layout: TeacherLayout },
@@ -30,6 +31,11 @@ export const teacherRoutes = [
   {
     path: "/teacher/news/detail/:id",
     component: NewsDetail,
+    layout: TeacherLayout,
+  },
+  {
+    path: "/teacher/news/create",
+    component: CreateNews,
     layout: TeacherLayout,
   },
 ];
