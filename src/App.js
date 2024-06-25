@@ -20,7 +20,7 @@ function App() {
         pauseOnHover
         theme="light"
       />
-      <FloatButton.BackTop />
+      <FloatButton.BackTop style={{ right: 96 }} />
     </div>
   );
 }

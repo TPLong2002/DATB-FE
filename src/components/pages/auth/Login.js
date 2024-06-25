@@ -69,7 +69,7 @@ function Login() {
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <img className="mx-auto h-24 w-auto" src={Logo} alt="Your Company" />
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-          Sign in to your account
+          Đăng nhập tài khoảng của bạn
         </h2>
       </div>
 
@@ -102,14 +102,14 @@ function Login() {
                 htmlFor="password"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
-                Password
+                Mật khẩu
               </label>
               <div className="text-sm">
                 <Link
-                  to="#"
+                  to="/forgotpassword"
                   className="font-semibold text-indigo-600 hover:text-indigo-500"
                 >
-                  Forgot password?
+                  Quên mật khẩu?
                 </Link>
               </div>
             </div>
@@ -134,7 +134,7 @@ function Login() {
               onClick={handleSubmit}
               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
-              Sign in
+              Đăng nhập
             </button>
           </div>
         </div>
@@ -144,7 +144,7 @@ function Login() {
             to="/"
             className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
           >
-            Back to home
+            Quay về trang chủ
           </Link>
         </p>
       </div>

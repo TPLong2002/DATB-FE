@@ -137,10 +137,10 @@ function HomeDashboard() {
         </div>
       </div>
       <div className="flex space-x-4">
-        <div className="w-1/4 ">
+        <div className="flex flex-col w-1/4 space-y-4">
           <UserCard
-            userCount={"Khối lớp 12"}
-            bg={"bg-blue-400"}
+            userCount={"Khối lớp 10"}
+            bg={"bg-green-400"}
             icon={<UserOutlined className="text-5xl text-white" />}
             typeUser={classCount10 + " Lớp"}
             h={16}
@@ -154,7 +154,7 @@ function HomeDashboard() {
           ></UserCard>
           <UserCard
             userCount={"Khối lớp 10"}
-            bg={"bg-blue-400"}
+            bg={"bg-red-400"}
             icon={<UserOutlined className="text-5xl text-white" />}
             typeUser={classCount12 + " Lớp"}
             h={16}

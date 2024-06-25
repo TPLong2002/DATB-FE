@@ -5,7 +5,17 @@ import logo from "@/img/logo.png";
 import { Logout } from "@/services/auth/signout";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "@/slice/authSlice";
-import { Button, Breadcrumb, Layout, Menu, theme, Image, Dropdown } from "antd";
+import {
+  Button,
+  Breadcrumb,
+  Layout,
+  Menu,
+  theme,
+  Image,
+  Dropdown,
+  Modal,
+  Input,
+} from "antd";
 import {
   UserOutlined,
   BookOutlined,
@@ -20,9 +30,13 @@ import {
   DashboardOutlined,
   SettingOutlined,
   RetweetOutlined,
+  MenuOutlined,
+  FieldTimeOutlined,
 } from "@ant-design/icons";
-
+import { FloatButton } from "antd";
 import Marquee from "react-fast-marquee";
+import { createSchoolyear } from "@/services/schoolyear";
+import { toast } from "react-toastify";
 
 const { Header, Content, Footer, Sider } = Layout;
 function getItem(label, key, icon, children) {
@@ -122,6 +136,10 @@ export default function Example({ children }) {
 
   const dispatch = useDispatch();
   let location = useLocation();
+  const [openModal, setOpenModal] = useState(false);
+  const [text, setText] = useState("Loading...");
+  const [confirmloading, setConfirmloading] = useState(false);
+  const [schoolyear, setSchoolyear] = useState("");
 
   const handleLogout = async () => {
     const res = await Logout();
@@ -136,6 +154,24 @@ export default function Example({ children }) {
       dispatch(logout());
     }
   };
+  const handleOk = async () => {
+    setText("Loading...");
+    setConfirmloading(true);
+    const res = await createSchoolyear(schoolyear);
+    if (+res.code === 0) {
+      toast.success(res.message);
+      setTimeout(() => {
+        setOpenModal(false);
+        setConfirmloading(false);
+      }, 1000);
+    } else {
+      toast.error(res.message);
+      setTimeout(() => {
+        setConfirmloading(false);
+      }, 1000);
+    }
+  };
+
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -245,6 +281,48 @@ export default function Example({ children }) {
           Trường THPT Nguyễn Hiền, Duy Sơn, Duy Xuyên, Quảng Nam
         </Footer>
       </Layout>
+      <Modal
+        title="Tạo năm học"
+        open={openModal}
+        onOk={() => {
+          handleOk();
+        }}
+        onCancel={() => {
+          setOpenModal(false);
+        }}
+        confirmloading={confirmloading}
+        width={300}
+      >
+        {confirmloading ? (
+          <p>{text}</p>
+        ) : (
+          <div className="flex flex-row space-x-2">
+            <p className="flex w-1/3 items-center justify-center">Năm học</p>
+            <Input
+              placeholder="Năm học"
+              value={schoolyear}
+              onChange={(e) => {
+                setSchoolyear(e.target.value);
+              }}
+              className="w-2/3"
+            ></Input>
+          </div>
+        )}
+      </Modal>
+      <FloatButton.Group
+        trigger="click"
+        type="primary"
+        style={{ right: 24 }}
+        icon={<MenuOutlined />}
+      >
+        <FloatButton
+          icon={<FieldTimeOutlined />}
+          tooltip={<div>Tạo năm học</div>}
+          onClick={() => {
+            setOpenModal(true);
+          }}
+        />
+      </FloatButton.Group>
     </Layout>
   );
 }
