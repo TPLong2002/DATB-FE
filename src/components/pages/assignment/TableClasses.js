@@ -130,7 +130,6 @@ const App = (props) => {
     { title: "Lớp", dataIndex: "name", key: "name" },
     { title: "Năm học", dataIndex: "schoolyear", key: "schoolyear" },
     {
-      title: "Action",
       key: "operation",
       render: (record) => (
         <Button

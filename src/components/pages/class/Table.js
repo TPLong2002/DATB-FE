@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Space, Table, Tag } from "antd";
+import { Button, Space, Table, Tag, Tooltip } from "antd";
 import DeleteClass from "@/components/pages/class/DeleteClass";
 import { Link, useNavigate } from "react-router-dom";
 import EditClass from "@/components/pages/class/EditClass";
@@ -76,40 +76,46 @@ const App = (props) => {
           },
         }}
       >
-        <Column title="Name" dataIndex="name" key="name" />
-        <Column title="GVCN" dataIndex="gvcn" key="gvcn" />
-        <Column title="Schoolyear" dataIndex="schoolyear" key="schoolyear" />
+        <Column title="Tên lớp" dataIndex="name" key="name" />
+        <Column title="Giáo viên chủ nhiệm" dataIndex="gvcn" key="gvcn" />
+        <Column title="Năm học" dataIndex="schoolyear" key="schoolyear" />
         <Column
-          title="Action"
           key="action"
           render={(_, record) => (
             <Space size="middle" className="text-l">
-              <Button
-                icon={<OrderedListOutlined />}
-                onClick={() => {
-                  navigate(`/class/${record.id}`);
-                }}
-              ></Button>
-              <Button
-                type="primary"
-                icon={<BookOutlined />}
-                onClick={() => {
-                  navigate(`/class/subject/${record.id}`);
-                }}
-              ></Button>
-              <Button
-                type="primary"
-                danger
-                icon={<DeleteOutlined />}
-                onClick={() => handleDelete(record.id)}
-              ></Button>
-
-              <Button
-                icon={<EditOutlined />}
-                onClick={() => {
-                  handleEdit(record.id);
-                }}
-              ></Button>
+              <Tooltip title={"Danh sách học sinh " + record.name}>
+                <Button
+                  icon={<OrderedListOutlined />}
+                  onClick={() => {
+                    navigate(`/class/${record.id}`);
+                  }}
+                ></Button>
+              </Tooltip>
+              <Tooltip title={"Danh sách môn học " + record.name}>
+                <Button
+                  type="primary"
+                  icon={<BookOutlined />}
+                  onClick={() => {
+                    navigate(`/class/subject/${record.id}`);
+                  }}
+                ></Button>
+              </Tooltip>
+              <Tooltip title={"Xóa " + record.name}>
+                <Button
+                  type="primary"
+                  danger
+                  icon={<DeleteOutlined />}
+                  onClick={() => handleDelete(record.id)}
+                ></Button>
+              </Tooltip>
+              <Tooltip title={"Sửa thông tin " + record.name}>
+                <Button
+                  icon={<EditOutlined />}
+                  onClick={() => {
+                    handleEdit(record.id);
+                  }}
+                ></Button>
+              </Tooltip>
             </Space>
           )}
         />

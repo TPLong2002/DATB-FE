@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Space, Table, Tag, Select, Input, Button } from "antd";
+import { Space, Table, Tag, Select, Input, Button, Tooltip } from "antd";
 import DeleteUser from "@/components/pages/user/DeleteUser";
 import CreateUser from "@/components/pages/user/CreateUser";
 import { useNavigate } from "react-router-dom";
 import { CSVLink } from "react-csv";
-import { DownloadOutlined } from "@ant-design/icons";
+import {
+  DownloadOutlined,
+  ProfileOutlined,
+  DeleteOutlined,
+  RedoOutlined,
+} from "@ant-design/icons";
 
 const { Column } = Table;
 
@@ -41,6 +46,7 @@ const App = (props) => {
   const [openDelete, setOpenDelete] = useState(false);
   const [userDelete, setUserDelete] = useState({ id: 0, ishidden: 0 });
   const [textSearch, setTextSearch] = useState(search ? search : "");
+  const [hovered, setHovered] = useState(false);
 
   const { rows, count } = data;
   const navigate = useNavigate();
@@ -166,10 +172,18 @@ const App = (props) => {
         }}
         className="shadow-xl"
       >
-        <Column title="Username" dataIndex="username" key="username" />
+        <Column title="Tên đăng nhập" dataIndex="username" key="username" />
+        <Column
+          title="Họ và tên"
+          render={(record) => (
+            <p>
+              {record?.Profile?.firstName + " " + record?.Profile?.lastName}
+            </p>
+          )}
+        />
         <Column title="Email" dataIndex="email" key="email" />
         <Column
-          title="Group"
+          title="Nhóm người dùng"
           dataIndex="group_id"
           key="group_id"
           render={(group_id) => (
@@ -187,27 +201,57 @@ const App = (props) => {
           )}
         />
         <Column
-          title="Action"
           key="action"
           render={(_, record) => (
             <Space size="middle" className="text-l">
-              <a onClick={() => navigate(`/user/profile/${record.id}`)}>
-                Profile {record.username}
-              </a>
+              <Tooltip
+                title={
+                  "Xem thông tin " +
+                  record?.Profile?.firstName +
+                  " " +
+                  record?.Profile?.lastName
+                }
+              >
+                <Button
+                  onClick={() => navigate(`/user/profile/${record.id}`)}
+                  icon={<ProfileOutlined />}
+                ></Button>
+              </Tooltip>
               {record.isdeleted == 0 ? (
-                <a
-                  onClick={() => handleDelete(record.id, record.isdeleted)}
-                  className="hover:text-red-500"
+                <Tooltip
+                  title={
+                    "Xóa " +
+                    record?.Profile?.firstName +
+                    " " +
+                    record?.Profile?.lastName
+                  }
                 >
-                  Delete
-                </a>
+                  <Button
+                    onClick={() => handleDelete(record.id, record.isdeleted)}
+                    danger
+                    icon={<DeleteOutlined />}
+                  ></Button>
+                </Tooltip>
               ) : (
-                <a
-                  onClick={() => handleDelete(record.id, record.isdeleted)}
-                  className="hover:text-green-500"
+                <Tooltip
+                  title={
+                    "Khôi phục " +
+                    record?.Profile?.firstName +
+                    " " +
+                    record?.Profile?.lastName
+                  }
                 >
-                  Recover
-                </a>
+                  <Button
+                    onClick={() => handleDelete(record.id, record.isdeleted)}
+                    icon={<RedoOutlined />}
+                    onMouseEnter={() => setHovered(true)}
+                    onMouseLeave={() => setHovered(false)}
+                    style={{
+                      color: hovered ? "green" : "green",
+                      borderColor: hovered ? "green" : "green",
+                    }}
+                  ></Button>
+                </Tooltip>
               )}
             </Space>
           )}

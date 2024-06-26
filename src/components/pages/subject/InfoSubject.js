@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getSubjectById } from "@/services/subject/infoSubject";
-import { updateSubject } from "@/services/subject";
-import { Typography, Table, Space, Input, Button } from "antd";
+import { updateSubject, delSubjectOfTeacher } from "@/services/subject";
+import { Typography, Table, Space, Input, Button, Tooltip } from "antd";
 import { useNavigate } from "react-router-dom";
 import AddTeacher from "@/components/pages/subject/AddTeacher";
 import { toast } from "react-toastify";
+import { DeleteOutlined, ProfileOutlined } from "@ant-design/icons";
 
 const { Title } = Typography;
 function InfoSubject() {
@@ -20,13 +21,19 @@ function InfoSubject() {
     const res = await getSubjectById(param.subject_id);
     setData(res.data);
   };
-  console.log(data);
   useEffect(() => {
     fetchSubject();
   }, [param.subject_id]);
+  const handleDelete = async (user_subject_id) => {
+    const res = await delSubjectOfTeacher(user_subject_id);
+    if (+res.code === 0) {
+      toast.success("Xóa giáo viên khỏi môn học thành công");
+      fetchSubject();
+    }
+  };
   const columns = [
     {
-      title: "Họ",
+      title: "Tên giáo viên",
       dataIndex: "fullname",
     },
 
@@ -35,14 +42,24 @@ function InfoSubject() {
       dataIndex: "phoneNumber",
     },
     {
-      title: "Action",
       key: "action",
       render: (_, record) => (
         <Space size="middle" className="text-l">
-          <a onClick={() => navigate(`/user/profile/${record.user_id}`)}>
-            Detail
-          </a>
-          <a className="hover:text-red-500">Delete</a>
+          <Tooltip title={"Xem thông tin " + record?.fullname}>
+            <Button
+              onClick={() => navigate(`/user/profile/${record.id}`)}
+              icon={<ProfileOutlined />}
+            ></Button>
+          </Tooltip>
+          <Tooltip title={"Xóa " + record?.fullname}>
+            <Button
+              danger
+              icon={<DeleteOutlined />}
+              onClick={() => {
+                handleDelete(record.user_subject_id);
+              }}
+            ></Button>
+          </Tooltip>
         </Space>
       ),
     },
@@ -57,6 +74,7 @@ function InfoSubject() {
       fetchSubject();
     }
   };
+
   return (
     <div className="space-y-2">
       <div className="flex text-center items-center justify-between">
@@ -86,7 +104,7 @@ function InfoSubject() {
                 ...row.Profile,
                 fullname: row.Profile.firstname + " " + row.Profile.lastname,
                 key: row.id,
-                user_id: row.id,
+                user_subject_id: row.id,
               }))
             : []
         }

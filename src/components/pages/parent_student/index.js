@@ -107,7 +107,6 @@ function App() {
     },
     { title: "Email phụ huynh", dataIndex: "parentEmail" },
     {
-      title: "action",
       render: (text, record, index) => {
         if (record.id) {
           return (

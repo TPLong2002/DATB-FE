@@ -235,6 +235,7 @@ export default function Example({ children }) {
           theme="dark"
           defaultSelectedKeys={[`${location.pathname}`]}
           selectedKeys={[mapPath(location.pathname)]}
+          defaultOpenKeys={["/dashboard"]}
           mode="inline"
           items={items}
           onClick={(e) => navigate(e.key)}

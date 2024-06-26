@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Table, Space, Checkbox } from "antd";
+import { Table, Space, Checkbox, Tooltip, Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import { updateAssignment } from "@/services/assignment";
+import { ProfileOutlined } from "@ant-design/icons";
 
 function InfoSubject(props) {
   const { data, fetchAssignments, pagination, setPagination } = props;
@@ -54,9 +55,12 @@ function InfoSubject(props) {
       key: "action",
       render: (_, record) => (
         <Space size="middle" className="text-l">
-          <a onClick={() => navigate(`/assignment/detail/${record.id}`)}>
-            Detail
-          </a>
+          <Tooltip title={"Chi tiết " + record?.name}>
+            <Button
+              onClick={() => navigate(`/assignment/detail/${record.id}`)}
+              icon={<ProfileOutlined />}
+            ></Button>
+          </Tooltip>
         </Space>
       ),
     },

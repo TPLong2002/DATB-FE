@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Table, Space, Checkbox } from "antd";
 import { useNavigate } from "react-router-dom";
 import DeleteFee from "@/components/pages/fee/DeleteFee";
+import { Button, Tooltip } from "antd";
+import { ProfileOutlined } from "@ant-design/icons";
 
 function InfoSubject(props) {
   const { data, fetchFee, pagination, setPagination } = props;
@@ -27,7 +29,14 @@ function InfoSubject(props) {
       title: "Tên phí",
       dataIndex: "name",
     },
-
+    {
+      title: "Năm học",
+      dataIndex: "schoolyear",
+    },
+    {
+      title: "Học kỳ",
+      dataIndex: "semester",
+    },
     {
       title: "Số tiền",
       align: "right",
@@ -54,11 +63,15 @@ function InfoSubject(props) {
       ),
     },
     {
-      title: "Action",
       key: "action",
       render: (_, record) => (
         <Space size="middle" className="text-l">
-          <a onClick={() => navigate(`/fee/detail/${record.id}`)}>Detail</a>
+          <Tooltip title={"Chi tiết " + record?.name}>
+            <Button
+              onClick={() => navigate(`/fee/detail/${record.id}`)}
+              icon={<ProfileOutlined />}
+            ></Button>
+          </Tooltip>
         </Space>
       ),
     },

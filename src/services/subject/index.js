@@ -95,3 +95,15 @@ export const addSubjectUserToClass = async (data) => {
     console.log(error);
   }
 };
+export const delSubjectOfTeacher = async (user_subject_id) => {
+  try {
+    const res = await Axios.delete("/teacher/deletesubject", {
+      data: {
+        id: user_subject_id,
+      },
+    });
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -49,7 +49,6 @@ const getNewsByIdWithToken = async (id) => {
   }
 };
 const updateNews = async (data) => {
-  console.log(data);
   try {
     const response = await Axios.put(`/news/update`, data);
     return response;

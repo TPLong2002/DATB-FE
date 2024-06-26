@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { getAllMarkType } from "@/services/markType";
 import { getMatksOfStudentsInClass } from "@/services/mark";
-import { Table, Space, Button } from "antd";
+import { Table, Space, Button, Tooltip } from "antd";
 import EditMark from "./EditMark";
+import { EditOutlined } from "@ant-design/icons";
 
 function MarkTable(props) {
   const {
@@ -34,9 +35,7 @@ function MarkTable(props) {
 
     return Object.values(students);
   };
-  const fetchMarkType = async () => {
-    const res = await getAllMarkType();
-    setMarkTypes(res.data);
+  const fetchMarks = async () => {
     const res2 = await getMatksOfStudentsInClass(
       class_id,
       subject_id,
@@ -45,8 +44,15 @@ function MarkTable(props) {
     );
     setData(transformData(res2.data));
   };
+  const fetchMarkType = async () => {
+    const res = await getAllMarkType();
+    setMarkTypes(res.data);
+  };
   useEffect(() => {
-    if (class_id && subject_id) fetchMarkType();
+    fetchMarkType();
+  }, []);
+  useEffect(() => {
+    if (class_id && subject_id) fetchMarks();
   }, [class_id, subject_id, schoolyear_id, semester_id]);
 
   let columns = [{ title: "Tên học sinh", dataIndex: "name" }];
@@ -73,8 +79,12 @@ function MarkTable(props) {
       dataIndex: "total",
       render: (_, record) => (
         <Space size="middle" className="text-l">
-          <a onClick={() => handleEditMark(record.id)}>Edit</a>
-          {/* <a className="hover:text-red-500">Delete</a> */}
+          <Tooltip title={"Sửa điểm " + record?.name}>
+            <Button
+              onClick={() => handleEditMark(record.id)}
+              icon={<EditOutlined />}
+            ></Button>
+          </Tooltip>
         </Space>
       ),
     },

@@ -42,6 +42,7 @@ function Fee() {
       selectSchoolyear,
       selectSemester
     );
+    console.log(res.data);
     if (+res.code === 0) {
       setData({
         ...data,
@@ -50,6 +51,8 @@ function Fee() {
           startDate: dayjs(row.startDate).format(format),
           endDate: dayjs(row.endDate).format(format),
           key: index,
+          schoolyear: row.Schoolyear.name,
+          semester: row.Semester.name,
         })),
         count: res.data.count,
       });

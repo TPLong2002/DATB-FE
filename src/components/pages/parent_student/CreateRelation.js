@@ -22,17 +22,17 @@ const App = (props) => {
   const [users, setUsers] = useState([
     { username: "", password: "", email: "" },
   ]);
-  const [groups, setGroups] = useState([{}]);
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [modalText, setModalText] = useState(
     "Loading, please wait a moment..."
   );
   const [allSchoolyear, setAllSchoolyear] = useState([{}]);
-  const [selectSchoolyear, setSelectSchoolyear] = useState();
+  const [selectSchoolyear_student, setSelectSchoolyear_student] = useState();
+  const [selectSchoolyear_parent, setSelectSchoolyear_parent] = useState();
   const [parent_students, setParent_students] = useState([]);
   const [allStudents, setAllStudents] = useState([]);
-  const [allParents, setAllParents] = useState([{}]);
+  const [allParents, setAllParents] = useState([]);
   const [selectParent, setSelectParent] = useState({
     id: 0,
     name: "Chọn phụ huynh",
@@ -44,20 +44,12 @@ const App = (props) => {
   // const [importedFile, setImportedFile] = useState(null);
   const fileInputRef = useRef(null); // Use useRef to create a ref
 
-  const fetchGroup = async () => {
-    try {
-      const res = await getGroups();
-      setGroups(res.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
   const fetchSchoolyear = async () => {
     const res_schoolyear = await getAllSchoolyear();
     setAllSchoolyear(res_schoolyear.data);
   };
   const fetchAllStudents = async () => {
-    const res = await getStudentsBySchoolyear(selectSchoolyear);
+    const res = await getStudentsBySchoolyear(selectSchoolyear_student);
     setAllStudents(
       res.data.map((item) => ({
         value: item.id,
@@ -67,7 +59,7 @@ const App = (props) => {
     );
   };
   const fetchAllParrents = async () => {
-    const res = await getParentsBySchoolyear(selectSchoolyear);
+    const res = await getParentsBySchoolyear(selectSchoolyear_parent);
     setAllParents(
       res.data.map((item) => ({
         value: item.id,
@@ -80,15 +72,18 @@ const App = (props) => {
     );
   };
   useEffect(() => {
-    fetchGroup();
     fetchSchoolyear();
   }, []);
   useEffect(() => {
-    if (selectSchoolyear) {
+    if (selectSchoolyear_student) {
       fetchAllStudents();
+    }
+  }, [selectSchoolyear_student]);
+  useEffect(() => {
+    if (selectSchoolyear_parent) {
       fetchAllParrents();
     }
-  }, [selectSchoolyear]);
+  }, [selectSchoolyear_parent]);
 
   const handleOk = async () => {
     setConfirmLoading(true);
@@ -190,8 +185,11 @@ const App = (props) => {
 
   const filterOption = (input, option) =>
     (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
-  const onSchoolyearChange = (value, index) => {
-    setSelectSchoolyear(value);
+  const onSchoolyear_studentChange = (value, index) => {
+    setSelectSchoolyear_student(value);
+  };
+  const onSchoolyear_parentChange = (value, index) => {
+    setSelectSchoolyear_parent(value);
   };
   return (
     <>
@@ -212,11 +210,11 @@ const App = (props) => {
             accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
             style={{ display: "none" }}
             onChange={handleFileChange}
-            ref={fileInputRef} // Assign the ref to the file input
+            ref={fileInputRef}
           />,
           <Button
             key="import"
-            onClick={() => fileInputRef.current.click()} // Trigger click event of the file input when "Import" button is clicked
+            onClick={() => fileInputRef.current.click()}
             icon={<UploadOutlined />}
           >
             Import
@@ -240,45 +238,69 @@ const App = (props) => {
           <div className="flex-col space-y-4">
             <div className="flex space-x-4">
               <div className="flex space-x-4 w-11/12">
-                <Select
-                  showSearch
-                  placeholder="Chọn năm học"
-                  optionFilterProp="children"
-                  onChange={onSchoolyearChange}
-                  filterOption={filterOption}
-                  options={allSchoolyear?.map((item) => ({
-                    value: item.id,
-                    label: item.name,
-                  }))}
-                  style={{ width: "50%" }}
-                />
-                <Select
-                  showSearch
-                  value={selectStudent.student_id}
-                  placeholder="Select a person"
-                  optionFilterProp="children"
-                  onChange={(value, label) => onStudentChange(value, label)}
-                  filterOption={filterOption}
-                  options={allStudents}
-                  style={{ width: "50%" }}
-                />
-                <Select
-                  showSearch
-                  value={selectParent.parent_id}
-                  placeholder="Select a person"
-                  optionFilterProp="children"
-                  onChange={(value, label) => onParentChange(value, label)}
-                  filterOption={filterOption}
-                  options={allParents}
-                  style={{ width: "50%" }}
+                <div className="flex-col w-1/2 border-2 p-1 justify-center items-center space-y-2">
+                  <p className="text-center">Chọn học sinh</p>
+                  <div className="flex space-x-4">
+                    <Select
+                      showSearch
+                      placeholder="Chọn năm"
+                      optionFilterProp="children"
+                      onChange={onSchoolyear_studentChange}
+                      filterOption={filterOption}
+                      options={allSchoolyear?.map((item) => ({
+                        value: item.id,
+                        label: item.name,
+                      }))}
+                      style={{ width: "40%" }}
+                    />
+                    <Select
+                      showSearch
+                      value={selectStudent.student_id}
+                      placeholder="Chọn học sinh"
+                      optionFilterProp="children"
+                      onChange={(value, label) => onStudentChange(value, label)}
+                      filterOption={filterOption}
+                      options={allStudents}
+                      style={{ width: "60%" }}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex-col space-x-4 w-1/2 border-2 p-2 justify-center items-center space-y-2">
+                  <p className="text-center">Chọn phụ huynh</p>
+                  <div className="flex space-x-4">
+                    <Select
+                      showSearch
+                      placeholder="Chọn năm"
+                      optionFilterProp="children"
+                      onChange={onSchoolyear_parentChange}
+                      filterOption={filterOption}
+                      options={allSchoolyear?.map((item) => ({
+                        value: item.id,
+                        label: item.name,
+                      }))}
+                      style={{ width: "40%" }}
+                    />
+                    <Select
+                      showSearch
+                      value={selectParent.parent_id}
+                      placeholder="Chọn phụ huynh"
+                      optionFilterProp="children"
+                      onChange={(value, label) => onParentChange(value, label)}
+                      filterOption={filterOption}
+                      options={allParents}
+                      style={{ width: "60%" }}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col justify-center">
+                <Button
+                  type="primary"
+                  icon={<PlusCircleOutlined />}
+                  onClick={handleAddParentStudent}
                 />
               </div>
-              <Button
-                type="primary"
-                icon={<PlusCircleOutlined />}
-                onClick={handleAddParentStudent}
-                className="w-1/12"
-              />
             </div>
 
             <Table

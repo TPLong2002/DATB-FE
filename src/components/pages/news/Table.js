@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { Button, Space, Table, Tag } from "antd";
-import DeleteClass from "@/components/pages/class/DeleteClass";
-import { Link, useNavigate } from "react-router-dom";
+import { Button, Space, Table, Tooltip } from "antd";
+
+import DeleteNews from "@/components/pages/news/DeleteNews";
+import { useNavigate } from "react-router-dom";
+import { ProfileOutlined, DeleteOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 
 const format = "YYYY-MM-DD HH:mm:ss";
@@ -10,20 +12,20 @@ const { Column } = Table;
 const App = (props) => {
   const { data, pagination, setPagination, fetchNews } = props;
   const [openDelete, setOpenDelete] = useState(false);
-  const [userDelete, setUserDelete] = useState(0);
+  const [newsDelete, setNewsDelete] = useState(0);
   const { rows, count } = data;
   const navigate = useNavigate();
   console.log(data);
   const handleDelete = (id) => {
     setOpenDelete(true);
-    setUserDelete(id);
+    setNewsDelete(id);
   };
   return (
     <>
-      <DeleteClass
+      <DeleteNews
         open={openDelete}
         setOpen={setOpenDelete}
-        id={userDelete}
+        id={newsDelete}
         fetchData={fetchNews}
       />
 
@@ -78,18 +80,21 @@ const App = (props) => {
           key="schoolyear_name"
         />
         <Column
-          title="Action"
           key="action"
           render={(_, record) => (
             <Space size="middle" className="text-l">
-              <Link to={`/admin/news/detail/${record.id}`}>Chi tiết</Link>
-
-              <a
+              <Tooltip title={"Chi tiết " + record?.title}>
+                <Button
+                  onClick={() => navigate(`/admin/news/detail/${record.id}`)}
+                  icon={<ProfileOutlined />}
+                ></Button>
+              </Tooltip>
+              <Tooltip title={"Xóa " + record?.title}></Tooltip>
+              <Button
                 onClick={() => handleDelete(record.id)}
-                className="hover:text-red-500"
-              >
-                Delete
-              </a>
+                danger
+                icon={<DeleteOutlined />}
+              ></Button>
             </Space>
           )}
         />

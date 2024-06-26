@@ -8,8 +8,8 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Modal, Select } from "antd";
-
+import { Button, Modal, Select, Tooltip } from "antd";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import AddRole from "@/components/pages/role/AddRole";
 import UpdateRole from "@/components/pages/role/UpdateRole";
 import { getRoles, delRoles, getRolesByGroup } from "@/services/role";
@@ -137,7 +137,7 @@ export default function BasicTable() {
                 <TableCell></TableCell>
                 <TableCell>URL</TableCell>
                 <TableCell align="right">Description</TableCell>
-                <TableCell align="right">actions</TableCell>
+                <TableCell align="right"></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -160,21 +160,20 @@ export default function BasicTable() {
                     </TableCell>
                     <TableCell align="right">{role.description}</TableCell>
                     <TableCell align="right">
-                      <div>
-                        <IconButton
-                          onClick={() => handleDelete(role.id)}
-                          aria-label="delete"
-                          size="large"
-                        >
-                          <DeleteIcon fontSize="inherit" />
-                        </IconButton>
-                        <IconButton
-                          aria-label="delete"
-                          size="small"
-                          onClick={() => handleUpdate(role.id)}
-                        >
-                          Edit
-                        </IconButton>
+                      <div className="flex justify-center items-center space-x-2">
+                        <Tooltip title={"Xóa quyền"}>
+                          <Button
+                            onClick={() => handleDelete(role.id)}
+                            danger
+                            icon={<DeleteOutlined />}
+                          ></Button>
+                        </Tooltip>
+                        <Tooltip title={"Sửa quyền"}>
+                          <Button
+                            onClick={() => handleUpdate(role.id)}
+                            icon={<EditOutlined />}
+                          ></Button>
+                        </Tooltip>
                       </div>
                     </TableCell>
                   </TableRow>

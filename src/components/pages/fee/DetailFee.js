@@ -84,6 +84,14 @@ function DetailFee() {
                 ></Input>
               </div>
               <div className="flex space-x-2">
+                <div className="w-1/2">Năm học</div>
+                <Input value={fee.Schoolyear?.name} readOnly></Input>
+              </div>
+              <div className="flex space-x-2">
+                <div className="w-1/2">Học kỳ</div>
+                <Input value={fee.Semester?.name} readOnly></Input>
+              </div>
+              <div className="flex space-x-2 ">
                 <div className="w-1/2">Số tiền</div>
                 <Input
                   value={convertVND(fee.price)}

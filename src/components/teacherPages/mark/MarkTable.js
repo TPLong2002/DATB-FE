@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { getAllMarkType } from "@/services/markType";
 import { getMatksOfStudentsInClass } from "@/services/mark";
-import { Table, Space, Button } from "antd";
+import { Table, Space, Button, Tooltip } from "antd";
+import { EditOutlined } from "@ant-design/icons";
 import EditMark from "./EditMark";
 
 function MarkTable(props) {
@@ -69,12 +70,15 @@ function MarkTable(props) {
   columns = [
     ...columns,
     {
-      title: "action",
       dataIndex: "total",
       render: (_, record) => (
         <Space size="middle" className="text-l">
-          <a onClick={() => handleEditMark(record.id)}>Edit</a>
-          {/* <a className="hover:text-red-500">Delete</a> */}
+          <Tooltip title={"Sửa điểm " + record?.name}>
+            <Button
+              onClick={() => handleEditMark(record.id)}
+              icon={<EditOutlined />}
+            ></Button>
+          </Tooltip>
         </Space>
       ),
     },
