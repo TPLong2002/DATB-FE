@@ -28,19 +28,24 @@ const Profile = () => {
     const group = await getGroupByUserId(id);
     setGroup(group?.data?.Group);
     if (+auth.id === +id || auth.role === "admin") {
-      if (options === 1) {
-        const res = await getProfile(id);
-        setProfiles(res?.data);
-        setOriginalImg(
-          res?.data?.map((row) => ({ avt: row.avt, id: res.data.id }))
-        );
-      }
-      if (options === 2) {
-        const res = await getRelativesProfile(id);
-        setProfiles(res?.data);
-        setOriginalImg(
-          res.data.map((row) => ({ avt: row.avt, id: res.data.id }))
-        );
+      console.log(auth.id, id);
+      try {
+        if (options === 1) {
+          const res = await getProfile(id);
+          setProfiles(res?.data?.map((row) => ({ ...row, newPassword: "" })));
+          setOriginalImg(
+            res?.data?.map((row) => ({ avt: row.avt, id: res.data.id }))
+          );
+        }
+        if (options === 2) {
+          const res = await getRelativesProfile(id);
+          setProfiles(res?.data);
+          setOriginalImg(
+            res.data.map((row) => ({ avt: row.avt, id: res.data.id }))
+          );
+        }
+      } catch (error) {
+        console.log(error);
       }
     } else {
       toast.error("Bạn không có quyền truy cập thông tin này");
@@ -148,9 +153,9 @@ const Profile = () => {
             />
             {auth.role === "admin" && (
               <Input.Password
-                value={profile?.password}
+                value={profile?.newPassword}
                 type="password"
-                name="password"
+                name="newPassword"
                 onChange={(e) => handleChange(e, index)}
                 placeholder="Mật khẩu"
                 iconRender={(visible) =>
