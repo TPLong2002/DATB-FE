@@ -153,7 +153,7 @@ function HomeDashboard() {
             h={16}
           ></UserCard>
           <UserCard
-            userCount={"Khối lớp 10"}
+            userCount={"Khối lớp 12"}
             bg={"bg-red-400"}
             icon={<UserOutlined className="text-5xl text-white" />}
             typeUser={classCount12 + " Lớp"}
