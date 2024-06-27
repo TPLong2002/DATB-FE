@@ -21,7 +21,7 @@ const App = (props) => {
           setOpen(false);
           fetchData();
           setModalText(defaultText);
-          toast.success("Xóa lớp học thành công");
+          toast.success("Xóa môn khỏi lớp học thành công");
           setConfirmLoading(false);
         }, 2000);
       }

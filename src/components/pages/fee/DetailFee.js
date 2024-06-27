@@ -97,7 +97,7 @@ function DetailFee() {
                   value={convertVND(fee.price)}
                   addonAfter="VNĐ"
                   name="price"
-                  onChange={handleChange}
+                  readOnly
                 ></Input>
               </div>
             </div>
@@ -140,6 +140,7 @@ function DetailFee() {
           <Title level={2}> Đối tượng</Title>
           <AddStudentToFee
             fee_id={id}
+            schoolyear_id={fee.schoolyear_id}
             fetchData={fetchStudentOfFee}
             ref={addStudentToFeeRef}
           />

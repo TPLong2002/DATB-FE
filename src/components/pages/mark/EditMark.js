@@ -11,7 +11,7 @@ function EditMark(props) {
     class_id,
     subject_id,
     markTypes,
-    fetchMarkType,
+    fetchMarks,
     semester_id,
     schoolyear_id,
   } = props;
@@ -60,7 +60,7 @@ function EditMark(props) {
       setModalText("loading...");
       if (+res.code == 0) {
         setTimeout(() => {
-          fetchMarkType().then(() => {
+          fetchMarks().then(() => {
             setOpenEditMark(false);
             setConfirmLoading(false);
             toast.success(res.message);

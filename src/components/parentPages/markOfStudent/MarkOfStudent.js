@@ -20,9 +20,13 @@ function Transcript() {
 
   const [data, setData] = useState([{ firstName: "", lastName: "" }]);
   const fetchProfile = async () => {
-    const res = await getRelativesProfile(auth.id);
-    console.log("res", res);
-    setData(res.data);
+    try {
+      const res = await getRelativesProfile(auth.id);
+      console.log("res", res);
+      setData(res.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
   const fetchSchoolyear = async () => {
     const res_schoolyear = await getAllSchoolyear();
@@ -39,7 +43,7 @@ function Transcript() {
     fetchProfile();
     fetchSchoolyear();
     fetchSemester();
-  }, []);
+  }, [auth.id]);
 
   const filterOption = (input, option) =>
     (option?.label ?? "").toLowerCase().includes(input.toLowerCase());

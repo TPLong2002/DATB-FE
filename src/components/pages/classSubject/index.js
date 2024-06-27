@@ -1,13 +1,11 @@
 import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import { Button, Checkbox, Space, Table, Tag, Typography, Text } from "antd";
+import { Button, Space, Table, Tag, Typography, Tooltip } from "antd";
+import { DeleteOutlined, OrderedListOutlined } from "@ant-design/icons";
 import { getSubjectsByClassId } from "@/services/class/classSubject";
 import DeleteSubject from "@/components/pages/classSubject/DeleteSubject";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AddTeacherSubjectToClass from "@/components/pages/classSubject/AddTeacherSubjectToClass";
-
-const { Column } = Table;
-const { Title } = Typography;
 
 const App = () => {
   const { class_id } = useParams();
@@ -16,11 +14,13 @@ const App = () => {
   const [subjectDetele, setSubjectDetele] = useState({
     class_id: class_id,
     subject_id: 0,
+    teacher_id: 0,
   });
   const [data, setData] = useState([]);
   const fetchSubjectOfClass = async () => {
     try {
       const res = await getSubjectsByClassId(class_id);
+      console.log(res.data);
       setData(res.data);
     } catch (error) {
       console.log(error);
@@ -29,9 +29,9 @@ const App = () => {
   useEffect(() => {
     fetchSubjectOfClass();
   }, [class_id]);
-  const handleDelete = (id) => {
+  const handleDelete = (id, teacher_id) => {
     setOpenDelete(true);
-    setSubjectDetele({ ...subjectDetele, subject_id: id });
+    setSubjectDetele({ ...subjectDetele, subject_id: id, teacher_id });
   };
   const columns = [
     {
@@ -47,13 +47,29 @@ const App = () => {
       key: "action",
       render: (_, record) => (
         <Space size="middle" className="text-l">
-          <a onClick={() => navigate(`/subject/info/${record.id}`)}>Detail</a>
-          <a
-            className="hover:text-red-500"
-            onClick={() => handleDelete(record.id)}
+          <Tooltip title={"Danh sách giáo viên dạy môn " + record.name}>
+            <Button
+              onClick={() => navigate(`/subject/info/${record.id}`)}
+              icon={<OrderedListOutlined />}
+            ></Button>
+          </Tooltip>
+
+          <Tooltip
+            title={
+              "Xóa " +
+              record?.Profile?.firstName +
+              " " +
+              record?.Profile?.lastName
+            }
           >
-            Delete
-          </a>
+            <Button
+              onClick={() =>
+                handleDelete(record.id, record.Subject_Users[0].id)
+              }
+              danger
+              icon={<DeleteOutlined />}
+            ></Button>
+          </Tooltip>
         </Space>
       ),
     },

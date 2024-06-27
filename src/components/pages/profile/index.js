@@ -28,10 +28,10 @@ const Profile = () => {
     const group = await getGroupByUserId(id);
     setGroup(group?.data?.Group);
     if (+auth.id === +id || auth.role === "admin") {
-      console.log(auth.id, id);
       try {
         if (options === 1) {
           const res = await getProfile(id);
+
           setProfiles(res?.data?.map((row) => ({ ...row, newPassword: "" })));
           setOriginalImg(
             res?.data?.map((row) => ({ avt: row.avt, id: res.data.id }))
@@ -39,6 +39,7 @@ const Profile = () => {
         }
         if (options === 2) {
           const res = await getRelativesProfile(id);
+          console.log(res);
           setProfiles(res?.data);
           setOriginalImg(
             res.data.map((row) => ({ avt: row.avt, id: res.data.id }))
@@ -74,6 +75,7 @@ const Profile = () => {
 
   const onSubmit = async (index) => {
     const newProfile = [...profiles];
+    console.log(newProfile[index]);
     if (profiles[index].avt && profiles[index].avt !== originalImg[index]) {
       const formData = new FormData();
       formData.append("file", profiles[index].avt);
@@ -113,10 +115,10 @@ const Profile = () => {
           onChange={(e) => setOptions(e.target.value)}
         >
           <Radio.Button value={1}>Thông tin cá nhân</Radio.Button>
-          {group.name === "student" && (
+          {group?.name === "student" && (
             <Radio.Button value={2}>Thông tin phụ huynh</Radio.Button>
           )}
-          {group.name === "parent" && (
+          {group?.name === "parent" && (
             <Radio.Button value={2}>Thông tin học sinh</Radio.Button>
           )}
         </Radio.Group>

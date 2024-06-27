@@ -66,7 +66,7 @@ function InfoSubject(props) {
       key: "action",
       render: (_, record) => (
         <Space size="middle" className="text-l">
-          <Tooltip title={"Chi tiết " + record?.name}>
+          <Tooltip title={"Chi tiết"}>
             <Button
               onClick={() => navigate(`/fee/detail/${record.id}`)}
               icon={<ProfileOutlined />}

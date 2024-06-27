@@ -21,8 +21,7 @@ const App = () => {
     try {
       if (auth.id) {
         const response = await getFeesByParentId(auth.id);
-        console.log(response.data);
-
+        console.log("response", response);
         const dataTable = [];
         let User_Parents = await Promise.all(
           response.data.User_Parents.map(async (item, index) => {
@@ -105,7 +104,11 @@ const App = () => {
           </Tag>
         ),
       },
-      { title: "Thời gian nộp", dataIndex: "time", key: "time" },
+      {
+        title: "Thời gian nộp",
+        dataIndex: "time",
+        key: "time",
+      },
       {
         title: "Phương thức thanh toán",
         dataIndex: "orderType",
@@ -117,7 +120,6 @@ const App = () => {
         key: "payType",
       },
       {
-        title: "Action",
         key: "operation",
         render: (record) => (
           <Space size="middle">
@@ -148,7 +150,9 @@ const App = () => {
               fee_id: fee.id,
               parent_student_id: item.Parent_Student.id,
               paymentstatus: fee.paymenthistory.Paymentstatus.code,
-              time: dayjs(fee.paymenthistory.time).format(format),
+              time: fee.paymenthistory.time
+                ? dayjs(fee.paymenthistory.time).format(format)
+                : null,
               payType: fee.paymenthistory.payType,
               orderType: fee.paymenthistory.orderType,
             });

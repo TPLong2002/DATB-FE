@@ -92,15 +92,13 @@ const App = (props) => {
       const csv = Papa.parse(target.result, {
         header: true,
       });
-      const parsedData = csv?.data;
+      const parsedData = csv?.data.slice(0, csv.data.length - 1);
       setUsers(parsedData);
     };
     reader.readAsText(file);
   };
   const admin = groups?.filter((group) => group.name === "admin");
-  const school_staff = groups?.filter(
-    (group) => group.name === "teacher" || group.name === "accountant"
-  );
+  const school_staff = groups?.filter((group) => group.name === "teacher");
   const parent_student = groups?.filter(
     (group) => group.name === "student" || group.name === "parent"
   );
@@ -122,6 +120,7 @@ const App = (props) => {
     console.log("newUsers", newUsers);
     setUsers(newUsers);
   };
+
   return (
     <>
       <Button type="primary" onClick={() => setOpen(true)}>
@@ -238,6 +237,7 @@ const App = (props) => {
                       showSearch
                       placeholder="Chọn năm học"
                       optionFilterProp="children"
+                      value={user.schoolyear_id ? +user.schoolyear_id : null}
                       onChange={(value) => onSchoolyearChange(value, index)}
                       onSearch={onSearch}
                       filterOption={filterOption}

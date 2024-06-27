@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Space, Table, Tag, Typography } from "antd";
 import DeleteUser from "@/components/pages/infoClass/KickStrudent";
 import AddStudent from "./AddStudent";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { Button, Tooltip } from "antd";
+import { ProfileOutlined, DeleteOutlined } from "@ant-design/icons";
 
 const { Column } = Table;
 const { Title } = Typography;
@@ -16,6 +18,7 @@ const tags = [
 
 const App = (props) => {
   const { data, fetchStudent } = props;
+  const navigate = useNavigate();
   const [openDelete, setOpenDelete] = useState(false);
   const [userkick, setUserKick] = useState(0);
   const [class_id, setClass_id] = useState(0);
@@ -87,15 +90,19 @@ const App = (props) => {
           key="action"
           render={(_, record) => (
             <Space size="middle" className="text-l">
-              <Link to="/profile" state={{ id: record.id }}>
-                Profile {record.username}
-              </Link>
-              <a
-                onClick={() => handleDelete(record.id)}
-                className="hover:text-red-500"
-              >
-                Delete
-              </a>
+              <Tooltip title={"Xem thông tin " + record?.username}>
+                <Button
+                  onClick={() => navigate(`/user/profile/${record.id}`)}
+                  icon={<ProfileOutlined />}
+                ></Button>
+              </Tooltip>
+              <Tooltip title={"Xóa " + record?.username}>
+                <Button
+                  onClick={() => handleDelete(record.id)}
+                  danger
+                  icon={<DeleteOutlined />}
+                ></Button>
+              </Tooltip>
             </Space>
           )}
         />

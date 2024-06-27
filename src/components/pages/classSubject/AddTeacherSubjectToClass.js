@@ -182,19 +182,23 @@ const App = (props) => {
         {confirmLoading ? (
           <p>{modalText}</p>
         ) : (
-          <div>
+          <div className="flex-col space-y-3">
             {subjectUser?.map((row, index) => (
               <div key={index} className="flex space-x-2">
-                <Input value={row.subject_label} readOnly></Input>
-                <Input value={row.teacher_label} readOnly></Input>
+                <div className="w-11/12 flex space-x-2">
+                  <Input value={row.subject_label} readOnly></Input>
+                  <Input value={row.teacher_label} readOnly></Input>
+                </div>
+
                 <Button
                   icon={<DeleteOutlined />}
                   onClick={handleDelete}
                   danger
+                  className="w-1/12"
                 ></Button>
               </div>
             ))}
-            <div className="flex space-x-2">
+            <div className="w-11/12 flex space-x-2">
               <Select
                 showSearch
                 value={defaultSubject}

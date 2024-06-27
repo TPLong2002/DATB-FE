@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { addStudentToClass } from "@/services/class/classInfo";
 import { getStudentBySchoolyear } from "@/services/class/classInfo";
 import { UploadOutlined, DeleteOutlined } from "@ant-design/icons";
+import { getAllSchoolyear } from "@/services/schoolyear";
 import Papa from "papaparse";
 import { Modal, Input, Select, Button } from "antd";
 import { toast } from "react-toastify";
@@ -16,23 +17,39 @@ const App = (props) => {
   const [modalText, setModalText] = useState(
     "Bạn có chắc muốn thêm học sinh ?"
   );
+  const [allSchoolyear, setAllSchoolyear] = useState([]);
+  const [selectSchoolyear, setSelectSchoolyear] = useState();
   const fileInputRef = useRef(null); // Use useRef to create a ref
+  const fetchAllSchoolyear = async () => {
+    try {
+      const res = await getAllSchoolyear();
+
+      setAllSchoolyear(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const fetchAllStudents = async () => {
+    try {
+      const res = await getStudentBySchoolyear(selectSchoolyear);
+      const data = res.data.map((student) => ({
+        value: student?.id,
+        label: student?.Profile?.firstname + " " + student?.Profile?.lastname,
+      }));
+      setAllStudents(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    setSelectSchoolyear(schoolyear);
+  }, [schoolyear]);
 
   useEffect(() => {
-    const fetchAllStudents = async () => {
-      try {
-        const res = await getStudentBySchoolyear(schoolyear);
-        const data = res.data.map((student) => ({
-          value: student?.id,
-          label: student?.Profile?.firstname + " " + student?.Profile?.lastname,
-        }));
-        setAllStudents(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchAllStudents();
-  }, [schoolyear]);
+    fetchAllSchoolyear();
+    if (schoolyear) fetchAllStudents();
+  }, [schoolyear, selectSchoolyear]);
+
   const handleOk = async () => {
     const data = students.map((student) => ({
       user_id: student.id,
@@ -94,6 +111,7 @@ const App = (props) => {
     setDefaultStudent("Chọn học sinh");
   };
   const handleDelete = (index) => {
+    console.log("index", index);
     let newStudents = [...students];
     const removedStudent = newStudents.splice(index, 1)[0];
     setAllStudents([
@@ -101,6 +119,9 @@ const App = (props) => {
       { value: removedStudent.id, label: removedStudent.label },
     ]);
     setStudents(newStudents);
+  };
+  const onSchoolyearChange = (value) => {
+    setSelectSchoolyear(value);
   };
   const onSearch = (value) => {
     console.log("search:", value);
@@ -146,28 +167,43 @@ const App = (props) => {
         {confirmLoading ? (
           <p>{modalText}</p>
         ) : (
-          <div>
+          <div className="flex-col space-y-3">
             {students.map((_class, index) => (
               <div key={index} className="flex space-x-2">
                 <Input value={_class.label} readOnly></Input>
                 <Button
                   icon={<DeleteOutlined />}
-                  onClick={handleDelete}
+                  onClick={() => handleDelete(index)}
                   danger
                 ></Button>
               </div>
             ))}
-            <Select
-              showSearch
-              value={defaultStudent}
-              placeholder="Select a person"
-              optionFilterProp="children"
-              onChange={onChange}
-              onSearch={onSearch}
-              filterOption={filterOption}
-              options={allStudents}
-              style={{ width: "50%" }}
-            />
+            <div className="flex space-x-3">
+              <Select
+                showSearch
+                placeholder="Chọn năm học"
+                optionFilterProp="children"
+                defaultValue={selectSchoolyear}
+                onChange={(value) => onSchoolyearChange(value)}
+                onSearch={onSearch}
+                filterOption={filterOption}
+                options={allSchoolyear?.map((item) => ({
+                  value: item.id,
+                  label: item.name,
+                }))}
+              />
+              <Select
+                showSearch
+                value={defaultStudent}
+                placeholder="Select a person"
+                optionFilterProp="children"
+                onChange={onChange}
+                onSearch={onSearch}
+                filterOption={filterOption}
+                options={allStudents}
+                style={{ width: "50%" }}
+              />
+            </div>
           </div>
         )}
       </Modal>

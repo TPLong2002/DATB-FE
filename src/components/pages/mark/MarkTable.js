@@ -22,15 +22,18 @@ function MarkTable(props) {
     const students = {};
 
     data?.forEach((item) => {
-      const userId = item.user_id;
+      const userId = item.id;
       if (!students[userId]) {
         students[userId] = {
           key: userId,
           id: userId,
-          name: `${item.User.Profile.firstName} ${item.User.Profile.lastName}`,
+          name: `${item.Profile.firstname} ${item.Profile.lastname}`,
         };
       }
-      students[userId][item?.Marktype?.name] = item.mark;
+      console.log(item);
+      item?.Marks?.forEach((mark) => {
+        students[userId][mark?.Marktype?.name] = mark?.mark;
+      });
     });
 
     return Object.values(students);
@@ -102,7 +105,7 @@ function MarkTable(props) {
             semester_id={semester_id}
             schoolyear_id={schoolyear_id}
             markTypes={markTypes}
-            fetchMarkType={fetchMarkType}
+            fetchMarks={fetchMarks}
             fetchSubjectsByClassId={fetchSubjectsByClassId}
           ></EditMark>
         )}

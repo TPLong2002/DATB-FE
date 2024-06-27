@@ -25,9 +25,9 @@ function Parent_DashBoard() {
       countStudentsByParentId(auth.id),
       getFeesUnPaidByParentId(auth.id),
     ]);
+
     setFees(fees.data);
     setStudents(students.data);
-
     setFeesUnPaid(feesUnPaid.data.length);
 
     // Lọc phí sắp hết hạn

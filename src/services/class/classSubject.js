@@ -13,7 +13,7 @@ export const getSubjectsByClassId = async (class_id) => {
 };
 export const deleteSubject = async (data) => {
   try {
-    const res = await Axios.delete(`class/subjects`, { data });
+    const res = await Axios.delete(`/class/subjects`, { data });
     return res;
   } catch (error) {
     throw error;

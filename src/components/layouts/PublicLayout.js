@@ -5,7 +5,16 @@ import logo from "@/img/logo.png";
 import { Logout } from "@/services/auth/signout";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "@/slice/authSlice";
-import { Button, Breadcrumb, Layout, Menu, theme, Image, Dropdown } from "antd";
+import {
+  Button,
+  Breadcrumb,
+  Layout,
+  Menu,
+  theme,
+  Image,
+  Dropdown,
+  FloatButton,
+} from "antd";
 import {
   UserOutlined,
   BookOutlined,
@@ -18,6 +27,8 @@ import {
   MenuUnfoldOutlined,
   LoginOutlined,
   RetweetOutlined,
+  GlobalOutlined,
+  FacebookOutlined,
 } from "@ant-design/icons";
 import { getCategory } from "@/services/news";
 
@@ -223,6 +234,21 @@ export default function Example({ children }) {
           Trường THPT Nguyễn Hiền, Duy Sơn, Duy Xuyên, Quảng Nam
         </Footer>
       </Layout>
+      <FloatButton.Group
+        trigger="click"
+        type="primary"
+        style={{ right: 24 }}
+        tooltip="Liên hệ"
+        icon={<GlobalOutlined />}
+      >
+        <FloatButton
+          icon={<FacebookOutlined />}
+          onClick={() => {
+            window.open("https://www.facebook.com/thptnguyenhiendx");
+          }}
+          tooltip={<div>FaceBook</div>}
+        />
+      </FloatButton.Group>
     </Layout>
   );
 }

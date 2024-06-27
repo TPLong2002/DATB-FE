@@ -24,26 +24,20 @@ const App = forwardRef((props, ref) => {
   const navigate = useNavigate();
   const [openDelete, setOpenDelete] = useState(false);
   const [studentDetele, setStudentDetele] = useState({});
-  const [data, setData] = useState([]);
+  const [data, setData] = useState({ rows: [], count: 0 });
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 10,
+  });
 
   const fetchStudentOfFee = async () => {
-    const res = await getStudentsOfFee(fee_id);
-    console.log(res.data);
+    const res = await getStudentsOfFee(
+      fee_id,
+      pagination.page,
+      pagination.limit
+    );
     if (+res.code === 0) {
-      setData(
-        res.data.Fee_Users.map((row) => ({
-          id: row.id,
-          username: row.username,
-          name: row.Profile.firstname + " " + row.Profile.lastname,
-          parent_name:
-            row.User_Students[0]?.Profile.firstname +
-            " " +
-            row.User_Students[0]?.Profile.lastname,
-          parent_id: row.User_Students[0]?.id,
-          paymentstatus: row.Student_Paymenthistories[0]?.Paymentstatus.code,
-          ishidden: row.User_Fee.ishidden,
-        }))
-      );
+      setData(res.data);
     }
   };
   useImperativeHandle(ref, () => ({
@@ -53,12 +47,11 @@ const App = forwardRef((props, ref) => {
   }));
   useEffect(() => {
     fetchStudentOfFee();
-  }, []);
+  }, [pagination]);
   const handleDelete = (id, ishidden) => {
     setOpenDelete(true);
     setStudentDetele({ fee_id: +fee_id, user_id: id, ishidden: ishidden ^ 1 });
   };
-  console.log(data);
   const columns = [
     {
       title: "Tên học sinh",
@@ -115,7 +108,15 @@ const App = forwardRef((props, ref) => {
     //   ),
     // },
   ];
-
+  const paginate = {
+    total: data.count,
+    defaultPageSize: pagination.limit,
+    showSizeChanger: true,
+    pageSizeOptions: ["1", "10", "50"],
+    onChange: (page, pageSize) => {
+      setPagination({ ...pagination, page, limit: pageSize });
+    },
+  };
   return (
     <>
       <DeleteStudentOfFee
@@ -129,7 +130,24 @@ const App = forwardRef((props, ref) => {
       <Table
         bordered={true}
         columns={columns}
-        dataSource={data ? data.map((row) => ({ ...row, key: row.id })) : []}
+        dataSource={
+          data
+            ? data?.rows[0]?.Fee_Users?.map((row) => ({
+                id: row.id,
+                username: row.username,
+                name: row.Profile.firstname + " " + row.Profile.lastname,
+                parent_name:
+                  row.User_Students[0]?.Profile.firstname +
+                  " " +
+                  row.User_Students[0]?.Profile.lastname,
+                parent_id: row.User_Students[0]?.id,
+                paymentstatus:
+                  row.Student_Paymenthistories[0]?.Paymentstatus.code,
+                ishidden: row.User_Fee.ishidden,
+              }))
+            : []
+        }
+        pagination={paginate}
       />
     </>
   );

@@ -7,27 +7,36 @@ import React, {
 } from "react";
 import { addStudentToFee } from "@/services/fee/studentOfFee";
 import { getStudentNotInFee } from "@/services/fee/studentOfFee";
+import { getAllSchoolyear } from "@/services/schoolyear";
 import { UploadOutlined, DeleteOutlined } from "@ant-design/icons";
 import Papa from "papaparse";
 import { Modal, Input, Select, Button } from "antd";
 import { toast } from "react-toastify";
 
 const App = forwardRef((props, ref) => {
-  const { fetchData, fee_id } = props;
+  const { fetchData, fee_id, schoolyear_id } = props;
   const [students, setStudents] = useState([]);
   const [allStudents, setAllStudents] = useState([]);
   const [defaultStudent, setDefaultStudent] = useState("Chọn học sinh"); // [0] is the default value of allStudents
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [schoolyear, setSchoolyear] = useState(23);
+  const [allSchoolyear, setAllSchoolyear] = useState();
+  const [selectSchoolyear, setSelectSchoolyear] = useState();
   const [modalText, setModalText] = useState(
     "Bạn có chắc muốn thêm học sinh ?"
   );
   const fileInputRef = useRef(null); // Use useRef to create a ref
+
+  const fetchSchoolyear = async () => {
+    const res = await getAllSchoolyear();
+    setAllSchoolyear(res.data);
+  };
+
   const fetchAllStudents = async () => {
     try {
-      const res = await getStudentNotInFee(fee_id);
-      const data = res.data.map((student) => ({
+      const res = await getStudentNotInFee(fee_id, selectSchoolyear);
+      console.log(res);
+      const data = res?.data?.map((student) => ({
         value: student?.id,
         label: student?.Profile?.firstname + " " + student?.Profile?.lastname,
         parent_id: student.User_Students[0]?.id,
@@ -38,8 +47,13 @@ const App = forwardRef((props, ref) => {
     }
   };
   useEffect(() => {
+    setSelectSchoolyear(schoolyear_id);
+  }, [schoolyear_id]);
+
+  useEffect(() => {
     fetchAllStudents();
-  }, [fee_id]);
+    fetchSchoolyear();
+  }, [fee_id, selectSchoolyear]);
 
   useImperativeHandle(ref, () => ({
     fetchAllStudents() {
@@ -127,6 +141,9 @@ const App = forwardRef((props, ref) => {
     ]);
     setStudents(newStudents);
   };
+  const onSchoolyearChange = (value) => {
+    setSelectSchoolyear(value);
+  };
   const onSearch = (value) => {
     console.log("search:", value);
   };
@@ -175,7 +192,7 @@ const App = forwardRef((props, ref) => {
         {confirmLoading ? (
           <p>{modalText}</p>
         ) : (
-          <div>
+          <div className="flex-col space-y-3">
             {students.map((_class, index) => (
               <div key={index} className="flex space-x-2">
                 <Input value={_class.label} readOnly></Input>
@@ -186,19 +203,35 @@ const App = forwardRef((props, ref) => {
                 ></Button>
               </div>
             ))}
-            {allStudents?.length > 0 && (
-              <Select
-                showSearch
-                value={defaultStudent}
-                placeholder="Select a person"
-                optionFilterProp="children"
-                onChange={onChange}
-                onSearch={onSearch}
-                filterOption={filterOption}
-                options={allStudents}
-                style={{ width: "50%" }}
-              />
-            )}
+            {
+              <div className="flex space-x-2 border-t-2 pt-2">
+                <Select
+                  showSearch
+                  placeholder="Chọn năm học"
+                  optionFilterProp="children"
+                  value={selectSchoolyear}
+                  onChange={(value) => onSchoolyearChange(value)}
+                  onSearch={onSearch}
+                  filterOption={filterOption}
+                  options={allSchoolyear?.map((item) => ({
+                    value: item.id,
+                    label: item.name,
+                  }))}
+                  className="w-1/3"
+                />
+                <Select
+                  showSearch
+                  value={defaultStudent}
+                  placeholder="Select a person"
+                  optionFilterProp="children"
+                  onChange={onChange}
+                  onSearch={onSearch}
+                  filterOption={filterOption}
+                  options={allStudents}
+                  className="w-2/3"
+                />
+              </div>
+            }
           </div>
         )}
       </Modal>

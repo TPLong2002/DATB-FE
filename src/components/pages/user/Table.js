@@ -217,41 +217,45 @@ const App = (props) => {
                   icon={<ProfileOutlined />}
                 ></Button>
               </Tooltip>
-              {record.isdeleted == 0 ? (
-                <Tooltip
-                  title={
-                    "Xóa " +
-                    record?.Profile?.firstName +
-                    " " +
-                    record?.Profile?.lastName
-                  }
-                >
-                  <Button
-                    onClick={() => handleDelete(record.id, record.isdeleted)}
-                    danger
-                    icon={<DeleteOutlined />}
-                  ></Button>
-                </Tooltip>
+              {record.username != "admin" ? (
+                record.isdeleted == 0 ? (
+                  <Tooltip
+                    title={
+                      "Xóa " +
+                      record?.Profile?.firstName +
+                      " " +
+                      record?.Profile?.lastName
+                    }
+                  >
+                    <Button
+                      onClick={() => handleDelete(record.id, record.isdeleted)}
+                      danger
+                      icon={<DeleteOutlined />}
+                    ></Button>
+                  </Tooltip>
+                ) : (
+                  <Tooltip
+                    title={
+                      "Khôi phục " +
+                      record?.Profile?.firstName +
+                      " " +
+                      record?.Profile?.lastName
+                    }
+                  >
+                    <Button
+                      onClick={() => handleDelete(record.id, record.isdeleted)}
+                      icon={<RedoOutlined />}
+                      onMouseEnter={() => setHovered(true)}
+                      onMouseLeave={() => setHovered(false)}
+                      style={{
+                        color: hovered ? "green" : "green",
+                        borderColor: hovered ? "green" : "green",
+                      }}
+                    ></Button>
+                  </Tooltip>
+                )
               ) : (
-                <Tooltip
-                  title={
-                    "Khôi phục " +
-                    record?.Profile?.firstName +
-                    " " +
-                    record?.Profile?.lastName
-                  }
-                >
-                  <Button
-                    onClick={() => handleDelete(record.id, record.isdeleted)}
-                    icon={<RedoOutlined />}
-                    onMouseEnter={() => setHovered(true)}
-                    onMouseLeave={() => setHovered(false)}
-                    style={{
-                      color: hovered ? "green" : "green",
-                      borderColor: hovered ? "green" : "green",
-                    }}
-                  ></Button>
-                </Tooltip>
+                ""
               )}
             </Space>
           )}

@@ -15,7 +15,7 @@ const App = (props) => {
         id: student.id,
         username: student.Profile?.firstName + " " + student.Profile?.lastName,
         email: student.email,
-        class: student.Student_Classes[0].name,
+        class: student.Student_Classes[0]?.name,
         schoolyear: student.Student_Classes[0]?.Schoolyear?.name,
         parent_id: data.id,
       };
