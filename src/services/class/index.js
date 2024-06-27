@@ -79,3 +79,15 @@ export const getGradeByClassId = async (class_id) => {
     throw error;
   }
 };
+export const getClassesBySchoolyear = async (schoolyear_id) => {
+  try {
+    const res = await Axios.get(`/class/schoolyear`, {
+      params: {
+        schoolyear_id: schoolyear_id,
+      },
+    });
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};

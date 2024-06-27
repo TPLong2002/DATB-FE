@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getClasses } from "@/services/class";
+import { getClassesBySchoolyear } from "@/services/class";
 import { getSubjectsByClassId } from "@/services/class/classSubject";
 import { getAllSchoolyear } from "@/services/schoolyear";
 import { getAllSemester } from "@/services/semester";
@@ -17,7 +17,8 @@ function Transcript() {
   const [allSemester, setAllSemester] = useState([{}]);
 
   const fetchClasses = async () => {
-    const res_class = await getClasses();
+    const res_class = await getClassesBySchoolyear(selectSchoolyear);
+    console.log("res_class", res_class);
     setAllClass(res_class.data);
   };
   const fetchSubjectsByClassId = async () => {
@@ -38,8 +39,10 @@ function Transcript() {
   useEffect(() => {
     fetchSchoolyear();
     fetchSemester();
-    fetchClasses();
   }, []);
+  useEffect(() => {
+    if (selectSchoolyear) fetchClasses();
+  }, [selectSchoolyear]);
 
   useEffect(() => {
     fetchSubjectsByClassId();
